@@ -72,8 +72,7 @@ class _HomeState extends State<Home> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar:
-          BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.error_outline),
@@ -97,9 +96,8 @@ class _HomeState extends State<Home> {
           // Add a ListView to the drawer. This ensures the user can scroll
           // through the options in the drawer if there isn't enough vertical
           // space to fit everything.
-          child: ListView(
+          child: Column(
             // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountEmail: Text("alex@gmail.com"),
@@ -108,16 +106,18 @@ class _HomeState extends State<Home> {
                     backgroundColor: Colors.white,
                     child: Text("A", style: TextStyle(fontSize: 40.0))),
               ),
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                children: drawerOptions),
+              Column(children: drawerOptions),
+              Expanded(child: SizedBox(),),
               Divider(),
-              new ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text("Вийти"),
-                onTap: () async {
-                  final result = await Navigator.pushNamedAndRemoveUntil(context, '/welcome', (_) => false);
-                },
+              Container(
+                child: new ListTile(
+                  leading: Icon(Icons.exit_to_app),
+                  title: Text("Вийти"),
+                  onTap: () async {
+                    final result = await Navigator.pushNamedAndRemoveUntil(
+                        context, '/welcome', (_) => false);
+                  },
+                ),
               )
             ],
           ),
