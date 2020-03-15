@@ -59,7 +59,6 @@ class _HomeState extends State<Home> {
         onTap: () => _onSelectItem(i),
       ));
     }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Awesome Map KPI'),
@@ -74,33 +73,6 @@ class _HomeState extends State<Home> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar:
-          // BottomAppBar(
-          //   shape: CircularNotchedRectangle(),
-          //   child: Row(
-          //     mainAxisSize: MainAxisSize.max,
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: <Widget>[
-          //       Row(
-          //         mainAxisSize: MainAxisSize.max,
-          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //         children: <Widget>[
-          //           BottomNavigationBarItem(
-          //             icon: Icon(Icons.error_outline),
-          //             onPressed: () {},
-          //           ),
-          //           IconButton(
-          //             icon: Icon(Icons.map),
-          //             onPressed: () {},
-          //           ),
-          //           IconButton(
-          //             icon: Icon(Icons.event),
-          //             onPressed: () {},
-          //           ),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // )
           BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -136,7 +108,17 @@ class _HomeState extends State<Home> {
                     backgroundColor: Colors.white,
                     child: Text("A", style: TextStyle(fontSize: 40.0))),
               ),
-              Column(children: drawerOptions),
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                children: drawerOptions),
+              Divider(),
+              new ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text("Вийти"),
+                onTap: () async {
+                  final result = await Navigator.pushNamedAndRemoveUntil(context, '/welcome', (_) => false);
+                },
+              )
             ],
           ),
         ),
