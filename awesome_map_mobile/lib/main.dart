@@ -1,7 +1,11 @@
+import 'package:awesome_map_mobile/authorization/signUp.dart';
+import 'package:awesome_map_mobile/introduce/introduce.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'authorization/signIn.dart';
+import 'home/home.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,11 +13,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: "/welcome",
-        routes: {
-          "/welcome": (context) => Welcome(),
-          "/signIn": (context) => SignIn()
-        },
+      initialRoute: "/",
+      routes: {
+        "/welcome": (context) => Welcome(),
+        "/signIn": (context) => SignIn(),
+        "/signUp": (context) => SignUp(),
+        "/introduce": (context) => Introduce(),
+        "/home": (context) => Home(),
+      },
       debugShowCheckedModeBanner: false,
       title: 'Awesome Map KPI',
       theme: ThemeData(
@@ -21,40 +28,64 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
               headline: TextStyle(
                   fontSize: 72.0, fontFamily: 'Adventure', color: Colors.white),
-              body2: TextStyle(fontSize: 25.0, fontFamily: 'Lato', fontWeight: FontWeight.bold),
-              body1: TextStyle(fontFamily: 'Lato')
-              )),
-      home: MyHomePage(title: ''),
+              body2: TextStyle(
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.bold),
+              body1: TextStyle(fontFamily: 'Lato'))),
+      home: AppPage(title: ''),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class AppPage extends StatefulWidget {
+  AppPage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _AppPageState createState() => _AppPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  // int _counter = 0;
+class _AppPageState extends State<AppPage> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Future<bool> isShowIntroduce;
 
-  // void _incrementCounter() {
-  //   setState(() {
-  //     _counter++;
-  //   });
+  @override
+  void initState() {
+    super.initState();
+    isShowIntroduce = _prefs.then((SharedPreferences prefs) {
+      return (prefs.getBool('isShowIntroduce') ?? true);
+    });
+  }
+
+  // checkFirstRun() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   bool isShowIntroduce = (prefs.getBool('isShowIntroduce') ?? false);
+  //   return !isShowIntroduce;
   // }
 
   @override
   Widget build(BuildContext context) {
+    // Widget startWidget = isShowIntroduce ? Introduce() : Welcome();
+
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(widget.title),
       // ),
-      body: Container(
-        child: Welcome(),
-      ),
+      body: FutureBuilder<bool>(
+          future: isShowIntroduce,
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return const CircularProgressIndicator();
+              default:
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Container(
+                      child: snapshot.data ? Introduce() : Welcome());
+                }
+            }
+          }),
       // Center(
       //   child: Column(
       //     children: <Widget>[

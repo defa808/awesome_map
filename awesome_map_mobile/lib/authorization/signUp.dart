@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  SignUp({Key key}) : super(key: key);
 
   @override
-  _SignInState createState() => _SignInState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _SignInState extends State<SignIn> {
-  bool _keyboardIsVisible() {
-    return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
-  }
-
+class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Hero(
@@ -29,7 +25,7 @@ class _SignInState extends State<SignIn> {
                   onPressed: () {
                     Navigator.pop(context);
                   }),
-              title: _keyboardIsVisible() ?  Text("AMKPI") :Text(""),
+              title: Text("AMKPI"),
               centerTitle: true,
             ),
           ),
@@ -37,7 +33,7 @@ class _SignInState extends State<SignIn> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               Container(
-                height: _keyboardIsVisible() ? 0 : 150,
+                height: 0,
                 color: Colors.blue,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +56,7 @@ class _SignInState extends State<SignIn> {
                     Column(
                       children: <Widget>[
                         Text(
-                          "Вхід",
+                          "Реєстрація",
                           style: Theme.of(context)
                               .textTheme
                               .body1
@@ -80,6 +76,14 @@ class _SignInState extends State<SignIn> {
                               labelText: "Пароль",
                               hintText: "Пароль"),
                         ),
+                        SizedBox(height: 10),
+                        TextField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              labelText: "Підтвердити пароль",
+                              hintText: "Підтвердити пароль"),
+                        ),
                         SizedBox(height: 20),
                       ],
                     ),
@@ -97,7 +101,8 @@ class _SignInState extends State<SignIn> {
                           textColor: Colors.blue,
                           onPressed: () async {
                             final result =
-                                await Navigator.pushNamedAndRemoveUntil(context, '/home',(_) => false);
+                                await Navigator.pushNamedAndRemoveUntil(
+                                    context, '/home', (_) => false);
                           },
                         ),
                         SizedBox(height: 10),
@@ -121,6 +126,6 @@ class _SignInState extends State<SignIn> {
             ]),
           ),
         ),
-        tag: "SignIn");
+        tag: "SignUp");
   }
 }
