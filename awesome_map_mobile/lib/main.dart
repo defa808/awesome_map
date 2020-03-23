@@ -2,8 +2,10 @@ import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'account/account.dart';
 import 'authorization/signIn.dart';
 import 'home/home.dart';
 
@@ -20,17 +22,22 @@ class MyApp extends StatelessWidget {
         "/signUp": (context) => SignUp(),
         "/introduce": (context) => Introduce(),
         "/home": (context) => Home(),
+        "/account": (context) => Account(),
+        "/problems": (context) => Account(),
+        "/problems": (context) => Account(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Awesome Map KPI',
       theme: ThemeData(
+          pageTransitionsTheme: PageTransitionsTheme(builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          }),
           primarySwatch: Colors.blue,
           textTheme: TextTheme(
               headline: TextStyle(
                   fontSize: 72.0, fontFamily: 'Adventure', color: Colors.white),
-              body2: TextStyle(
-                  fontFamily: 'Lato',
-                  fontWeight: FontWeight.bold),
+              body2: TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold),
               body1: TextStyle(fontFamily: 'Lato'))),
       home: AppPage(title: ''),
     );
@@ -66,7 +73,9 @@ class _AppPageState extends State<AppPage> {
   @override
   Widget build(BuildContext context) {
     // Widget startWidget = isShowIntroduce ? Introduce() : Welcome();
-
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(widget.title),

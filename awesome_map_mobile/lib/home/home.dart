@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
 
+class DrawerItem {
+  Text title;
+  Icon icon;
+  String path;
+  DrawerItem({icon, title, path}) {
+    this.title = title;
+    this.icon = icon;
+    this.path = path;
+  }
+}
+
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
 
   final drawerItems = [
-    new ListTile(
-        leading: Icon(Icons.account_circle), title: new Text("Аккаунт")),
-    new ListTile(
-        leading: Icon(Icons.error_outline), title: new Text("Проблеми")),
-    new ListTile(leading: Icon(Icons.event), title: new Text("Заходи")),
-    new ListTile(
-        leading: Icon(Icons.settings), title: new Text("Налаштування")),
+    DrawerItem(
+        icon: Icon(Icons.account_circle),
+        title: Text("Аккаунт"),
+        path: '/account'),
+    DrawerItem(
+        icon: Icon(Icons.error_outline),
+        title: Text("Проблеми"),
+        path: '/problems'),
+    DrawerItem(icon: Icon(Icons.event), title: Text("Заходи"), path: '/events'),
+    DrawerItem(
+        icon: Icon(Icons.settings),
+        title: Text("Налаштування"),
+        path: '/settings'),
   ];
 
   @override
@@ -35,7 +52,14 @@ class _HomeState extends State<Home> {
       style: optionStyle,
     ),
   ];
-  int _selectedDrawerIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDrawerIndex = -1;
+  }
+
+  int _selectedDrawerIndex = -1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -43,9 +67,13 @@ class _HomeState extends State<Home> {
     });
   }
 
-  _onSelectItem(int index) {
+  _onSelectItem(int index, String path) {
     setState(() => _selectedDrawerIndex = index);
     Navigator.of(context).pop(); // close the drawer
+    Navigator.of(context).pushNamed(path);
+    setState(() {
+      _selectedDrawerIndex = -1;
+    });
   }
 
   @override
@@ -53,10 +81,10 @@ class _HomeState extends State<Home> {
     var drawerOptions = <Widget>[];
     for (var i = 0; i < widget.drawerItems.length; i++) {
       drawerOptions.add(new ListTile(
-        leading: widget.drawerItems[i].leading,
+        leading: widget.drawerItems[i].icon,
         title: widget.drawerItems[i].title,
         selected: i == _selectedDrawerIndex,
-        onTap: () => _onSelectItem(i),
+        onTap: () => _onSelectItem(i, widget.drawerItems[i].path),
       ));
     }
     return Scaffold(
@@ -107,7 +135,9 @@ class _HomeState extends State<Home> {
                     child: Text("A", style: TextStyle(fontSize: 40.0))),
               ),
               Column(children: drawerOptions),
-              Expanded(child: SizedBox(),),
+              Expanded(
+                child: SizedBox(),
+              ),
               Divider(),
               Container(
                 child: new ListTile(

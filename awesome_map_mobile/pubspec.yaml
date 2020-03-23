@@ -36,6 +36,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - images/noavatar.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -51,7 +53,7 @@ flutter:
         - asset: fonts/Lato-Light.ttf
         - asset: fonts/Lato-Medium.ttf
         - asset: fonts/Lato-Regular.ttf
-
+ 
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
