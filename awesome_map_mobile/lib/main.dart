@@ -1,5 +1,6 @@
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
+import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'account/account.dart';
 import 'authorization/signIn.dart';
+import 'events/eventList.dart';
 import 'home/home.dart';
 
 void main() => runApp(MyApp());
@@ -23,8 +25,8 @@ class MyApp extends StatelessWidget {
         "/introduce": (context) => Introduce(),
         "/home": (context) => Home(),
         "/account": (context) => Account(),
-        "/problems": (context) => Account(),
-        "/problems": (context) => Account(),
+        "/problems": (context) => ProblemList(),
+        "/events": (context) => EventList(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Awesome Map KPI',

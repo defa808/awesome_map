@@ -48,7 +48,7 @@ class _AccountState extends State<Account> {
       
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: isEditMode
-          ? _keyboardIsVisible()? Row(
+          ? !_keyboardIsVisible()? Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 FloatingActionButton(
