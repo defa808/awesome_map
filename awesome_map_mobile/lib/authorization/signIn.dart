@@ -29,7 +29,7 @@ class _SignInState extends State<SignIn> {
                   onPressed: () {
                     Navigator.pop(context);
                   }),
-              title: _keyboardIsVisible() ?  Text("AMKPI") :Text(""),
+              title: _keyboardIsVisible() ? Text("AMKPI") : Text(""),
               centerTitle: true,
             ),
           ),
@@ -97,7 +97,8 @@ class _SignInState extends State<SignIn> {
                           textColor: Colors.blue,
                           onPressed: () async {
                             final result =
-                                await Navigator.pushNamedAndRemoveUntil(context, '/home',(_) => false);
+                                await Navigator.pushNamedAndRemoveUntil(
+                                    context, '/home', (_) => false);
                           },
                         ),
                         SizedBox(height: 10),

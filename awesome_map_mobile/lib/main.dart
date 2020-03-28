@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'account/account.dart';
 import 'authorization/signIn.dart';
+import 'events/eventDetails.dart';
 import 'events/eventList.dart';
 import 'home/home.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         "/account": (context) => Account(),
         "/problems": (context) => ProblemList(),
         "/events": (context) => EventList(),
+        "/event": (context) => EventDetails(),
       },
       debugShowCheckedModeBanner: false,
       title: 'Awesome Map KPI',
