@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'eventContent.dart';
 
 class SelectableEventItem extends StatefulWidget {
-  SelectableEventItem({Key key}) : super(key: key);
+  SelectableEventItem({Key key, int id}) : super(key: key) {
+    this.id = id;
+  }
+  int id;
 
   @override
   _SelectableEventItemState createState() => _SelectableEventItemState();
@@ -11,10 +14,10 @@ class SelectableEventItem extends StatefulWidget {
 
 class _SelectableEventItemState extends State<SelectableEventItem> {
   var _isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
     return Card(
       child: InkWell(
         onLongPress: () {
@@ -23,8 +26,8 @@ class _SelectableEventItemState extends State<SelectableEventItem> {
             _isSelected = !_isSelected;
           });
         },
-        onTap: (){
-          Navigator.pushNamed(context,'/event', arguments: {'id':1});
+        onTap: () {
+          Navigator.pushNamed(context, '/event', arguments: {'id': widget.id});
         },
         splashColor: colorScheme.onSurface.withOpacity(0.12),
         highlightColor: Colors.transparent,
@@ -34,21 +37,19 @@ class _SelectableEventItemState extends State<SelectableEventItem> {
                 color: _isSelected
                     ? colorScheme.primary.withOpacity(0.08)
                     : Colors.transparent),
-            EventContent(),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Icon(Icons.check_circle,
-                                    color: _isSelected
-                                        ? colorScheme.primary
-                                        : Colors.transparent)),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                }
-              }
-              
-         
+            EventContent(id: widget.id),
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(Icons.check_circle,
+                      color: _isSelected
+                          ? colorScheme.primary
+                          : Colors.transparent)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

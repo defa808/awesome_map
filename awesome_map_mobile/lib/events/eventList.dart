@@ -21,7 +21,8 @@ class _EventList extends State<EventList> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: ListView(children: List.generate(1, (i) => templateWidget)),
+          child: ListView(
+              children: List.generate(10, (i) => SelectableEventItem(id: i))),
         ));
   }
 }

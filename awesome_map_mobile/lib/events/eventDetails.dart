@@ -10,6 +10,9 @@ class EventDetails extends StatefulWidget {
 class _EventDetailsState extends State<EventDetails> {
   @override
   Widget build(BuildContext context) {
+    final Map args = ModalRoute.of(context).settings.arguments;
+    final int id = args["id"];
+
     return Scaffold(
       body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -21,7 +24,7 @@ class _EventDetailsState extends State<EventDetails> {
                   expandedHeight: 200.0,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Hero(
-                      tag: 'hop-hey',
+                      tag: 'event-details-$id',
                       child: Material(
                         child: Ink.image(
                           image: AssetImage('images/gitar.jpg'),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class EventContent extends StatefulWidget {
-  EventContent({Key key}) : super(key: key);
+  int id;
 
+  EventContent({Key key, int id}) : super(key: key){
+    this.id = id;
+  }
   @override
   _EventContentState createState() => _EventContentState();
 }
@@ -10,6 +13,7 @@ class EventContent extends StatefulWidget {
 class _EventContentState extends State<EventContent> {
   @override
   Widget build(BuildContext context) {
+    int id = widget.id;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -19,7 +23,7 @@ class _EventContentState extends State<EventContent> {
             children: <Widget>[
               Positioned.fill(
                 child: Hero(
-                  tag: 'hop-hey',
+                  tag: 'event-details-$id',
                   child: Material(
                     child: Ink.image(
                       image: AssetImage("images/gitar.jpg"),
