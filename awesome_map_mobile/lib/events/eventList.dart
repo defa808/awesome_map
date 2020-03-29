@@ -12,8 +12,6 @@ class EventList extends StatefulWidget {
 class _EventList extends State<EventList> {
   @override
   Widget build(BuildContext context) {
-    Widget templateWidget = SelectableEventItem();
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Заходи'),

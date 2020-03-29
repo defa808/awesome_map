@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'mainMap.dart';
+
 class DrawerItem {
   Text title;
   Icon icon;
@@ -38,15 +40,12 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Проблемки?',
       style: optionStyle,
     ),
-    Text(
-      'Index 1: Головна карта',
-      style: optionStyle,
-    ),
+    MainMap(),
     Text(
       'Index 2: Заходи',
       style: optionStyle,
@@ -91,11 +90,6 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text('Awesome Map KPI'),
         centerTitle: true,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {},
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
