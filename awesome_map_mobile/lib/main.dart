@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
+import 'package:awesome_map_mobile/models/googleMapModel.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'account/account.dart';
@@ -11,8 +14,17 @@ import 'authorization/signIn.dart';
 import 'events/eventDetails.dart';
 import 'events/eventList.dart';
 import 'home/home.dart';
+import 'models/problemForm.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+  
+  MultiProvider(
+    
+    child: MyApp(), providers: <SingleChildCloneableWidget>[
+      ChangeNotifierProvider<GoogleMapModel>.value(notifier: GoogleMapModel()),
+      ChangeNotifierProvider<ProblemForm>.value(notifier: ProblemForm(0,0,"",-1, "",new List<File>()))
+    ],)
+  );
 
 class MyApp extends StatelessWidget {
   @override

@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/problems/problemMap.dart';
 import 'package:flutter/material.dart';
 
 import 'mainMap.dart';
@@ -41,11 +42,8 @@ class _HomeState extends State<Home> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Проблемки?',
-      style: optionStyle,
-    ),
-    MainMap(),
+    ProblemMap(key: UniqueKey()),
+    MainMap(key: UniqueKey(),),
     Text(
       'Index 2: Заходи',
       style: optionStyle,
