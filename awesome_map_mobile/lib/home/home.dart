@@ -1,3 +1,5 @@
+import 'package:awesome_map_mobile/home/gridOrListButton.dart';
+import 'package:awesome_map_mobile/problems/problemFilter.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
 import 'package:flutter/material.dart';
 
@@ -86,6 +88,9 @@ class _HomeState extends State<Home> {
     }
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          ProblemFilter()
+        ],
         title: const Text('Awesome Map KPI'),
         centerTitle: true,
       ),

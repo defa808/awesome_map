@@ -11,6 +11,7 @@ class BaseMap extends StatelessWidget {
     return Consumer<GoogleMapModel>(builder: (context, model, _) {
       return GoogleMap(
     buildingsEnabled: true,
+    mapToolbarEnabled: false,
     myLocationEnabled: true,
     myLocationButtonEnabled: false,
     initialCameraPosition: CameraPosition(

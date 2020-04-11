@@ -17,8 +17,6 @@ class GoogleMapModel extends ChangeNotifier {
   }
 
   void add(ProblemForm data) {
-  
-
     final String markerIdVal = 'marker_id_$_markerIdCounter';
     _markerIdCounter++;
     final MarkerId markerId = MarkerId(markerIdVal);
@@ -46,14 +44,17 @@ class GoogleMapModel extends ChangeNotifier {
         final Marker resetOld = markers[selectedMarker]
             .copyWith(iconParam: BitmapDescriptor.defaultMarker);
         markers[selectedMarker] = resetOld;
+        selectedMarker = null;
+      } else {
+        selectedMarker = markerId;
+        final Marker newMarker = tappedMarker.copyWith(
+          iconParam: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueGreen,
+          ),
+        );
+        markers[markerId] = newMarker;
       }
-      selectedMarker = markerId;
-      final Marker newMarker = tappedMarker.copyWith(
-        iconParam: BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueGreen,
-        ),
-      );
-      markers[markerId] = newMarker;
+
       notifyListeners();
     }
   }

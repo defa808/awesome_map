@@ -1,4 +1,5 @@
 import 'package:awesome_map_mobile/home/baseMap.dart';
+import 'package:awesome_map_mobile/home/mapListButton.dart';
 import 'package:awesome_map_mobile/models/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/problemForm.dart';
 import 'package:awesome_map_mobile/problems/createProblemItem.dart';
@@ -17,7 +18,8 @@ class _ProblemMapState extends State<ProblemMap> {
   bool isPrepareAdd = false;
 
   void _add(ProblemForm model) {
-    LatLng currentPosition = Provider.of<GoogleMapModel>(context).getCurrentLatLon();
+    LatLng currentPosition =
+        Provider.of<GoogleMapModel>(context).getCurrentLatLon();
     model.setLatLon(currentPosition);
     Provider.of<GoogleMapModel>(context).add(model);
     Provider.of<ProblemForm>(context).setLatLon(currentPosition);
@@ -91,6 +93,10 @@ class _ProblemMapState extends State<ProblemMap> {
         body: Container(
           child: Stack(children: <Widget>[
             BaseMap(),
+            Padding(
+              padding: const EdgeInsets.only(top:8.0),
+              child: MapListButton(),
+            ),
             if (isPrepareAdd)
               Center(
                 child: Container(
