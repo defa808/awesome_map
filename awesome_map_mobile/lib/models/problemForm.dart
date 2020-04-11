@@ -9,8 +9,8 @@ class ProblemForm extends Problem with ChangeNotifier {
   bool readyToFill = false;
 
   void setLatLon(LatLng position) {
-    this.latitude = position.latitude;
-    this.longitude = position.longitude;
+    this.latitude = num.parse(position.latitude.toStringAsFixed(10));
+    this.longitude = num.parse(position.longitude.toStringAsFixed(10));
     this.readyToFill = true;
     this.notifyListeners();
   }

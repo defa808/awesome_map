@@ -18,6 +18,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
   ProblemForm _data = ProblemForm(0, 0, "", 0, "", new List<File>());
 
   void completeTicket(context) {
+    Provider.of<GoogleMapModel>(context).removeLast();
     _formKey.currentState.save();
     Provider.of<ProblemForm>(context).save(_data);
     Provider.of<GoogleMapModel>(context).add(_data);

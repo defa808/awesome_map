@@ -17,6 +17,8 @@ class GoogleMapModel extends ChangeNotifier {
   }
 
   void add(ProblemForm data) {
+  
+
     final String markerIdVal = 'marker_id_$_markerIdCounter';
     _markerIdCounter++;
     final MarkerId markerId = MarkerId(markerIdVal);
@@ -92,7 +94,7 @@ class GoogleMapModel extends ChangeNotifier {
   }
 
   void removeLast() {
-     final String markerIdVal = 'marker_id_' + (_markerIdCounter - 1).toString();
+    final String markerIdVal = 'marker_id_' + (_markerIdCounter - 1).toString();
     final MarkerId markerId = MarkerId(markerIdVal);
     markers.remove(markerId);
     notifyListeners();
