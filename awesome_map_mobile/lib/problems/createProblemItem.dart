@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:awesome_map_mobile/models/googleMapModel.dart';
-import 'package:awesome_map_mobile/models/problemForm.dart';
+import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/problem/problemForm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

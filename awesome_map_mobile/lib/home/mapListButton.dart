@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MapListButton extends StatefulWidget {
-  const MapListButton({Key key}) : super(key: key);
+  final Function() onMapChange;
+  final Function() onListChange;
+  const MapListButton(
+      {Key key, @required this.onMapChange, @required this.onListChange})
+      : super(key: key);
 
   @override
   _MapListButtonState createState() => _MapListButtonState();
@@ -37,10 +41,14 @@ class _MapListButtonState extends State<MapListButton>
           isSelected: _selections,
           onPressed: (int index) {
             setState(() {
-             for (var i = 0; i < _selections.length; i++) {
-               _selections[i] = false;
-             }
+              for (var i = 0; i < _selections.length; i++) {
+                _selections[i] = false;
+              }
               _selections[index] = true;
+              if (index == 0)
+                widget.onMapChange();
+              else
+                widget.onListChange();
             });
           },
         ),

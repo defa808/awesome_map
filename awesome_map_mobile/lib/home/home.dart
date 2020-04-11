@@ -1,7 +1,7 @@
-import 'package:awesome_map_mobile/home/gridOrListButton.dart';
 import 'package:awesome_map_mobile/problems/problemFilter.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'mainMap.dart';
 
@@ -43,9 +43,12 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   static final List<Widget> _widgetOptions = <Widget>[
     ProblemMap(key: UniqueKey()),
-    MainMap(key: UniqueKey(),),
+    MainMap(
+      key: UniqueKey(),
+    ),
     Text(
       'Index 2: Заходи',
       style: optionStyle,
@@ -55,6 +58,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     _selectedDrawerIndex = -1;
   }
 
@@ -88,10 +92,8 @@ class _HomeState extends State<Home> {
     }
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          ProblemFilter()
-        ],
-        title: const Text('Awesome Map KPI'),
+        actions: <Widget>[ProblemFilter()],
+        title: Text("Awesome Map KPI"),
         centerTitle: true,
       ),
       body: Center(

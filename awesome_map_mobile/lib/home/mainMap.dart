@@ -1,5 +1,5 @@
 import 'package:awesome_map_mobile/home/baseMap.dart';
-import 'package:awesome_map_mobile/models/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

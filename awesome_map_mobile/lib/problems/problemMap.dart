@@ -1,7 +1,6 @@
 import 'package:awesome_map_mobile/home/baseMap.dart';
-import 'package:awesome_map_mobile/home/mapListButton.dart';
-import 'package:awesome_map_mobile/models/googleMapModel.dart';
-import 'package:awesome_map_mobile/models/problemForm.dart';
+import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/problem/problemForm.dart';
 import 'package:awesome_map_mobile/problems/createProblemItem.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,6 +30,7 @@ class _ProblemMapState extends State<ProblemMap> {
   @override
   void initState() {
     super.initState();
+
     setState(() {
       isPrepareAdd = false;
     });
@@ -38,65 +38,15 @@ class _ProblemMapState extends State<ProblemMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProblemForm>(builder: (context, model, _) {
+    return Consumer<ProblemForm>(builder: (context, problemFormModel, _) {
+      // config.setSettings(
+      //     floatingButton: getFloatingButton(problemFormModel, context));
       return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: model.readyToFill
-            ? null
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  FloatingActionButton(
-                      heroTag: null,
-                      backgroundColor: Colors.white,
-                      child: const Icon(Icons.my_location, color: Colors.blue),
-                      onPressed: () {
-                        Provider.of<GoogleMapModel>(context)
-                            .setCurrentLocation();
-                      }),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  isPrepareAdd
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            FloatingActionButton(
-                                child: const Icon(Icons.clear),
-                                onPressed: () {
-                                  setState(() {
-                                    isPrepareAdd = !isPrepareAdd;
-                                  });
-                                }),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            FloatingActionButton(
-                                heroTag: null,
-                                child: const Icon(Icons.done),
-                                onPressed: () {
-                                  _add(model);
-                                }),
-                          ],
-                        )
-                      : FloatingActionButton(
-                          heroTag: null,
-                          child: const Icon(Icons.add),
-                          onPressed: () {
-                            setState(() {
-                              isPrepareAdd = !isPrepareAdd;
-                            });
-                          }),
-                ],
-              ),
+        floatingActionButton: getFloatingButton(problemFormModel, context),
         body: Container(
           child: Stack(children: <Widget>[
             BaseMap(),
-            Padding(
-              padding: const EdgeInsets.only(top:8.0),
-              child: MapListButton(),
-            ),
             if (isPrepareAdd)
               Center(
                 child: Container(
@@ -108,10 +58,61 @@ class _ProblemMapState extends State<ProblemMap> {
                           Icon(Icons.location_on, color: Colors.red, size: 45)),
                 ),
               ),
-            if (model.readyToFill) CreateProblemItem(),
+            if (problemFormModel.readyToFill) CreateProblemItem(),
           ]),
         ),
       );
     });
+  }
+
+  Column getFloatingButton(ProblemForm problemFormModel, BuildContext context) {
+    return problemFormModel.readyToFill
+        ? null
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              FloatingActionButton(
+                  heroTag: null,
+                  backgroundColor: Colors.white,
+                  child: const Icon(Icons.my_location, color: Colors.blue),
+                  onPressed: () {
+                    Provider.of<GoogleMapModel>(context).setCurrentLocation();
+                  }),
+              SizedBox(
+                height: 15,
+              ),
+              isPrepareAdd
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        FloatingActionButton(
+                            child: const Icon(Icons.clear),
+                            onPressed: () {
+                              setState(() {
+                                isPrepareAdd = !isPrepareAdd;
+                              });
+                            }),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        FloatingActionButton(
+                            heroTag: null,
+                            child: const Icon(Icons.done),
+                            onPressed: () {
+                              _add(problemFormModel);
+                            }),
+                      ],
+                    )
+                  : FloatingActionButton(
+                      heroTag: null,
+                      child: const Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          isPrepareAdd = !isPrepareAdd;
+                        });
+                      }),
+            ],
+          );
   }
 }

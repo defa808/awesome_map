@@ -1,7 +1,5 @@
 import 'dart:io';
-
-import 'package:awesome_map_mobile/models/problem.dart';
-import 'package:awesome_map_mobile/problems/problemMap.dart';
+import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

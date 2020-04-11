@@ -1,4 +1,4 @@
-import 'package:awesome_map_mobile/models/problemForm.dart';
+import 'package:awesome_map_mobile/models/problem/problemForm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';

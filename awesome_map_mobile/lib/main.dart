@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
-import 'package:awesome_map_mobile/models/googleMapModel.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
+import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,48 +15,56 @@ import 'authorization/signIn.dart';
 import 'events/eventDetails.dart';
 import 'events/eventList.dart';
 import 'home/home.dart';
-import 'models/problemForm.dart';
+import 'models/googleMap/googleMapModel.dart';
+import 'models/problem/problemForm.dart';
 
-void main() => runApp(
-  
-  MultiProvider(
-    
-    child: MyApp(), providers: <SingleChildCloneableWidget>[
-      ChangeNotifierProvider<GoogleMapModel>.value(notifier: GoogleMapModel()),
-      ChangeNotifierProvider<ProblemForm>.value(notifier: ProblemForm(0,0,"",-1, "",new List<File>()))
-    ],)
-  );
+void main() => runApp(MultiProvider(
+      child: CustomTheme(
+        initialThemeKey: MyThemeKeys.LIGHT,
+        child: MyApp()),
+      providers: <SingleChildCloneableWidget>[
+        ChangeNotifierProvider<GoogleMapModel>.value(
+            notifier: GoogleMapModel()),
+        ChangeNotifierProvider<ProblemForm>.value(
+            notifier: ProblemForm(0, 0, "", -1, "", new List<File>()))
+      ],
+    ));
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: "/",
-      routes: {
-        "/welcome": (context) => Welcome(),
-        "/signIn": (context) => SignIn(),
-        "/signUp": (context) => SignUp(),
-        "/introduce": (context) => Introduce(),
-        "/home": (context) => Home(),
-        "/account": (context) => Account(),
-        "/problems": (context) => ProblemList(),
-        "/events": (context) => EventList(),
-        "/event": (context) => EventDetails(),
-      },
-      debugShowCheckedModeBanner: false,
-      title: 'Awesome Map KPI',
-      theme: ThemeData(
-          pageTransitionsTheme: PageTransitionsTheme(builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          }),
-          primarySwatch: Colors.blue,
-          textTheme: TextTheme(
-              headline: TextStyle(
-                  fontSize: 72.0, fontFamily: 'Adventure', color: Colors.white),
-              body2: TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold),
-              body1: TextStyle(fontFamily: 'Lato'))),
-      home: AppPage(title: ''),
+    return StreamBuilder(
+      builder: (context, snapshot) => MaterialApp(
+        initialRoute: "/",
+        routes: {
+          "/welcome": (context) => Welcome(),
+          "/signIn": (context) => SignIn(),
+          "/signUp": (context) => SignUp(),
+          "/introduce": (context) => Introduce(),
+          "/home": (context) => Home(),
+          "/account": (context) => Account(),
+          "/problems": (context) => ProblemList(),
+          "/events": (context) => EventList(),
+          "/event": (context) => EventDetails(),
+        },
+        debugShowCheckedModeBanner: false,
+        title: 'Awesome Map KPI',
+        theme: ThemeData(
+            pageTransitionsTheme: PageTransitionsTheme(builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            }),
+            primarySwatch: Colors.blue,
+            textTheme: TextTheme(
+                headline: TextStyle(
+                    fontSize: 72.0,
+                    fontFamily: 'Adventure',
+                    color: Colors.white),
+                body2:
+                    TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold),
+                body1: TextStyle(fontFamily: 'Lato'))),
+        home: AppPage(title: ''),
+      ),
     );
   }
 }
@@ -71,10 +80,10 @@ class AppPage extends StatefulWidget {
 class _AppPageState extends State<AppPage> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Future<bool> isShowIntroduce;
-
   @override
   void initState() {
     super.initState();
+
     isShowIntroduce = _prefs.then((SharedPreferences prefs) {
       return (prefs.getBool('isShowIntroduce') ?? true);
     });
@@ -88,6 +97,7 @@ class _AppPageState extends State<AppPage> {
 
   @override
   Widget build(BuildContext context) {
+  
     // Widget startWidget = isShowIntroduce ? Introduce() : Welcome();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
