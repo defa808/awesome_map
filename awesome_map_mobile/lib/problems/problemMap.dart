@@ -17,9 +17,9 @@ class _ProblemMapState extends State<ProblemMap> {
   bool isPrepareAdd = false;
 
   void _add(ProblemForm model) {
+    LatLng currentPosition = Provider.of<GoogleMapModel>(context).getCurrentLatLon();
+    model.setLatLon(currentPosition);
     Provider.of<GoogleMapModel>(context).add(model);
-    LatLng currentPosition =
-        Provider.of<GoogleMapModel>(context).getCurrentLatLon();
     Provider.of<ProblemForm>(context).setLatLon(currentPosition);
     setState(() {
       isPrepareAdd = false;

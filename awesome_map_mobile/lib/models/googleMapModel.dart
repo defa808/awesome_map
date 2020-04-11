@@ -92,7 +92,9 @@ class GoogleMapModel extends ChangeNotifier {
   }
 
   void removeLast() {
-    markers.remove(markers[_markerIdCounter - 1]);
+     final String markerIdVal = 'marker_id_' + (_markerIdCounter - 1).toString();
+    final MarkerId markerId = MarkerId(markerIdVal);
+    markers.remove(markerId);
     notifyListeners();
   }
 

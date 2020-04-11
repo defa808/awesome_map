@@ -26,6 +26,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
 
   void removeTicket() {
     Provider.of<GoogleMapModel>(context).removeLast();
+    Provider.of<ProblemForm>(context).clear();
   }
 
   String _selectedTypeProblem;
