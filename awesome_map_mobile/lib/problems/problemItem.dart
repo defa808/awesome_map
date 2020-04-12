@@ -79,10 +79,13 @@ class _ProblemItemState extends State<ProblemItem> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  RaisedButton(
-                    color: CustomTheme.of(context).buttonColor,
-                    child: Text("Слідкувати"),
-                    onPressed: () {},
+                  Expanded(
+                    child: 
+                    RaisedButton(
+                      color: CustomTheme.of(context).buttonColor,
+                      onPressed: () {},
+                      child: Text("На карті"),
+                    ),
                   ),
                   FlatButton(
                     color: CustomTheme.of(context).bottomAppBarColor,

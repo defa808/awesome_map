@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
+import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           "/problems": (context) => ProblemListMessage(),
           "/events": (context) => EventList(),
           "/event": (context) => EventDetails(),
+          "/problemDetail": (context) => ProblemDetails(),
         },
         debugShowCheckedModeBanner: false,
         title: 'Awesome Map KPI',

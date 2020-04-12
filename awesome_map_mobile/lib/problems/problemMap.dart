@@ -75,7 +75,7 @@ class _ProblemMapState extends State<ProblemMap> {
               FloatingActionButton(
                   heroTag: null,
                   backgroundColor: Colors.white,
-                  child: const Icon(Icons.my_location, color: Colors.blue),
+                  child: Icon(Icons.my_location, color: Colors.blue),
                   onPressed: () {
                     Provider.of<GoogleMapModel>(context).setCurrentLocation();
                   }),
