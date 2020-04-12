@@ -49,20 +49,7 @@ class MyApp extends StatelessWidget {
         },
         debugShowCheckedModeBanner: false,
         title: 'Awesome Map KPI',
-        theme: ThemeData(
-            pageTransitionsTheme: PageTransitionsTheme(builders: {
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-            }),
-            primarySwatch: Colors.blue,
-            textTheme: TextTheme(
-                headline: TextStyle(
-                    fontSize: 72.0,
-                    fontFamily: 'Adventure',
-                    color: Colors.white),
-                body2:
-                    TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold),
-                body1: TextStyle(fontFamily: 'Lato'))),
+        theme:CustomTheme.of(context),
         home: AppPage(title: ''),
       ),
     );

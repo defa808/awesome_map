@@ -21,7 +21,6 @@ class _CustomTheme extends InheritedWidget {
 class CustomTheme extends StatefulWidget {
   final Widget child;
   final MyThemeKeys initialThemeKey;
-
   const CustomTheme({
     Key key,
     this.initialThemeKey,
@@ -46,18 +45,22 @@ class CustomTheme extends StatefulWidget {
 
 class CustomThemeState extends State<CustomTheme> {
   ThemeData _theme;
+  MyThemeKeys _themeKey;
 
   ThemeData get theme => _theme;
+  MyThemeKeys get themeKey => _themeKey;
 
   @override
   void initState() {
     _theme = MyThemes.getThemeFromKey(widget.initialThemeKey);
+    _themeKey = widget.initialThemeKey;
     super.initState();
   }
 
   void changeTheme(MyThemeKeys themeKey) {
     setState(() {
       _theme = MyThemes.getThemeFromKey(themeKey);
+      _themeKey = themeKey;
     });
   }
 

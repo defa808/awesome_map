@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:awesome_map_mobile/problems/problemFilter.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
+import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -127,8 +131,33 @@ class _HomeState extends State<Home> {
             // Important: Remove any padding from the ListView.
             children: <Widget>[
               UserAccountsDrawerHeader(
+                decoration:
+                    BoxDecoration(color: Theme.of(context).primaryColor),
                 accountEmail: Text("alex@gmail.com"),
                 accountName: null,
+                otherAccountsPictures: <Widget>[
+                  CustomTheme.instanceOf(context).themeKey == MyThemeKeys.LIGHT
+                      ? Transform.rotate(
+                          child: IconButton(
+                            icon: Icon(Icons.brightness_3),
+                            color: Colors.white,
+                            onPressed: () {
+                              _changeTheme(context, MyThemeKeys.DARK);
+                            },
+                          ),
+                          angle: 30 * pi / 180,
+                        )
+                      : Transform.rotate(
+                          child: IconButton(
+                            icon: Icon(Icons.brightness_1),
+                            color: Colors.white,
+                            onPressed: () {
+                              _changeTheme(context, MyThemeKeys.LIGHT);
+                            },
+                          ),
+                          angle: 30 * pi / 180,
+                        )
+                ],
                 currentAccountPicture: CircleAvatar(
                     backgroundColor: Colors.white,
                     child: Text("A", style: TextStyle(fontSize: 40.0))),
@@ -153,5 +182,9 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void _changeTheme(BuildContext buildContext, MyThemeKeys key) {
+    CustomTheme.instanceOf(buildContext).changeTheme(key);
   }
 }
