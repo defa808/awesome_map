@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MainMap extends StatefulWidget {
-  MainMap({Key key}) : super(key: key) {}
+  Function changeTitleAppBar;
+  MainMap({Key key, Function changeTitle}) : super(key: key) {
+    changeTitleAppBar = changeTitle;
+  }
 
   @override
   _MainMapState createState() => _MainMapState();
@@ -16,8 +19,14 @@ class _MainMapState extends State<MainMap> {
     super.dispose();
   }
 
+@override
+void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Column(

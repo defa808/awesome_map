@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
-import 'package:awesome_map_mobile/problems/problemList.dart';
+import 'package:awesome_map_mobile/problems/problemListMessage.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
@@ -19,9 +19,7 @@ import 'models/googleMap/googleMapModel.dart';
 import 'models/problem/problemForm.dart';
 
 void main() => runApp(MultiProvider(
-      child: CustomTheme(
-        initialThemeKey: MyThemeKeys.LIGHT,
-        child: MyApp()),
+      child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
       providers: <SingleChildCloneableWidget>[
         ChangeNotifierProvider<GoogleMapModel>.value(
             notifier: GoogleMapModel()),
@@ -43,13 +41,13 @@ class MyApp extends StatelessWidget {
           "/introduce": (context) => Introduce(),
           "/home": (context) => Home(),
           "/account": (context) => Account(),
-          "/problems": (context) => ProblemList(),
+          "/problems": (context) => ProblemListMessage(),
           "/events": (context) => EventList(),
           "/event": (context) => EventDetails(),
         },
         debugShowCheckedModeBanner: false,
         title: 'Awesome Map KPI',
-        theme:CustomTheme.of(context),
+        theme: CustomTheme.of(context),
         home: AppPage(title: ''),
       ),
     );
@@ -84,7 +82,6 @@ class _AppPageState extends State<AppPage> {
 
   @override
   Widget build(BuildContext context) {
-  
     // Widget startWidget = isShowIntroduce ? Introduce() : Welcome();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

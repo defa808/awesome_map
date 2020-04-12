@@ -1,12 +1,9 @@
 import 'dart:math';
-
 import 'package:awesome_map_mobile/problems/problemFilter.dart';
-import 'package:awesome_map_mobile/problems/problemMap.dart';
+import 'package:awesome_map_mobile/problems/problemHome.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'mainMap.dart';
 
 class DrawerItem {
@@ -18,6 +15,14 @@ class DrawerItem {
     this.icon = icon;
     this.path = path;
   }
+}
+
+class BottomTabItem {
+  Widget title;
+  List<Widget> actions;
+  Widget body;
+
+  BottomTabItem({this.title, this.actions, this.body});
 }
 
 class Home extends StatefulWidget {
@@ -39,30 +44,33 @@ class Home extends StatefulWidget {
         path: '/settings'),
   ];
 
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  final bottomTabBarItems = [
+    BottomTabItem(
+        title: Text("Проблеми"),
+        actions: <Widget>[ProblemFilter()],
+        body: ProblemHome()),
+    BottomTabItem(title: Text("Awesome Map KPI"), body: MainMap()),
+    BottomTabItem(
+      title: Text("Заходи"),
+      body: Text(
+        'Index 2: Заходи',
+        style: optionStyle,
+      ),
+    )
+  ];
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-
-  static final List<Widget> _widgetOptions = <Widget>[
-    ProblemMap(key: UniqueKey()),
-    MainMap(
-      key: UniqueKey(),
-    ),
-    Text(
-      'Index 2: Заходи',
-      style: optionStyle,
-    ),
-  ];
 
   @override
   void initState() {
     super.initState();
-
     _selectedDrawerIndex = -1;
   }
 
@@ -94,14 +102,15 @@ class _HomeState extends State<Home> {
         onTap: () => _onSelectItem(i, widget.drawerItems[i].path),
       ));
     }
+
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[ProblemFilter()],
-        title: Text("Awesome Map KPI"),
+        actions: widget.bottomTabBarItems.elementAt(_selectedIndex).actions,
+        title: widget.bottomTabBarItems.elementAt(_selectedIndex).title,
         centerTitle: true,
       ),
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: widget.bottomTabBarItems.elementAt(_selectedIndex).body,
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

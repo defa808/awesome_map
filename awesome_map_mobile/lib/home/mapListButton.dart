@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class MapListButton extends StatefulWidget {
+  final int initialValue;
   final Function() onMapChange;
   final Function() onListChange;
   const MapListButton(
-      {Key key, @required this.onMapChange, @required this.onListChange})
+      {Key key,
+      @required this.initialValue,
+      @required this.onMapChange,
+      @required this.onListChange})
       : super(key: key);
 
   @override
@@ -13,11 +17,14 @@ class MapListButton extends StatefulWidget {
 
 class _MapListButtonState extends State<MapListButton>
     with SingleTickerProviderStateMixin {
-  List<bool> _selections = [true, false];
+  List<bool> _selections; //[true, false];
 
   @override
   void initState() {
     super.initState();
+    _selections = List.generate(2, (int index) {
+      return widget.initialValue == index;
+    });
   }
 
   @override
