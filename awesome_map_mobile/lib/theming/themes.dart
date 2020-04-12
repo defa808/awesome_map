@@ -3,30 +3,15 @@ import 'package:flutter/material.dart';
 enum MyThemeKeys { LIGHT, DARK, DARKER }
 
 class MyThemes {
-  static final ThemeData standartTheme = ThemeData(
-      pageTransitionsTheme: PageTransitionsTheme(builders: {
-        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-      }),
-      primarySwatch: Colors.blue,
-      textTheme: TextTheme(
-          headline: TextStyle(
-              fontSize: 72.0, fontFamily: 'Adventure', color: Colors.white),
-          body2: TextStyle(fontFamily: 'Lato', fontWeight: FontWeight.bold),
-          body1: TextStyle(fontFamily: 'Lato')));
-
-  static final ThemeData lightTheme = standartTheme.copyWith(
+  static final ThemeData lightTheme = getMixTheme(ThemeData.light()).copyWith(
     primaryColor: Colors.blue,
-    brightness: Brightness.light,
   );
 
-  static final ThemeData darkTheme = standartTheme.copyWith(
-    primaryColor: Colors.grey,
+  static final ThemeData darkTheme = getMixTheme(ThemeData.dark()).copyWith(
     brightness: Brightness.dark,
   );
 
-  static final ThemeData darkerTheme = standartTheme.copyWith(
-    primaryColor: Colors.black,
+  static final ThemeData darkerTheme = getMixTheme(ThemeData.dark()).copyWith(
     brightness: Brightness.dark,
   );
 
@@ -41,5 +26,24 @@ class MyThemes {
       default:
         return lightTheme;
     }
+  }
+
+  static getMixTheme(ThemeData themeData) {
+    return themeData.copyWith(
+      pageTransitionsTheme: PageTransitionsTheme(builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      }),
+      toggleButtonsTheme: ToggleButtonsThemeData(
+          color: themeData.brightness == Brightness.dark
+              ? Colors.grey
+              : Colors.grey,
+          selectedColor: themeData.brightness == Brightness.dark
+              ? Colors.white
+              : Colors.blue,
+          fillColor: themeData.brightness == Brightness.dark
+              ? Colors.black12
+              : Colors.white),
+    );
   }
 }

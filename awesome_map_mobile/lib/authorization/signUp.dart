@@ -42,7 +42,7 @@ class _SignUpState extends State<SignUp> {
                         style: Theme.of(context)
                             .textTheme
                             .headline
-                            .copyWith(fontSize: 60)),
+                            .copyWith(fontSize: 60, fontFamily: "Adventure")),
                     SizedBox(height: 60)
                   ],
                 ),
@@ -60,7 +60,7 @@ class _SignUpState extends State<SignUp> {
                           style: Theme.of(context)
                               .textTheme
                               .body1
-                              .copyWith(color: Colors.blue, fontSize: 40),
+                              .copyWith(color: Colors.blue, fontFamily: 'Lato', fontSize: 40),
                         ),
                         SizedBox(height: 10),
                         TextField(

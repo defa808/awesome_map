@@ -14,7 +14,7 @@ class Welcome extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text("Awesome", style: Theme.of(context).textTheme.headline),
+                Text("Awesome", style: Theme.of(context).textTheme.headline.copyWith( fontSize: 72.0, color:Colors.white, fontFamily: 'Adventure')),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,8 +28,8 @@ class Welcome extends StatelessWidget {
                         )),
                     Column(
                       children: <Widget>[
-                        Text("Map", style: Theme.of(context).textTheme.headline),
-                        Text("KPI", style: Theme.of(context).textTheme.headline),
+                        Text("Map", style: Theme.of(context).textTheme.headline.copyWith( fontSize: 72.0,color:Colors.white, fontFamily: 'Adventure')),
+                        Text("KPI", style: Theme.of(context).textTheme.headline.copyWith( fontSize: 72.0,color:Colors.white, fontFamily: 'Adventure')),
                       ],
                     )
                   ],
@@ -47,7 +47,7 @@ class Welcome extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .body2
-                            .copyWith(color: Colors.white, fontSize: 25)),
+                            .copyWith(color: Colors.white, fontFamily: 'Lato', fontWeight: FontWeight.bold, fontSize: 25)),
                   ],
                 ),
                 Row(
@@ -57,7 +57,7 @@ class Welcome extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .body2
-                            .copyWith(color: Colors.white,fontSize: 25)),
+                            .copyWith(color: Colors.white, fontFamily: 'Lato', fontWeight: FontWeight.bold, fontSize: 25)),
                   ],
                 ),
                 Row(
@@ -67,7 +67,7 @@ class Welcome extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .body2
-                            .copyWith(color: Colors.white, fontSize: 25)),
+                            .copyWith(color: Colors.white, fontFamily: 'Lato', fontWeight: FontWeight.bold,  fontSize: 25)),
                   ],
                 ),
               ]),

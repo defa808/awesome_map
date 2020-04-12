@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 class MapListButton extends StatefulWidget {
@@ -38,11 +39,11 @@ class _MapListButtonState extends State<MapListButton>
       alignment: Alignment.topCenter,
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(30)),
+            color: CustomTheme.of(context).toggleButtonsTheme.fillColor, borderRadius: BorderRadius.circular(30)),
         child: ToggleButtons(
-          color: Colors.grey,
+          color: Theme.of(context).toggleButtonsTheme.color,
           renderBorder: false,
-          selectedColor: Colors.blue,
+          selectedColor: Theme.of(context).toggleButtonsTheme.selectedColor,
           borderRadius: BorderRadius.circular(30),
           children: <Widget>[Icon(Icons.map), Icon(Icons.list)],
           isSelected: _selections,

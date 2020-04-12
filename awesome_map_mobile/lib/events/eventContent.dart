@@ -33,29 +33,6 @@ class _EventContentState extends State<EventContent> {
                   ),
                 ),
               ),
-              // Positioned(
-              //     top: 16,
-              //     right: 16,
-              //     child: Column(
-              //       crossAxisAlignment:CrossAxisAlignment.end,
-              //       children: <Widget>[
-              //         FittedBox(
-              //             fit: BoxFit.scaleDown,
-              //             alignment: Alignment.center,
-              //             child: Text(
-              //               "12.10.19",
-              //               style: TextStyle(color: Colors.white, fontSize: 13),
-              //             )),
-              //             SizedBox(height: 2),
-              //         FittedBox(
-              //             fit: BoxFit.scaleDown,
-              //             alignment: Alignment.center,
-              //             child: Text(
-              //               "12:10",
-              //               style: TextStyle(color: Colors.white, fontSize: 13),
-              //             ))
-              //       ],
-              //     )),
             ],
           ),
         ),
