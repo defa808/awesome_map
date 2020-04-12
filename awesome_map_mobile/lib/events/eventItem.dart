@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'eventContent.dart';
@@ -17,7 +18,7 @@ class _SelectableEventItemState extends State<SelectableEventItem> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = CustomTheme.of(context).colorScheme;
     return Card(
       child: InkWell(
         onLongPress: () {

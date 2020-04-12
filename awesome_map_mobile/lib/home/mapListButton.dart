@@ -41,9 +41,9 @@ class _MapListButtonState extends State<MapListButton>
         decoration: BoxDecoration(
             color: CustomTheme.of(context).toggleButtonsTheme.fillColor, borderRadius: BorderRadius.circular(30)),
         child: ToggleButtons(
-          color: Theme.of(context).toggleButtonsTheme.color,
+          color: CustomTheme.of(context).toggleButtonsTheme.color,
           renderBorder: false,
-          selectedColor: Theme.of(context).toggleButtonsTheme.selectedColor,
+          selectedColor: CustomTheme.of(context).toggleButtonsTheme.selectedColor,
           borderRadius: BorderRadius.circular(30),
           children: <Widget>[Icon(Icons.map), Icon(Icons.list)],
           isSelected: _selections,
