@@ -14,19 +14,39 @@ class GoogleMapModel extends ChangeNotifier {
 
   GoogleMapModel() {
     currentCameraPosition = new CameraPosition(target: centerKPI);
+    add(Marker(
+      position: LatLng(50.449601, 30.457368),
+      infoWindow: InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
+      markerId: null,
+    ));
   }
 
-  void add(ProblemForm data) {
+  void selectItem(MarkerId markerId) {
+    onMarkerTapped(markerId);
+  }
+
+  MarkerId getSelectedItem() {
+    return selectedMarker;
+  }
+
+  void initMarker(List<Marker> markers) {
+    for (var item in markers) {
+      add(item);
+    }
+    notifyListeners();
+  }
+
+  void add(Marker data) {
     final String markerIdVal = 'marker_id_$_markerIdCounter';
     _markerIdCounter++;
     final MarkerId markerId = MarkerId(markerIdVal);
     final Marker marker = Marker(
       markerId: markerId,
       draggable: true,
-      position: LatLng(data.latitude, data.longitude),
-      infoWindow: InfoWindow(title: data.title, snippet: data.description),
+      position: data.position,
+      infoWindow: data.infoWindow,
       onTap: () {
-        _onMarkerTapped(markerId);
+        onMarkerTapped(markerId);
       },
       onDragEnd: (LatLng position) {
         _onMarkerDragEnd(markerId, position);
@@ -37,7 +57,7 @@ class GoogleMapModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _onMarkerTapped(MarkerId markerId) {
+  void onMarkerTapped(MarkerId markerId) {
     final Marker tappedMarker = markers[markerId];
     if (tappedMarker != null) {
       if (markers.containsKey(selectedMarker)) {

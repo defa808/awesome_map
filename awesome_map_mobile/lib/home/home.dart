@@ -103,7 +103,7 @@ class _HomeState extends State<Home> {
       ));
     }
 
-    return Scaffold(
+    return  Scaffold(
       appBar: AppBar(
         actions: widget.bottomTabBarItems.elementAt(_selectedIndex).actions,
         title: widget.bottomTabBarItems.elementAt(_selectedIndex).title,

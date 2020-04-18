@@ -19,17 +19,30 @@ class _ProblemMapState extends State<ProblemMap> {
   void _add(ProblemForm model) {
     LatLng currentPosition =
         Provider.of<GoogleMapModel>(context).getCurrentLatLon();
-    model.setLatLon(currentPosition);
-    Provider.of<GoogleMapModel>(context).add(model);
+    // model.setLatLon(currentPosition);
+    Marker modelMarker = Marker(
+        position: currentPosition,
+        infoWindow: InfoWindow(title: model.title, snippet: model.description),
+        markerId: null);
+    Provider.of<GoogleMapModel>(context).add(modelMarker);
     Provider.of<ProblemForm>(context).setLatLon(currentPosition);
     setState(() {
       isPrepareAdd = false;
     });
   }
 
+  static List<Marker> problems = <Marker>[
+    Marker(
+      position: LatLng(50.449601, 30.457368),
+      infoWindow: InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
+      markerId: null,
+    )
+  ];
+
   @override
   void initState() {
     super.initState();
+    // Provider.of<GoogleMapModel>(context).initMarker(problems);
 
     setState(() {
       isPrepareAdd = false;
@@ -38,6 +51,7 @@ class _ProblemMapState extends State<ProblemMap> {
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<ProblemForm>(builder: (context, problemFormModel, _) {
       // config.setSettings(
       //     floatingButton: getFloatingButton(problemFormModel, context));

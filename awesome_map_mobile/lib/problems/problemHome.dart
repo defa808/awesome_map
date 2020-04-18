@@ -1,7 +1,10 @@
 import 'package:awesome_map_mobile/home/mapListButton.dart';
+import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class ProblemHome extends StatefulWidget {
   ProblemHome({Key key}) : super(key: key);
@@ -24,40 +27,52 @@ class _ProblemHomeState extends State<ProblemHome> {
   }
 
   Widget mapListButton;
-
+  MarkerId selectedItemLast;
   @override
   Widget build(BuildContext context) {
-    mapListButton = MapListButton(
-      initialValue: isShowList ? 1 : 0,
-      onListChange: () => setState(
-        () {
-          isShowList = true;
-        },
-      ),
-      onMapChange: () => setState(() {
-        isShowList = false;
-      }),
-    );
+    Provider.of<GoogleMapModel>(context, listen: false).addListener(() {
+      MarkerId selectedItem =
+          Provider.of<GoogleMapModel>(context, listen: false).getSelectedItem();
+    });
+    return Consumer<GoogleMapModel>(
+      builder: (BuildContext context, GoogleMapModel model, Widget child) {
+        MarkerId selectedItem = model.selectedMarker;
+        if (selectedItemLast != selectedItem) isShowList = false;
+        selectedItemLast = selectedItem;
 
-    return isShowList
-        ? Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: mapListButton,
-              ),
-              Divider(),
-              Expanded(child: ProblemList()),
-            ],
-          )
-        : Stack(
-            children: <Widget>[
-              ProblemMap(),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: mapListButton,
+        mapListButton = MapListButton(
+          initialValue: isShowList ? 1 : 0,
+          onListChange: () => setState(
+            () {
+              isShowList = true;
+            },
+          ),
+          onMapChange: () => setState(() {
+            isShowList = false;
+          }),
+        );
+
+        return isShowList
+            ? Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: mapListButton,
+                  ),
+                  Divider(),
+                  Expanded(child: ProblemList()),
+                ],
               )
-            ],
-          );
+            : Stack(
+                children: <Widget>[
+                  ProblemMap(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: mapListButton,
+                  )
+                ],
+              );
+      },
+    );
   }
 }

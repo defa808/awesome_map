@@ -1,5 +1,8 @@
+import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class ProblemItem extends StatefulWidget {
   int id;
@@ -80,10 +83,11 @@ class _ProblemItemState extends State<ProblemItem> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
-                    child: 
-                    RaisedButton(
+                    child: RaisedButton(
                       color: CustomTheme.of(context).buttonColor,
-                      onPressed: () {},
+                      onPressed: () {
+                        Provider.of<GoogleMapModel>(context).selectItem(MarkerId("marker_id_1"));
+                      },
                       child: Text("На карті"),
                     ),
                   ),

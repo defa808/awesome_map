@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/problem/problemForm.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class CreateProblemItem extends StatefulWidget {
@@ -21,7 +22,11 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
     Provider.of<GoogleMapModel>(context).removeLast();
     _formKey.currentState.save();
     Provider.of<ProblemForm>(context).save(_data);
-    Provider.of<GoogleMapModel>(context).add(_data);
+    Provider.of<GoogleMapModel>(context).add(Marker(
+        markerId: null,
+        position: LatLng(_data.latitude, _data.longitude),
+        infoWindow:
+            InfoWindow(title: _data.title, snippet: _data.description)));
     Provider.of<ProblemForm>(context).clear();
   }
 

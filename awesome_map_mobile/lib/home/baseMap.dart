@@ -10,21 +10,21 @@ class BaseMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GoogleMapModel>(builder: (context, model, _) {
       return GoogleMap(
-    buildingsEnabled: true,
-    mapToolbarEnabled: false,
-    myLocationEnabled: true,
-    myLocationButtonEnabled: false,
-    initialCameraPosition: CameraPosition(
-      target: model.centerKPI,
-      zoom: 15.0,
-    ),
-    onCameraMove: (CameraPosition cameraPosition) {
-      model.currentCameraPosition = cameraPosition;
-    },
-    markers: Set<Marker>.of(model.markers.values),
-    onMapCreated: (GoogleMapController controller) {
-      Provider.of<GoogleMapModel>(context).setController(controller);
-    },
+        buildingsEnabled: true,
+        mapToolbarEnabled: false,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        initialCameraPosition: CameraPosition(
+          target: model.centerKPI,
+          zoom: 15.0,
+        ),
+        onCameraMove: (CameraPosition cameraPosition) {
+          model.currentCameraPosition = cameraPosition;
+        },
+        markers: Set<Marker>.of(model.markers.values),
+        onMapCreated: (GoogleMapController controller) {
+          Provider.of<GoogleMapModel>(context).setController(controller);
+        },
       );
     });
   }
