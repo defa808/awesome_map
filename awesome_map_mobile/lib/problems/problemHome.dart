@@ -1,5 +1,9 @@
+import 'package:awesome_map_mobile/home/mapDetails.dart';
 import 'package:awesome_map_mobile/home/mapListButton.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/problems/problemDetailContent.dart';
+import 'package:awesome_map_mobile/problems/problemDetails.dart';
+import 'package:awesome_map_mobile/problems/problemItem.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +73,11 @@ class _ProblemHomeState extends State<ProblemHome> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: mapListButton,
+                  ),
+                  if(selectedItemLast != null)
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: MapDetails(child: ProblemDetailContent()),
                   )
                 ],
               );
