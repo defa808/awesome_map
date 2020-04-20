@@ -1,7 +1,9 @@
+import 'package:awesome_map_mobile/models/problem/problemFilterModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ProblemFilter extends StatelessWidget {
-  const ProblemFilter({Key key}) : super(key: key);
+class ProblemFilterButton extends StatelessWidget {
+  const ProblemFilterButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,9 @@ class ProblemFilter extends StatelessWidget {
         //   progress: _animationController,
         // ),
         // onPressed: () => _handleOnPressed(),
-        onPressed: () {},
+        onPressed: () {
+          Provider.of<ProblemFilterModel>(context).showOrHide();
+        },
       ),
     );
   }
