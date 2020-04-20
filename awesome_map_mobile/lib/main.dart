@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
+import 'package:awesome_map_mobile/models/problem/problemFilterModel.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
@@ -22,6 +23,8 @@ import 'models/problem/problemForm.dart';
 void main() => runApp(MultiProvider(
       child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
       providers: <SingleChildCloneableWidget>[
+        ChangeNotifierProvider<ProblemFilterModel>.value(
+            notifier: ProblemFilterModel()),
         ChangeNotifierProvider<GoogleMapModel>.value(
             notifier: GoogleMapModel()),
         ChangeNotifierProvider<ProblemForm>.value(
@@ -50,6 +53,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Awesome Map KPI',
         theme: CustomTheme.of(context),
+        supportedLocales: [
+          const Locale('en'), // English
+          const Locale('ua'), // Ukraine
+        ],
         home: AppPage(title: ''),
       ),
     );

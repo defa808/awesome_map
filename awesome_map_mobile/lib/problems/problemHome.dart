@@ -1,9 +1,9 @@
+import 'package:awesome_map_mobile/base/filterContainer.dart';
 import 'package:awesome_map_mobile/home/mapDetails.dart';
 import 'package:awesome_map_mobile/home/mapListButton.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/problems/filter/problemFilter.dart';
 import 'package:awesome_map_mobile/problems/problemDetailContent.dart';
-import 'package:awesome_map_mobile/problems/problemDetails.dart';
-import 'package:awesome_map_mobile/problems/problemItem.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +34,10 @@ class _ProblemHomeState extends State<ProblemHome> {
   MarkerId selectedItemLast;
   @override
   Widget build(BuildContext context) {
-    Provider.of<GoogleMapModel>(context, listen: false).addListener(() {
-      MarkerId selectedItem =
-          Provider.of<GoogleMapModel>(context, listen: false).getSelectedItem();
-    });
+    // Provider.of<GoogleMapModel>(context, listen: false).addListener(() {
+    //   MarkerId selectedItem =
+    //       Provider.of<GoogleMapModel>(context, listen: false).getSelectedItem();
+    // });
     return Consumer<GoogleMapModel>(
       builder: (BuildContext context, GoogleMapModel model, Widget child) {
         MarkerId selectedItem = model.selectedMarker;
@@ -56,31 +56,34 @@ class _ProblemHomeState extends State<ProblemHome> {
           }),
         );
 
-        return isShowList
-            ? Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: mapListButton,
-                  ),
-                  Divider(),
-                  Expanded(child: ProblemList()),
-                ],
-              )
-            : Stack(
-                children: <Widget>[
-                  ProblemMap(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: mapListButton,
-                  ),
-                  if(selectedItemLast != null)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: MapDetails(child: ProblemDetailContent()),
-                  )
-                ],
-              );
+        return Stack(children: <Widget>[
+          isShowList
+              ? Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: mapListButton,
+                    ),
+                    Divider(),
+                    Expanded(child: ProblemList()),
+                  ],
+                )
+              : Stack(
+                  children: <Widget>[
+                    ProblemMap(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: mapListButton,
+                    ),
+                    if (selectedItemLast != null)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: MapDetails(child: ProblemDetailContent()),
+                      )
+                  ],
+                ),
+          FilterContainer(child: ProblemFilter())
+        ]);
       },
     );
   }

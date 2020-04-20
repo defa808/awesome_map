@@ -1,5 +1,6 @@
-import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
+
+import 'filter/filterItem.dart';
 
 class ProblemDetailContent extends StatelessWidget {
   const ProblemDetailContent({Key key}) : super(key: key);
@@ -8,35 +9,33 @@ class ProblemDetailContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
+          Wrap(
+            spacing: 0,
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(right: 8.0, bottom: 5.0),
-                child: Chip(
-                  avatar: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor:
-                        CustomTheme.of(context).chipTheme.labelStyle.color,
-                    child: Icon(Icons.delete),
-                  ),
-                  label: Text("Сміття"),
-                  backgroundColor:
-                      CustomTheme.of(context).chipTheme.backgroundColor,
-                ),
-              ),
+                  padding: EdgeInsets.only(right: 5.0),
+                  child: FilterItem(
+                    icon: Icon(Icons.delete),
+                    label: Text("Сміття"),
+                  )),
               Padding(
-                padding: EdgeInsets.only(right: 8.0, bottom: 5.0),
-                child: Chip(
-                  avatar: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor:
-                        CustomTheme.of(context).chipTheme.labelStyle.color,
-                    child: Icon(Icons.security),
+                  padding: EdgeInsets.only(right: 5.0),
+                  child: FilterItem(
+                    icon: Icon(Icons.security),
+                    label: Text("Охорона здоров'я"),
+                  )),
+              Padding(
+                  padding: EdgeInsets.only(
+                    right: 5.0,
                   ),
-                  label: Text("Охорона здоров'я"),
-                ),
-              ),
+                  child: FilterItem(
+                    icon: Icon(Icons.security),
+                    label: Text("Охорона здоров'я"),
+                  )),
             ],
           ),
           Text(

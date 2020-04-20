@@ -1,4 +1,4 @@
-import 'package:awesome_map_mobile/home/title.dart';
+import 'package:awesome_map_mobile/base/title.dart';
 import 'package:awesome_map_mobile/problems/problemDetailContent.dart';
 import 'package:flutter/material.dart';
 

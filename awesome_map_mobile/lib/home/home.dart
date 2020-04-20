@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:awesome_map_mobile/problems/problemFilter.dart';
+import 'package:awesome_map_mobile/problems/problemFilterButton.dart';
 import 'package:awesome_map_mobile/problems/problemHome.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';
@@ -48,8 +48,8 @@ class Home extends StatefulWidget {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   final bottomTabBarItems = [
     BottomTabItem(
-        title: Text("Проблеми"),
-        actions: <Widget>[ProblemFilter()],
+        title:Text("Проблеми"),
+        actions: <Widget>[ProblemFilterButton()],
         body: ProblemHome()),
     BottomTabItem(title: Text("Awesome Map KPI"), body: MainMap()),
     BottomTabItem(
@@ -103,7 +103,7 @@ class _HomeState extends State<Home> {
       ));
     }
 
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         actions: widget.bottomTabBarItems.elementAt(_selectedIndex).actions,
         title: widget.bottomTabBarItems.elementAt(_selectedIndex).title,
