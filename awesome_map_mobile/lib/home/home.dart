@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:awesome_map_mobile/problems/problemFilterButton.dart';
+import 'package:awesome_map_mobile/problems/filter/problemFilterButton.dart';
 import 'package:awesome_map_mobile/problems/problemHome.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';

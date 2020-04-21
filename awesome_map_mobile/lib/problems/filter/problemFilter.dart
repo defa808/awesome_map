@@ -20,15 +20,17 @@ class ProblemFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color mainColor = Colors.white; //Theme.of(context).secondaryHeaderColor;
-
     return Consumer<ProblemFilterModel>(
       builder: (BuildContext context, ProblemFilterModel model, Widget child) {
         return Container(
             color: CustomTheme.of(context).primaryColor,
             child: model.isShow
                 ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(mainAxisSize: MainAxisSize.min, children: <
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8, horizontal: 8.0),
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: <
                         Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +51,7 @@ class ProblemFilter extends StatelessWidget {
                                 keyboardType: TextInputType.text,
                                 initialValue: model.title,
                                 style: TextStyle(color: mainColor),
-                                onSaved: (String value) {
+                                onChanged: (String value) {
                                   model.setTitle(value);
                                 }),
                           ),
@@ -64,9 +66,11 @@ class ProblemFilter extends StatelessWidget {
                             child: DatePicker(
                               labelText: "Початкова дата",
                               initDate: model.startDate,
+                              endDate: model.endDate ?? DateTime(2100),
                               onChange: (value) {
                                 model.setStartDate(value);
                               },
+                              firstDate: DateTime(2020),
                             ),
                           ),
                           SizedBox(
@@ -75,6 +79,8 @@ class ProblemFilter extends StatelessWidget {
                           Flexible(
                             child: DatePicker(
                               labelText: "Кінцева дата",
+                              firstDate: model.startDate ?? DateTime(2020),
+                              endDate: DateTime(2100),
                               initDate: model.endDate,
                               onChange: (value) {
                                 model.setEndDate(value);
@@ -91,10 +97,6 @@ class ProblemFilter extends StatelessWidget {
                             decoration: InputDecoration(
                                 hintStyle: TextStyle(color: mainColor),
                                 labelStyle: TextStyle(color: mainColor),
-                                suffixIcon: new Icon(
-                                  Icons.search,
-                                  color: mainColor,
-                                ),
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(color: mainColor)),
                                 enabledBorder: UnderlineInputBorder(
@@ -138,14 +140,23 @@ class ProblemFilter extends StatelessWidget {
                                 label: Text(item.name),
                                 icon: Icon(IconData(item.iconCode,
                                     fontFamily: 'MaterialIcons')),
-                                onDelete: (){
-                                    Provider.of<ProblemFilterModel>(context)
-                                        .removeCategory(item.guid);
+                                onDelete: () {
+                                  Provider.of<ProblemFilterModel>(context)
+                                      .removeCategory(item.guid);
                                 },
                               ),
                             )
                         ],
-                      )
+                      ),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: FlatButton(
+                            child: Text("Cкинути",
+                                style: TextStyle(color: mainColor)),
+                            onPressed:
+                                Provider.of<ProblemFilterModel>(context)
+                                    .reset,
+                          ))
                     ]),
                   )
                 : Container(
