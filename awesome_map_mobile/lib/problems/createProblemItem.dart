@@ -217,9 +217,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                           children: <Widget>[
                             FlatButton.icon(
                               textColor: Colors.blue,
-                              icon: Transform.rotate(
-                                  angle: -45 * pi / 180,
-                                  child: Icon(Icons.send, color: Colors.blue)),
+                              icon:  Icon(Icons.send, color: Colors.blue),
                               label: Text("Відправити"),
                               onPressed: () {
                                 completeTicket(context);
