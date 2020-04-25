@@ -39,7 +39,7 @@ class _MapListButtonState extends State<MapListButton>
       alignment: Alignment.topCenter,
       child: Container(
         decoration: BoxDecoration(
-            color: CustomTheme.of(context).toggleButtonsTheme.fillColor, borderRadius: BorderRadius.circular(30)),
+            color: CustomTheme.of(context).scaffoldBackgroundColor, borderRadius: BorderRadius.circular(30)),
         child: ToggleButtons(
           color: CustomTheme.of(context).toggleButtonsTheme.color,
           renderBorder: false,

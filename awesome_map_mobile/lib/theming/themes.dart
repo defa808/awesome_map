@@ -41,9 +41,7 @@ class MyThemes {
           selectedColor: themeData.brightness == Brightness.dark
               ? Colors.white
               : Colors.blue,
-          fillColor: themeData.brightness == Brightness.dark
-              ? Colors.grey[800]
-              : Colors.white),
+         ),
     );
   }
 }
