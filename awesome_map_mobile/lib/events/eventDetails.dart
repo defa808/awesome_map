@@ -1,8 +1,6 @@
 import 'package:awesome_map_mobile/comments/commentsList.dart';
 import 'package:awesome_map_mobile/comments/commentsMain.dart';
-import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'eventDetailsContent.dart';
@@ -45,7 +43,6 @@ class _EventDetailsState extends State<EventDetails> {
                           ),
                         ),
                       ),
-                      centerTitle: true,
                       title: Text("Гітарний вечір"),
                     )),
               ];

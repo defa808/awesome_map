@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class EventContent extends StatefulWidget {
   int id;
 
-  EventContent({Key key, int id}) : super(key: key){
+  EventContent({Key key, int id}) : super(key: key) {
     this.id = id;
   }
   @override
@@ -38,53 +38,52 @@ class _EventContentState extends State<EventContent> {
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-          child: DefaultTextStyle(
-            style: TextStyle(color: Colors.black),
-            softWrap: false,
-            overflow: TextOverflow.ellipsis,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Гітарний вечір",
-                        style: TextStyle(color: Colors.black, fontSize: 25),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Icon(Icons.location_on),
-                        Text("Палац культури")
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          "12.10.19",
-                          style: TextStyle(color: Colors.black, fontSize: 13),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          "12:10",
-                          style: TextStyle(color: Colors.black, fontSize: 13),
-                        )
-                      ],
+                    Flexible(
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            "Гітарний вечір",
+                            style: TextStyle(color: Colors.black, fontSize: 25),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.location_on),
+                      Text("Палац культури")
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        "12.10.19",
+                        style: TextStyle(color: Colors.black, fontSize: 13),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        "12:10",
+                        style: TextStyle(color: Colors.black, fontSize: 13),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
         )
       ],

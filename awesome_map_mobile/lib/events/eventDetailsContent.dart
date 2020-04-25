@@ -125,7 +125,7 @@ class EventDetailsContent extends StatelessWidget {
               child: Container(),
             ),
             RaisedButton(
-              child: Text("Піду"),
+              child: Text("Приєднатися"),
               onPressed: () {},
             ),
           ],
