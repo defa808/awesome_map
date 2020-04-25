@@ -84,7 +84,8 @@ class _ProblemItemState extends State<ProblemItem> {
                 children: <Widget>[
                   Expanded(
                     child: RaisedButton(
-                      color: CustomTheme.of(context).buttonColor,
+                      color: CustomTheme.of(context).accentColor,
+                      textColor: CustomTheme.of(context).bottomAppBarColor,
                       onPressed: () {
                         Provider.of<GoogleMapModel>(context).selectItem(MarkerId("marker_id_1"));
                       },

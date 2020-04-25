@@ -1,5 +1,7 @@
 import 'package:awesome_map_mobile/base/title.dart';
+import 'package:awesome_map_mobile/comments/commentsMain.dart';
 import 'package:awesome_map_mobile/problems/problemDetailContent.dart';
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 class ProblemDetails extends StatefulWidget {
@@ -12,35 +14,44 @@ class ProblemDetails extends StatefulWidget {
 class _ProblemDetailsState extends State<ProblemDetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Детальніше"),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text("Детальніше"),
+          ),
+          body: Column(
             children: <Widget>[
-              // Row(
-              //   children: <Widget>[
-              //     Flexible(
-              //       child: Text(
-              //         "Розкидане сміття біля скверу",
-              //         maxLines: 3,
-              //         style: TextStyle(fontSize: 20),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              Header(
-                text: "Розкидане сміття біля скверу",
-              ),
-              SizedBox(
-                height: 10,
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Header(
+                  text: "Розкидане сміття біля скверу",
+                ),
               ),
               Divider(),
-              ProblemDetailContent(),
+              TabBar(
+                labelColor: CustomTheme.of(context).accentColor,
+                unselectedLabelColor:
+                    CustomTheme.of(context).accentColor.withOpacity(0.3),
+                tabs: <Widget>[
+                  Tab(
+                    text: "Детальніше",
+                  ),
+                  Tab(
+                    text: "Коментарії",
+                  )
+                ],
+              ),
+              Expanded(
+                  child: TabBarView(children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ProblemDetailContent(),
+                ),
+                CommentsMain(),
+              ])),
             ],
-          ),
-        ));
+          )),
+    );
   }
 }

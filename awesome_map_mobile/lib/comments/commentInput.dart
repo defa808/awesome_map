@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 class CommentInput extends StatelessWidget {
@@ -23,7 +24,7 @@ class CommentInput extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.send, color: Colors.blue),
+              icon: Icon(Icons.send, color: CustomTheme.of(context).accentColor),
               onPressed: () {},
             ),
           ],

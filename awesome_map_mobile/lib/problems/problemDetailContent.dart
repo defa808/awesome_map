@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'filter/filterItem.dart';
@@ -81,6 +82,8 @@ class ProblemDetailContent extends StatelessWidget {
                 child: Container(),
               ),
               RaisedButton(
+                color: CustomTheme.of(context).accentColor,
+                textColor: CustomTheme.of(context).bottomAppBarColor,
                 child: Text("Слідкувати"),
                 onPressed: () {},
               )
@@ -121,7 +124,6 @@ class ProblemDetailContent extends StatelessWidget {
               ),
             ],
           ),
-          Text("Віджет коментарів")
         ],
       ),
     );
