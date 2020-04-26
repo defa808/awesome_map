@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
+import 'package:awesome_map_mobile/models/event/eventFilterModel.dart';
 import 'package:awesome_map_mobile/models/problem/problemFilterModel.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
@@ -16,19 +17,20 @@ import 'account/account.dart';
 import 'authorization/signIn.dart';
 import 'events/eventDetails.dart';
 import 'events/eventList.dart';
+import 'events/eventUserList.dart';
 import 'home/home.dart';
+import 'models/event/eventForm.dart';
 import 'models/googleMap/googleMapModel.dart';
 import 'models/problem/problemForm.dart';
 
 void main() => runApp(MultiProvider(
       child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
       providers: <SingleChildCloneableWidget>[
-        ChangeNotifierProvider<ProblemFilterModel>.value(
-            notifier: ProblemFilterModel()),
-        ChangeNotifierProvider<GoogleMapModel>.value(
-            notifier: GoogleMapModel()),
-        ChangeNotifierProvider<ProblemForm>.value(
-            notifier: ProblemForm(0, 0, "", -1, "", new List<File>()))
+        ChangeNotifierProvider<ProblemFilterModel>.value(notifier: ProblemFilterModel()),
+        ChangeNotifierProvider<EventFilterModel>.value(notifier: EventFilterModel()),
+        ChangeNotifierProvider<GoogleMapModel>.value(notifier: GoogleMapModel()),
+        ChangeNotifierProvider<ProblemForm>.value(notifier: ProblemForm.empty()),
+        ChangeNotifierProvider<EventForm>.value(notifier: EventForm.empty())
       ],
     ));
 
@@ -46,7 +48,7 @@ class MyApp extends StatelessWidget {
           "/home": (context) => Home(),
           "/account": (context) => Account(),
           "/problems": (context) => ProblemListMessage(),
-          "/events": (context) => EventList(),
+          "/events": (context) => EventUserList(),
           "/event": (context) => EventDetails(),
           "/problemDetail": (context) => ProblemDetails(),
         },

@@ -38,4 +38,8 @@ class ProblemForm extends Problem with ChangeNotifier {
     this.files = new List<File>();
     this.notifyListeners();
   }
+
+  factory ProblemForm.empty(){
+    return ProblemForm(0, 0, "", -1, "", new List<File>());
+  }
 }

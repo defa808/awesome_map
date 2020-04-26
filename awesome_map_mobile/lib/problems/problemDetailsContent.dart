@@ -1,9 +1,8 @@
+import 'package:awesome_map_mobile/base/filter/filterItem.dart';
 import 'package:awesome_map_mobile/base/photo/photoItem.dart';
 import 'package:awesome_map_mobile/base/photo/photoVIewer.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
-
-import 'filter/filterItem.dart';
 
 class ProblemDetailsContent extends StatelessWidget {
   const ProblemDetailsContent({Key key}) : super(key: key);
@@ -38,14 +37,7 @@ List<PhotoItem> photoes = [
                     icon: Icon(Icons.security),
                     label: Text("Охорона здоров'я"),
                   )),
-              Padding(
-                  padding: EdgeInsets.only(
-                    right: 5.0,
-                  ),
-                  child: FilterItem(
-                    icon: Icon(Icons.security),
-                    label: Text("Охорона здоров'я"),
-                  )),
+              
             ],
           ),
           Text(

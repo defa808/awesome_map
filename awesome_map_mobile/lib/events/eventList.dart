@@ -12,15 +12,10 @@ class EventList extends StatefulWidget {
 class _EventList extends State<EventList> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Заходи'),
-          centerTitle: true,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ListView(
-              children: List.generate(10, (i) => SelectableEventItem(id: i))),
-        ));
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: ListView(
+          children: List.generate(10, (i) => SelectableEventItem(id: i))),
+    );
   }
 }

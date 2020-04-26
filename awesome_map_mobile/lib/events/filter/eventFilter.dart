@@ -2,13 +2,13 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filter/filterItem.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
-import 'package:awesome_map_mobile/models/problem/problemFilterModel.dart';
+import 'package:awesome_map_mobile/models/event/eventFilterModel.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProblemFilter extends StatelessWidget {
-  ProblemFilter({Key key}) : super(key: key);
+class EventFilter extends StatelessWidget {
+  EventFilter({Key key}) : super(key: key);
   final List<Category> categories = <Category>[
     Category(guid: "CVsdf", name: "Сміття", iconCode: Icons.delete.codePoint),
     Category(
@@ -20,8 +20,8 @@ class ProblemFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color mainColor = Colors.white; //Theme.of(context).secondaryHeaderColor;
-    return Consumer<ProblemFilterModel>(
-      builder: (BuildContext context, ProblemFilterModel model, Widget child) {
+    return Consumer<EventFilterModel>(
+      builder: (BuildContext context, EventFilterModel model, Widget child) {
         return Container(
             color: CustomTheme.of(context).primaryColor,
             child: model.isShow
@@ -66,7 +66,7 @@ class ProblemFilter extends StatelessWidget {
                             child: DatePicker(
                               labelText: "Початкова дата",
                               initDate: model.startDate,
-                              endDate: model.endDate ?? DateTime(2100),
+                              endDate: DateTime(2100),
                               onChange: (value) {
                                 model.setStartDate(value);
                               },
@@ -77,15 +77,24 @@ class ProblemFilter extends StatelessWidget {
                             width: 8,
                           ),
                           Flexible(
-                            child: DatePicker(
-                              labelText: "Кінцева дата",
-                              firstDate: model.startDate ?? DateTime(2020),
-                              endDate: DateTime(2100),
-                              initDate: model.endDate,
-                              onChange: (value) {
-                                model.setEndDate(value);
-                              },
-                            ),
+                            child: TextFormField(
+                                cursorColor: mainColor,
+                                decoration: InputDecoration(
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: mainColor)),
+                                    hintStyle: TextStyle(color: mainColor),
+                                    labelStyle: TextStyle(color: mainColor),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: mainColor)),
+                                    labelText: "Місце"),
+                                keyboardType: TextInputType.text,
+                                initialValue: model.title,
+                                style: TextStyle(color: mainColor),
+                                onChanged: (String value) {
+                                  model.setPlace(value);
+                                }),
                           ),
                         ],
                       ),
@@ -121,7 +130,7 @@ class ProblemFilter extends StatelessWidget {
                                     .toLowerCase()
                                     .contains(query.toLowerCase()),
                             itemSubmitted: (Category data) =>
-                                Provider.of<ProblemFilterModel>(context)
+                                Provider.of<EventFilterModel>(context)
                                     .addCategory(data),
                             key: new GlobalKey<
                                 AutoCompleteTextFieldState<Category>>(),
@@ -141,7 +150,7 @@ class ProblemFilter extends StatelessWidget {
                                 icon: Icon(IconData(item.iconCode,
                                     fontFamily: 'MaterialIcons')),
                                 onDelete: () {
-                                  Provider.of<ProblemFilterModel>(context)
+                                  Provider.of<EventFilterModel>(context)
                                       .removeCategory(item.guid);
                                 },
                               ),
@@ -154,7 +163,7 @@ class ProblemFilter extends StatelessWidget {
                             child: Text("Cкинути",
                                 style: TextStyle(color: mainColor)),
                             onPressed:
-                                Provider.of<ProblemFilterModel>(context)
+                                Provider.of<EventFilterModel>(context)
                                     .reset,
                           ))
                     ]),

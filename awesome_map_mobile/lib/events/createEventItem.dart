@@ -1,37 +1,38 @@
 import 'dart:io';
+
+import 'package:awesome_map_mobile/models/event/eventForm.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
-import 'package:awesome_map_mobile/models/problem/problemForm.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class CreateProblemItem extends StatefulWidget {
-  CreateProblemItem({Key key}) : super(key: key);
+class CreateEventItem extends StatefulWidget {
+  CreateEventItem({Key key}) : super(key: key);
 
   @override
-  _CreateProblemItemState createState() => _CreateProblemItemState();
+  _CreateEventItemState createState() => _CreateEventItemState();
 }
 
-class _CreateProblemItemState extends State<CreateProblemItem> {
-  List<String> _typeProblems = [];
+class _CreateEventItemState extends State<CreateEventItem> {
+  List<String> _typeEvents = [];
   final _formKey = GlobalKey<FormState>();
-  ProblemForm _data = ProblemForm.empty();
+  EventForm _data = EventForm.empty();
 
   void completeTicket(context) {
     Provider.of<GoogleMapModel>(context).removeLast();
     _formKey.currentState.save();
-    Provider.of<ProblemForm>(context).save(_data);
+    Provider.of<EventForm>(context).save(_data);
     Provider.of<GoogleMapModel>(context).add(Marker(
         markerId: null,
         position: LatLng(_data.latitude, _data.longitude),
         infoWindow:
             InfoWindow(title: _data.title, snippet: _data.description)));
-    Provider.of<ProblemForm>(context).clear();
+    Provider.of<EventForm>(context).clear();
   }
 
   void removeTicket() {
     Provider.of<GoogleMapModel>(context).removeLast();
-    Provider.of<ProblemForm>(context).clear();
+    Provider.of<EventForm>(context).clear();
   }
 
   String _selectedTypeProblem;
@@ -39,7 +40,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
   void initState() {
     super.initState();
     setState(() {
-      _typeProblems = [
+      _typeEvents = [
         "Довкілля",
         "Електоенергія",
         "Закон  і Порядок",
@@ -64,11 +65,12 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
         expand: true,
         builder: (context, scrollController) {
           return Container(
-      
-
             padding: EdgeInsets.only(top: 25),
             decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color:Colors.grey[400], spreadRadius: 1, blurRadius: 7)],
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey[400], spreadRadius: 1, blurRadius: 7)
+                ],
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40),
@@ -78,7 +80,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
               controller: scrollController,
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: 5),
-                child: Consumer<ProblemForm>(builder: (context, model, _) {
+                child: Consumer<EventForm>(builder: (context, model, _) {
                   return Form(
                     key: _formKey,
                     child: Column(
@@ -132,8 +134,8 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                         SizedBox(height: 10),
                         DropdownButtonFormField<String>(
                           isExpanded: true,
-                          hint: Text("Тип проблеми"),
-                          items: _typeProblems.map((String value) {
+                          hint: Text("Тип заходу"),
+                          items: _typeEvents.map((String value) {
                             return new DropdownMenuItem<String>(
                               value: value,
                               child: new Text(value),
@@ -141,7 +143,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                           }).toList(),
                           value: _selectedTypeProblem,
                           onSaved: (String value) {
-                            this._data.typeProblemId = 0; //hard code
+                            this._data.typeEventId = 0; //hard code
                           },
                           onChanged: (String value) {
                             setState(() {
@@ -219,7 +221,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                           children: <Widget>[
                             FlatButton.icon(
                               textColor: Colors.blue,
-                              icon:  Icon(Icons.send, color: Colors.blue),
+                              icon: Icon(Icons.send, color: Colors.blue),
                               label: Text("Відправити"),
                               onPressed: () {
                                 completeTicket(context);

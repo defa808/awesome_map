@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:awesome_map_mobile/events/eventHome.dart';
+import 'package:awesome_map_mobile/events/filter/eventFilterButton.dart';
 import 'package:awesome_map_mobile/problems/filter/problemFilterButton.dart';
 import 'package:awesome_map_mobile/problems/problemHome.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
@@ -48,17 +50,14 @@ class Home extends StatefulWidget {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   final bottomTabBarItems = [
     BottomTabItem(
-        title:Text("Проблеми"),
+        title: Text("Проблеми"),
         actions: <Widget>[ProblemFilterButton()],
         body: ProblemHome()),
-    BottomTabItem(title: Text("Awesome Map KPI"), body: MainMap()),
+    BottomTabItem(title: Text("Карта"), body: MainMap()),
     BottomTabItem(
-      title: Text("Заходи"),
-      body: Text(
-        'Index 2: Заходи',
-        style: optionStyle,
-      ),
-    )
+        title: Text("Заходи"),
+        actions: <Widget>[EventFilterButton()],
+        body: EventHome()),
   ];
 
   @override

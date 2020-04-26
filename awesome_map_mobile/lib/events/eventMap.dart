@@ -1,22 +1,23 @@
 import 'package:awesome_map_mobile/base/baseMap.dart';
+import 'package:awesome_map_mobile/models/event/eventForm.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
-import 'package:awesome_map_mobile/models/problem/problemForm.dart';
-import 'package:awesome_map_mobile/problems/createProblemItem.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class ProblemMap extends StatefulWidget {
-  ProblemMap({Key key}) : super(key: key);
+import 'createEventItem.dart';
+
+class EventMap extends StatefulWidget {
+  const EventMap({Key key}) : super(key: key);
 
   @override
-  _ProblemMapState createState() => _ProblemMapState();
+  _EventMapState createState() => _EventMapState();
 }
 
-class _ProblemMapState extends State<ProblemMap> {
-  bool isPrepareAdd = false;
+class _EventMapState extends State<EventMap> {
+ bool isPrepareAdd = false;
 
-  void _add(ProblemForm model) {
+  void _add(EventForm model) {
     LatLng currentPosition =
         Provider.of<GoogleMapModel>(context).getCurrentLatLon();
     // model.setLatLon(currentPosition);
@@ -25,7 +26,7 @@ class _ProblemMapState extends State<ProblemMap> {
         infoWindow: InfoWindow(title: model.title, snippet: model.description),
         markerId: null);
     Provider.of<GoogleMapModel>(context).add(modelMarker);
-    Provider.of<ProblemForm>(context).setLatLon(currentPosition);
+    Provider.of<EventForm>(context).setLatLon(currentPosition);
     setState(() {
       isPrepareAdd = false;
     });
@@ -52,7 +53,7 @@ class _ProblemMapState extends State<ProblemMap> {
   @override
   Widget build(BuildContext context) {
 
-    return Consumer<ProblemForm>(builder: (context, problemFormModel, _) {
+    return Consumer<EventForm>(builder: (context, problemFormModel, _) {
       return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: getFloatingButton(problemFormModel, context),
@@ -70,15 +71,15 @@ class _ProblemMapState extends State<ProblemMap> {
                           Icon(Icons.location_on, color: Colors.red, size: 45)),
                 ),
               ),
-            if (problemFormModel.readyToFill) CreateProblemItem(),
+            if (problemFormModel.readyToFill) CreateEventItem(),
           ]),
         ),
       );
     });
   }
 
-  Column getFloatingButton(ProblemForm problemFormModel, BuildContext context) {
-    return problemFormModel.readyToFill
+  Column getFloatingButton(EventForm eventFormModel, BuildContext context) {
+    return eventFormModel.readyToFill
         ? null
         : Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -112,7 +113,7 @@ class _ProblemMapState extends State<ProblemMap> {
                             heroTag: null,
                             child: const Icon(Icons.done),
                             onPressed: () {
-                              _add(problemFormModel);
+                              _add(eventFormModel);
                             }),
                       ],
                     )
