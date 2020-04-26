@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'filter/filterItem.dart';
 
-class ProblemDetailContent extends StatelessWidget {
-  const ProblemDetailContent({Key key}) : super(key: key);
+class ProblemDetailsContent extends StatelessWidget {
+  const ProblemDetailsContent({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

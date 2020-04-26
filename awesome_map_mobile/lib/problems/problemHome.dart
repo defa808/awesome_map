@@ -3,7 +3,7 @@ import 'package:awesome_map_mobile/home/mapDetails.dart';
 import 'package:awesome_map_mobile/home/mapListButton.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/problems/filter/problemFilter.dart';
-import 'package:awesome_map_mobile/problems/problemDetailContent.dart';
+import 'package:awesome_map_mobile/problems/problemDetailsContent.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +78,7 @@ class _ProblemHomeState extends State<ProblemHome> {
                     if (selectedItemLast != null)
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: MapDetails(child: ProblemDetailContent()),
+                        child: MapDetails(child: ProblemDetailsContent()),
                       )
                   ],
                 ),

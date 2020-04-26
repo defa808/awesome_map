@@ -1,6 +1,6 @@
 import 'package:awesome_map_mobile/base/title.dart';
 import 'package:awesome_map_mobile/comments/commentsMain.dart';
-import 'package:awesome_map_mobile/problems/problemDetailContent.dart';
+import 'package:awesome_map_mobile/problems/problemDetailsContent.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +46,7 @@ class _ProblemDetailsState extends State<ProblemDetails> {
                   child: TabBarView(children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: ProblemDetailContent(),
+                  child: ProblemDetailsContent(),
                 ),
                 CommentsMain(),
               ])),
