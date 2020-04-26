@@ -65,8 +65,11 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
         expand: true,
         builder: (context, scrollController) {
           return Container(
+      
+
             padding: EdgeInsets.only(top: 25),
             decoration: BoxDecoration(
+              boxShadow: [BoxShadow(color:Colors.grey[400], spreadRadius: 1, blurRadius: 7)],
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40),

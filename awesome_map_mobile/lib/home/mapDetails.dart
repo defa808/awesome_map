@@ -17,11 +17,15 @@ class MapDetails extends StatelessWidget {
         builder: (context, scrollController) {
           return Container(
             decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey[400], spreadRadius: 1, blurRadius: 7)
+                ],
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40))),
-            padding: EdgeInsets.only(top: 20, left:20, right:20),
+            padding: EdgeInsets.only(top: 20, left: 20, right: 20),
             child: Column(
               children: <Widget>[
                 Container(
@@ -30,16 +34,16 @@ class MapDetails extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius: BorderRadius.circular(18))),
-               SizedBox(
+                SizedBox(
                   height: 20,
-                ), 
-               Header(
-                text: "Розкидане сміття біля скверу",
-              ),
+                ),
+                Header(
+                  text: "Розкидане сміття біля скверу",
+                ),
                 SizedBox(
                   height: 10,
                 ),
-                 Divider(),
+                Divider(),
                 Expanded(
                   child: SingleChildScrollView(
                     controller: scrollController,

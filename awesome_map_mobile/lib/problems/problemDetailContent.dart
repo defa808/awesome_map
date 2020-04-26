@@ -1,3 +1,5 @@
+import 'package:awesome_map_mobile/base/photo/photoItem.dart';
+import 'package:awesome_map_mobile/base/photo/photoVIewer.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +10,13 @@ class ProblemDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+List<PhotoItem> photoes = [
+  PhotoItem(id: "123", name: "First Image", resource: "images/gallery1.jpg"),
+  PhotoItem(id: "1223", name: "Second Image", resource: "images/gallery2.jpg"),
+  PhotoItem(id: "122343", name: "Third Image", resource: "images/gallery3.jpg")
+];
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,10 +69,7 @@ class ProblemDetailContent extends StatelessWidget {
                 ],
               ),
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text("Тут Мають бути файли"),
-                )
+               PhotoViewer(galleryItems: photoes,)
               ],
             ),
           ),
