@@ -1,6 +1,8 @@
 import 'package:awesome_map_mobile/base/baseMap.dart';
 import 'package:awesome_map_mobile/models/event/eventForm.dart';
+import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +17,7 @@ class EventMap extends StatefulWidget {
 }
 
 class _EventMapState extends State<EventMap> {
- bool isPrepareAdd = false;
+  bool isPrepareAdd = false;
 
   void _add(EventForm model) {
     LatLng currentPosition =
@@ -25,7 +27,8 @@ class _EventMapState extends State<EventMap> {
         position: currentPosition,
         infoWindow: InfoWindow(title: model.title, snippet: model.description),
         markerId: null);
-    Provider.of<GoogleMapModel>(context).add(modelMarker);
+    Provider.of<GoogleMapModel>(context)
+        .add(AwesomeMarker(marker: modelMarker, type: MarkerType.Event));
     Provider.of<EventForm>(context).setLatLon(currentPosition);
     setState(() {
       isPrepareAdd = false;
@@ -34,7 +37,7 @@ class _EventMapState extends State<EventMap> {
 
   static List<Marker> problems = <Marker>[
     Marker(
-      position: LatLng(50.449601, 30.457368),
+      position: LatLng(52.449601, 32.457368),
       infoWindow: InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
       markerId: null,
     )
@@ -43,7 +46,6 @@ class _EventMapState extends State<EventMap> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<GoogleMapModel>(context).initMarker(problems);
 
     setState(() {
       isPrepareAdd = false;
@@ -52,14 +54,13 @@ class _EventMapState extends State<EventMap> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<EventForm>(builder: (context, problemFormModel, _) {
       return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: getFloatingButton(problemFormModel, context),
         body: Container(
           child: Stack(children: <Widget>[
-            BaseMap(),
+            BaseMap(filter: MarkerType.Event),
             if (isPrepareAdd)
               Center(
                 child: Container(

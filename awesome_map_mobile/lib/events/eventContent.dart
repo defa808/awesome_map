@@ -8,6 +8,7 @@ class EventContent extends StatefulWidget {
   }
   @override
   _EventContentState createState() => _EventContentState();
+  
 }
 
 class _EventContentState extends State<EventContent> {
@@ -26,7 +27,7 @@ class _EventContentState extends State<EventContent> {
                   tag: 'event-details-$id',
                   child: Material(
                     child: Ink.image(
-                      image: AssetImage("images/gitar.jpg"),
+                      image: id.isOdd ?  AssetImage("images/gitar.jpg") : AssetImage("images/it.jpg"),
                       fit: BoxFit.cover,
                       child: Container(),
                     ),
@@ -49,7 +50,7 @@ class _EventContentState extends State<EventContent> {
                       child: Column(
                         children: <Widget>[
                           Text(
-                            "Гітарний вечір",
+                            id.isOdd ?"Гітарний вечір" : "Мастер класс Flutter",
                             style: TextStyle(color: Colors.black, fontSize: 25),
                           ),
                         ],
@@ -64,7 +65,7 @@ class _EventContentState extends State<EventContent> {
                   Row(
                     children: <Widget>[
                       Icon(Icons.location_on),
-                      Text("Палац культури")
+                      Text( id.isOdd ?"Палац культури" : "Бібліотека НТУУ 'КПІ'")
                     ],
                   ),
                   Column(

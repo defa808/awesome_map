@@ -4,21 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'awesomeMarker.dart';
+import 'markerType.dart';
+
 class GoogleMapModel extends ChangeNotifier {
   GoogleMapController controller;
   LatLng centerKPI = LatLng(50.449601, 30.457368);
   CameraPosition currentCameraPosition;
-  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  Map<MarkerId, AwesomeMarker> markers = <MarkerId, AwesomeMarker>{};
   int _markerIdCounter = 1;
   MarkerId selectedMarker;
+  BitmapDescriptor customIcon;
 
   GoogleMapModel() {
     currentCameraPosition = new CameraPosition(target: centerKPI);
-    add(Marker(
-      position: LatLng(50.449601, 30.457368),
-      infoWindow: InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
-      markerId: null,
-    ));
+    add(AwesomeMarker(
+        marker: Marker(
+          position: LatLng(50.449301, 30.459368),
+          infoWindow:
+              InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
+          markerId: null,
+        ),
+        type: MarkerType.Event));
+    add(
+      AwesomeMarker(
+          marker: Marker(
+            position: LatLng(50.449891, 30.457668),
+            infoWindow:
+                InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
+            markerId: null,
+          ),
+          type: MarkerType.Problem),
+    );
   }
 
   void selectItem(MarkerId markerId) {
@@ -31,39 +48,48 @@ class GoogleMapModel extends ChangeNotifier {
 
   void initMarker(List<Marker> markers) {
     for (var item in markers) {
-      add(item);
+      add(AwesomeMarker(marker: item, type: MarkerType.Problem));
     }
-    notifyListeners();
   }
 
-  void add(Marker data) {
+  void add(AwesomeMarker data) {
     final String markerIdVal = 'marker_id_$_markerIdCounter';
     _markerIdCounter++;
     final MarkerId markerId = MarkerId(markerIdVal);
-    final Marker marker = Marker(
-      markerId: markerId,
-      draggable: true,
-      position: data.position,
-      infoWindow: data.infoWindow,
-      onTap: () {
-        onMarkerTapped(markerId);
-      },
-      onDragEnd: (LatLng position) {
-        _onMarkerDragEnd(markerId, position);
-      },
-    );
+    final awesomeMarker = AwesomeMarker(
+        marker: Marker(
+          icon: getIconMarker(data.type),
+          markerId: markerId,
+          draggable: true,
+          position: data.marker.position,
+          infoWindow: data.marker.infoWindow,
+          onTap: () {
+            onMarkerTapped(markerId);
+          },
+          onDragEnd: (LatLng position) {
+            _onMarkerDragEnd(markerId, position);
+          },
+        ),
+        type: data.type);
 
-    markers[markerId] = marker;
+    markers[markerId] = awesomeMarker;
     notifyListeners();
   }
 
+getIconMarker(MarkerType type){
+  return type == MarkerType.Problem
+              ? BitmapDescriptor.defaultMarker
+              : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
+}
+
   void onMarkerTapped(MarkerId markerId) {
-    final Marker tappedMarker = markers[markerId];
+    final Marker tappedMarker = markers[markerId].marker;
     if (tappedMarker != null) {
       if (markers.containsKey(selectedMarker)) {
         final Marker resetOld = markers[selectedMarker]
-            .copyWith(iconParam: BitmapDescriptor.defaultMarker);
-        markers[selectedMarker] = resetOld;
+            .marker
+            .copyWith(iconParam:getIconMarker(markers[selectedMarker].type));
+        markers[selectedMarker].marker = resetOld;
         selectedMarker = null;
       } else {
         selectedMarker = markerId;
@@ -72,7 +98,7 @@ class GoogleMapModel extends ChangeNotifier {
             BitmapDescriptor.hueGreen,
           ),
         );
-        markers[markerId] = newMarker;
+        markers[markerId].marker = newMarker;
       }
 
       notifyListeners();
@@ -80,7 +106,7 @@ class GoogleMapModel extends ChangeNotifier {
   }
 
   void _onMarkerDragEnd(MarkerId markerId, LatLng newPosition) async {
-    final Marker tappedMarker = markers[markerId];
+    final Marker tappedMarker = markers[markerId].marker;
     if (tappedMarker != null) {
       // await showDialog<void>(
       //     context: context,

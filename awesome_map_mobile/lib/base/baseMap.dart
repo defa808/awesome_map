@@ -1,11 +1,12 @@
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class BaseMap extends StatelessWidget {
-  const BaseMap({Key key}) : super(key: key);
-
+  const BaseMap({Key key, this.filter}) : super(key: key);
+  final MarkerType filter;
   @override
   Widget build(BuildContext context) {
     return Consumer<GoogleMapModel>(builder: (context, model, _) {
@@ -21,7 +22,9 @@ class BaseMap extends StatelessWidget {
         onCameraMove: (CameraPosition cameraPosition) {
           model.currentCameraPosition = cameraPosition;
         },
-        markers: Set<Marker>.of(model.markers.values),
+        markers: Set<Marker>.of(model.markers.values
+            .where((x) => x.type == (filter ?? x.type))
+            .map((x) => x.marker)),
         onMapCreated: (GoogleMapController controller) {
           Provider.of<GoogleMapModel>(context).setController(controller);
         },

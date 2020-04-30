@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailsContent extends StatelessWidget {
@@ -125,6 +126,8 @@ class EventDetailsContent extends StatelessWidget {
               child: Container(),
             ),
             RaisedButton(
+              color: CustomTheme.of(context).accentColor,
+              textColor: CustomTheme.of(context).bottomAppBarColor,
               child: Text("Приєднатися"),
               onPressed: () {},
             ),

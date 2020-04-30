@@ -1,0 +1,4 @@
+enum MarkerType{
+  Problem,
+  Event
+}

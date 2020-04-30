@@ -17,7 +17,7 @@ environment:
   sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
-  intro_slider: ^1.0.8
+  intro_slider: ^2.2.9
   shared_preferences: ^0.4.2
   google_maps_flutter: ^0.5.25+2
   geolocator: ^5.3.0
@@ -50,11 +50,8 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
-    - images/noavatar.png
-    - images/gitar.jpg
-    - images/gallery1.jpg
-    - images/gallery2.jpg
-    - images/gallery3.jpg
+    - images/
+    - images/canDo/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

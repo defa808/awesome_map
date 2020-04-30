@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/models/problem/problemForm.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,15 +19,17 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
   final _formKey = GlobalKey<FormState>();
   ProblemForm _data = ProblemForm.empty();
 
-  void completeTicket(context) {
+  void completeTicket(context) async {
     Provider.of<GoogleMapModel>(context).removeLast();
     _formKey.currentState.save();
     Provider.of<ProblemForm>(context).save(_data);
-    Provider.of<GoogleMapModel>(context).add(Marker(
-        markerId: null,
-        position: LatLng(_data.latitude, _data.longitude),
-        infoWindow:
-            InfoWindow(title: _data.title, snippet: _data.description)));
+    Provider.of<GoogleMapModel>(context).add(AwesomeMarker(
+        marker: Marker(
+            markerId: null,
+            position: LatLng(_data.latitude, _data.longitude),
+            infoWindow:
+                InfoWindow(title: _data.title, snippet: _data.description)),
+        type: MarkerType.Problem));
     Provider.of<ProblemForm>(context).clear();
   }
 
@@ -64,11 +68,12 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
         expand: true,
         builder: (context, scrollController) {
           return Container(
-      
-
             padding: EdgeInsets.only(top: 25),
             decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color:Colors.grey[400], spreadRadius: 1, blurRadius: 7)],
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey[400], spreadRadius: 1, blurRadius: 7)
+                ],
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40),
@@ -219,7 +224,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                           children: <Widget>[
                             FlatButton.icon(
                               textColor: Colors.blue,
-                              icon:  Icon(Icons.send, color: Colors.blue),
+                              icon: Icon(Icons.send, color: Colors.blue),
                               label: Text("Відправити"),
                               onPressed: () {
                                 completeTicket(context);

@@ -1,16 +1,15 @@
-﻿using System;
+﻿using awesome_map_server.Models.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace awesome_map_server.Models {
-    public class Problem {
+    public class Problem : Ticket {
         public Guid Id { get; set; }
         public string Title { get; set; }
         public Guid ProblemTypeId { get; set; }
         public virtual List<ProblemTypeProblem> ProblemTypes { get; set; }
-        public double X { get; set; }
-        public double Y { get; set; }
         public string Description { get; set; }
         public string OwnerId { get; set; }
         public virtual ApplicationUser Owner { get; set; }

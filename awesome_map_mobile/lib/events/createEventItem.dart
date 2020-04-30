@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:awesome_map_mobile/models/event/eventForm.dart';
+import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +24,13 @@ class _CreateEventItemState extends State<CreateEventItem> {
     Provider.of<GoogleMapModel>(context).removeLast();
     _formKey.currentState.save();
     Provider.of<EventForm>(context).save(_data);
-    Provider.of<GoogleMapModel>(context).add(Marker(
-        markerId: null,
-        position: LatLng(_data.latitude, _data.longitude),
-        infoWindow:
-            InfoWindow(title: _data.title, snippet: _data.description)));
+    Provider.of<GoogleMapModel>(context).add(AwesomeMarker(
+        marker: Marker(
+            markerId: null,
+            position: LatLng(_data.latitude, _data.longitude),
+            infoWindow:
+                InfoWindow(title: _data.title, snippet: _data.description)),
+        type: MarkerType.Event));
     Provider.of<EventForm>(context).clear();
   }
 

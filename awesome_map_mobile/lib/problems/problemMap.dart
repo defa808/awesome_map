@@ -1,5 +1,7 @@
 import 'package:awesome_map_mobile/base/baseMap.dart';
+import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/models/problem/problemForm.dart';
 import 'package:awesome_map_mobile/problems/createProblemItem.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +26,8 @@ class _ProblemMapState extends State<ProblemMap> {
         position: currentPosition,
         infoWindow: InfoWindow(title: model.title, snippet: model.description),
         markerId: null);
-    Provider.of<GoogleMapModel>(context).add(modelMarker);
+    Provider.of<GoogleMapModel>(context)
+        .add(AwesomeMarker(marker: modelMarker, type: MarkerType.Problem));
     Provider.of<ProblemForm>(context).setLatLon(currentPosition);
     setState(() {
       isPrepareAdd = false;
@@ -42,7 +45,6 @@ class _ProblemMapState extends State<ProblemMap> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<GoogleMapModel>(context).initMarker(problems);
 
     setState(() {
       isPrepareAdd = false;
@@ -51,14 +53,13 @@ class _ProblemMapState extends State<ProblemMap> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<ProblemForm>(builder: (context, problemFormModel, _) {
       return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: getFloatingButton(problemFormModel, context),
         body: Container(
           child: Stack(children: <Widget>[
-            BaseMap(),
+            BaseMap(filter: MarkerType.Problem),
             if (isPrepareAdd)
               Center(
                 child: Container(

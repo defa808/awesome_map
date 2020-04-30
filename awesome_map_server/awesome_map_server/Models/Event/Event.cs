@@ -1,15 +1,14 @@
-﻿using System;
+﻿using awesome_map_server.Models.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace awesome_map_server.Models{
-    public class Event {
+namespace awesome_map_server.Models {
+    public class Event : Ticket {
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public double X { get; set; }
-        public double Y { get; set; }
         public string PlaceDescription { get; set; }
         public DateTime StartDate { get; set; }
         public TimeSpan Duration { get; set; }
