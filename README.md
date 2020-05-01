@@ -13,3 +13,6 @@ awesome_map
 
 ## Переглядай заходи. Коментуй. Приєднуйся.
 ![](https://github.com/defa808/awesome_map/blob/master/awesome_map_mobile/images/canDo/showEvents.gif) 
+
+## Фільтруй.
+![](https://github.com/defa808/awesome_map/blob/master/docs/demo/filter.gif)
