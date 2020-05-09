@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace awesome_map_server.Models {
     public class ApplicationUser : IdentityUser {
         [InverseProperty("Owner")]
-        public virtual List<Problem> MyProblem { get; set; }
+        public virtual List<Problem> MyProblems { get; set; }
         public virtual List<ProblemUser> ObservedProblems { get; set; }
 
         public virtual List<Event> MyEvents { get; set; }
@@ -17,8 +17,12 @@ namespace awesome_map_server.Models {
         [InverseProperty("UserSender")]
         public virtual List<Comment> Sent { get; set; }
 
-        ApplicationUser() {
+        public ApplicationUser() {
             ObservedProblems = new List<ProblemUser>();
+            MyProblems = new List<Problem>();
+            MyEvents = new List<Event>();
+            Inbox = new List<Comment>();
+            Sent = new List<Comment>();
         }
     }
 }

@@ -695,7 +695,7 @@ namespace awesome_map_server.Data.Migrations
             modelBuilder.Entity("awesome_map_server.Models.Problem", b =>
                 {
                     b.HasOne("awesome_map_server.Models.ApplicationUser", "Owner")
-                        .WithMany("MyProblem")
+                        .WithMany("MyProblems")
                         .HasForeignKey("OwnerId");
                 });
 

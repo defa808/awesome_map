@@ -12,10 +12,10 @@ namespace awesome_map_server.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
                     X = table.Column<double>(nullable: false),
                     Y = table.Column<double>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     PlaceDescription = table.Column<string>(nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false),
                     Duration = table.Column<TimeSpan>(nullable: false),
@@ -63,10 +63,10 @@ namespace awesome_map_server.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    ProblemTypeId = table.Column<Guid>(nullable: false),
                     X = table.Column<double>(nullable: false),
                     Y = table.Column<double>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    ProblemTypeId = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     OwnerId = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false)
@@ -282,13 +282,13 @@ namespace awesome_map_server.Data.Migrations
                         column: x => x.BackwardCommentId,
                         principalTable: "Comments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_ForwardComments_Comments_ForwardCommentId",
                         column: x => x.ForwardCommentId,
                         principalTable: "Comments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

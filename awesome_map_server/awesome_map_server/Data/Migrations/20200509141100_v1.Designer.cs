@@ -10,7 +10,7 @@ using awesome_map_server.Data;
 namespace awesome_map_server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200411120529_v1")]
+    [Migration("20200509141100_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -697,7 +697,7 @@ namespace awesome_map_server.Data.Migrations
             modelBuilder.Entity("awesome_map_server.Models.Problem", b =>
                 {
                     b.HasOne("awesome_map_server.Models.ApplicationUser", "Owner")
-                        .WithMany("MyProblem")
+                        .WithMany("MyProblems")
                         .HasForeignKey("OwnerId");
                 });
 

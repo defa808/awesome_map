@@ -33,8 +33,7 @@ namespace awesome_map_server.Data {
             builder.Entity<ProblemUser>().HasKey(x => new { x.ProblemId, x.UserId });
             builder.Entity<EventTypeEvent>().HasKey(x => new { x.EventId, x.TypeId });
             builder.Entity<EventUser>().HasKey(x => new { x.EventId, x.UserId });
-            builder.Entity<ForwardComments>().HasKey(x => new { x.ForwardCommentId, x.BackwardCommentId});
+            builder.Entity<ForwardComments>().HasKey(x => new { x.ForwardCommentId, x.BackwardCommentId });
         }
-
     }
 }
