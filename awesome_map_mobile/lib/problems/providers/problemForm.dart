@@ -1,45 +1,37 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:awesome_map_mobile/env/config.dart';
+import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
-class ProblemForm extends Problem with ChangeNotifier {
+class ProblemForm with ChangeNotifier {
   bool readyToFill = false;
-
+  Problem problem = Problem.empty();
   void setLatLon(LatLng position) {
-    this.latitude = num.parse(position.latitude.toStringAsFixed(10));
-    this.longitude = num.parse(position.longitude.toStringAsFixed(10));
+    problem.latitude = num.parse(position.latitude.toStringAsFixed(10));
+    problem.longitude = num.parse(position.longitude.toStringAsFixed(10));
     this.readyToFill = true;
     this.notifyListeners();
   }
 
-  ProblemForm(double latitude, double longitude, String title,
-      int typeProblemId, String description, List<File> files)
-      : super(latitude, longitude, title, typeProblemId, description, files);
-
-  void save(ProblemForm form) {
-    this.latitude = form.latitude;
-    this.longitude = form.longitude;
-    this.title = form.title;
-    this.typeProblemId = form.typeProblemId;
-    this.description = form.description;
-    this.files = form.files;
-    this.notifyListeners();
-    // this = form.toJson();
+  Future<bool> save() async {
+    try {
+      AppConfig config = await AppConfig.forEnvironment();
+      Response res = await http.post(config.apiUrl + "api/Problems",
+          headers: {"Content-type": "application/json"},
+          body: json.encode(problem.toJson()));
+      return true;
+    } catch (Exception) {}
+    return false;
   }
 
   void clear() {
     this.readyToFill = false;
-    this.latitude = 0;
-    this.longitude = 0;
-    this.title = "";
-    this.typeProblemId = -1;
-    this.description = "";
-    this.files = new List<File>();
+    this.problem = Problem.empty();
     this.notifyListeners();
-  }
-
-  factory ProblemForm.empty(){
-    return ProblemForm(0, 0, "", -1, "", new List<File>());
   }
 }

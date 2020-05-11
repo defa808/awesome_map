@@ -16,20 +16,21 @@ class CreateProblemItem extends StatefulWidget {
 class _CreateProblemItemState extends State<CreateProblemItem> {
   List<String> _typeProblems = [];
   final _formKey = GlobalKey<FormState>();
-  ProblemForm _data = ProblemForm.empty();
+  ProblemForm _data = new ProblemForm();
 
   void completeTicket(context) async {
     Provider.of<GoogleMapModel>(context).removeLast();
     _formKey.currentState.save();
-    Provider.of<ProblemForm>(context).save(_data);
-    Provider.of<GoogleMapModel>(context).add(AwesomeMarker(
-        marker: Marker(
-            markerId: null,
-            position: LatLng(_data.latitude, _data.longitude),
-            infoWindow:
-                InfoWindow(title: _data.title, snippet: _data.description)),
-        type: MarkerType.Problem));
-    Provider.of<ProblemForm>(context).clear();
+    if (await _data.save()) {
+      Provider.of<GoogleMapModel>(context).add(AwesomeMarker(
+          marker: Marker(
+              markerId: null,
+              position: LatLng(_data.problem.latitude, _data.problem.longitude),
+              infoWindow:
+                  InfoWindow(title: _data.problem.title, snippet: _data.problem.description)),
+          type: MarkerType.Problem));
+      _data.clear();
+    }
   }
 
   void removeTicket() {
@@ -106,9 +107,9 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                       labelText: "Широта",
                                       hintText: "Широта"),
                                   keyboardType: TextInputType.number,
-                                  initialValue: model.latitude.toString(),
+                                  initialValue: model.problem.latitude.toString(),
                                   onSaved: (String value) {
-                                    this._data.latitude = double.parse(value);
+                                    this._data.problem.latitude = double.parse(value);
                                   }),
                             ),
                             SizedBox(width: 50),
@@ -119,9 +120,9 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                       labelText: "Довгота",
                                       hintText: "Довгота"),
                                   keyboardType: TextInputType.number,
-                                  initialValue: model.longitude.toString(),
+                                  initialValue: model.problem.longitude.toString(),
                                   onSaved: (String value) {
-                                    this._data.longitude = double.parse(value);
+                                    this._data.problem.longitude = double.parse(value);
                                   }),
                             ),
                           ],
@@ -131,7 +132,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                 border: UnderlineInputBorder(),
                                 labelText: "Назва"),
                             onSaved: (String value) {
-                              this._data.title = value;
+                              this._data.problem.title = value;
                             }),
                         SizedBox(height: 10),
                         DropdownButtonFormField<String>(
@@ -145,7 +146,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                           }).toList(),
                           value: _selectedTypeProblem,
                           onSaved: (String value) {
-                            this._data.typeProblemId = 0; //hard code
+                            this._data.problem.typeProblemId = 0; //hard code
                           },
                           onChanged: (String value) {
                             setState(() {
@@ -160,7 +161,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                 border: UnderlineInputBorder(),
                                 labelText: "Опис"),
                             onSaved: (String value) {
-                              this._data.description = value;
+                              this._data.problem.description = value;
                             }),
                         SizedBox(height: 10),
                         Row(

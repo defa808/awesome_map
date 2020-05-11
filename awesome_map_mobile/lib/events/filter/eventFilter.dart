@@ -1,8 +1,8 @@
+import 'package:awesome_map_mobile/base/categoryAutoComplete.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filter/filterItem.dart';
 import 'package:awesome_map_mobile/events/providers/eventFilterModel.dart';
-import 'package:awesome_map_mobile/models/base/categoryAutoComplete.dart';
-import 'package:awesome_map_mobile/models/categories/eventTypes.dart';
+import 'package:awesome_map_mobile/events/providers/eventTypes.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

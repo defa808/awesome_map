@@ -18,13 +18,13 @@ import 'events/eventDetails.dart';
 import 'events/eventUserList.dart';
 import 'events/providers/eventFilterModel.dart';
 import 'events/providers/eventForm.dart';
+import 'events/providers/eventTypes.dart';
 import 'home/home.dart';
-import 'models/categories/eventTypes.dart';
-import 'models/categories/problemTypes.dart';
 import 'models/googleMap/googleMapModel.dart';
 
 import 'problems/providers/problemFilterModel.dart';
 import 'problems/providers/problemForm.dart';
+import 'problems/providers/problemTypes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

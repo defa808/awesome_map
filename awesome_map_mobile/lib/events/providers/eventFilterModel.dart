@@ -1,4 +1,4 @@
-import 'package:awesome_map_mobile/models/base/filterModel.dart';
+import 'package:awesome_map_mobile/base/providers/filterModel.dart';
 
 class EventFilterModel extends FilterModel {
   DateTime startDate;

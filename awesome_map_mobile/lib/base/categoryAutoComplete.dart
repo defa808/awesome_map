@@ -1,8 +1,9 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
-import 'package:awesome_map_mobile/models/base/filterModel.dart';
-import 'package:awesome_map_mobile/models/categories/categories.dart';
 import 'package:flutter/material.dart';
+
+import 'providers/categories.dart';
+import 'providers/filterModel.dart';
 
 class CategoryAutoComplete extends StatelessWidget {
   const CategoryAutoComplete(

@@ -25,7 +25,7 @@ class _ProblemMapState extends State<ProblemMap> {
     // model.setLatLon(currentPosition);
     Marker modelMarker = Marker(
         position: currentPosition,
-        infoWindow: InfoWindow(title: model.title, snippet: model.description),
+        infoWindow: InfoWindow(title: model.problem.title, snippet: model.problem.description),
         markerId: null);
     Provider.of<GoogleMapModel>(context)
         .add(AwesomeMarker(marker: modelMarker, type: MarkerType.Problem));

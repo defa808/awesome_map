@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:awesome_map_mobile/models/event/event.dart';
+import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -21,7 +22,7 @@ class EventForm extends Event with ChangeNotifier {
     String title,
     int typeProblemId,
     String description,
-    List<File> files,
+    List<ServerFile> files,
     String placeDescription,
     DateTime startDate,
     DateTime createdDate,
@@ -43,7 +44,7 @@ class EventForm extends Event with ChangeNotifier {
             files);
 
   factory EventForm.empty(){
-    return EventForm(0, 0, "", 0, "", new List<File>(), "",
+    return EventForm(0, 0, "", 0, "", new List<ServerFile>(), "",
       DateTime.now(), DateTime.now(), Duration.zero, 0, false);
   }
 
@@ -70,7 +71,7 @@ class EventForm extends Event with ChangeNotifier {
     this.longitude = 0;
     this.title = "";
     this.description = "";
-    this.files = new List<File>();
+    this.files = new List<ServerFile>();
     this.placeDescription = "";
     this.startDate = DateTime.now();
     this.createdDate = DateTime.now();

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
@@ -16,7 +17,7 @@ class Event {
   DateTime createdDate;
   Duration duration;
   int peopleCount;
-  List<File> files;
+  List<ServerFile> files;
   bool isClosed;
   Event(this.latitude, this.longitude, this.title, this.typeEventId,
       this.description,
