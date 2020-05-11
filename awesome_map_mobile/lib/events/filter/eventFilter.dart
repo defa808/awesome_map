@@ -1,13 +1,10 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filter/filterItem.dart';
-import 'package:awesome_map_mobile/models/base/category.dart';
+import 'package:awesome_map_mobile/events/providers/eventFilterModel.dart';
 import 'package:awesome_map_mobile/models/base/categoryAutoComplete.dart';
 import 'package:awesome_map_mobile/models/categories/eventTypes.dart';
-import 'package:awesome_map_mobile/models/event/eventFilterModel.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventFilter extends StatelessWidget {

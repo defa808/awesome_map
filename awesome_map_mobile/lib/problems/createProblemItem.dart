@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
-import 'package:awesome_map_mobile/models/problem/problemForm.dart';
+import 'package:awesome_map_mobile/problems/providers/problemForm.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';

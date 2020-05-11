@@ -1,4 +1,4 @@
-import 'package:awesome_map_mobile/models/problem/problemFilterModel.dart';
+import 'package:awesome_map_mobile/problems/providers/problemFilterModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

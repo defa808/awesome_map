@@ -2,10 +2,9 @@ import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filter/filterItem.dart';
 import 'package:awesome_map_mobile/models/base/categoryAutoComplete.dart';
 import 'package:awesome_map_mobile/models/categories/problemTypes.dart';
-import 'package:awesome_map_mobile/models/problem/problemFilterModel.dart';
+import 'package:awesome_map_mobile/problems/providers/problemFilterModel.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class ProblemFilter extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:awesome_map_mobile/base/baseMap.dart';
-import 'package:awesome_map_mobile/models/event/eventForm.dart';
+import 'package:awesome_map_mobile/events/providers/eventForm.dart';
 import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';

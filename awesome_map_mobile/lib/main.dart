@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/https/HttpsOverrides.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
-import 'package:awesome_map_mobile/models/event/eventFilterModel.dart';
-import 'package:awesome_map_mobile/models/problem/problemFilterModel.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
@@ -17,15 +15,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'account/account.dart';
 import 'authorization/signIn.dart';
 import 'events/eventDetails.dart';
-import 'events/eventList.dart';
 import 'events/eventUserList.dart';
+import 'events/providers/eventFilterModel.dart';
+import 'events/providers/eventForm.dart';
 import 'home/home.dart';
 import 'models/categories/eventTypes.dart';
 import 'models/categories/problemTypes.dart';
-import 'models/event/eventForm.dart';
 import 'models/googleMap/googleMapModel.dart';
-import 'models/problem/problemForm.dart';
-import 'package:http/http.dart' as http;
+
+import 'problems/providers/problemFilterModel.dart';
+import 'problems/providers/problemForm.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

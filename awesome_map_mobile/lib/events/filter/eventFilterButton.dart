@@ -1,4 +1,4 @@
-import 'package:awesome_map_mobile/models/event/eventFilterModel.dart';
+import 'package:awesome_map_mobile/events/providers/eventFilterModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
