@@ -10,11 +10,11 @@ class FilterItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RawChip(
-      avatar: CircleAvatar(
+      avatar: icon != null ? CircleAvatar(
         backgroundColor: Colors.transparent,
         foregroundColor: CustomTheme.of(context).chipTheme.labelStyle.color,
         child: icon,
-      ),
+      ): null,
       label: label,
       onDeleted: onDelete,
       deleteIcon: Icon(Icons.clear),

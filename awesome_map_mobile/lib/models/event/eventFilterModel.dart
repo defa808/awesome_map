@@ -1,17 +1,9 @@
-import 'package:awesome_map_mobile/models/base/category.dart';
-import 'package:flutter/material.dart';
+import 'package:awesome_map_mobile/models/base/filterModel.dart';
 
-class EventFilterModel extends ChangeNotifier {
-  int filtersCount = 0;
+class EventFilterModel extends FilterModel {
   DateTime startDate;
-  String place;
+  String place = "";
   String title = "";
-  List<Category> selectedCategories = new List<Category>();
-  bool isShow = false;
-  void showOrHide() {
-    isShow = !isShow;
-    notifyListeners();
-  }
 
   void setTitle(String value) {
     this.title = value;
@@ -32,32 +24,19 @@ class EventFilterModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addCategory(Category value) {
-    selectedCategories.add(value);
-    updateCounter();
-    notifyListeners();
+  @override
+  int checkChangedCounter() {
+    int res = 0;
+    if (this.title.isNotEmpty) res++;
+    if (this.startDate != null) res++;
+    if (this.place.isNotEmpty) res++;
+    return res;
   }
 
-  removeCategory(String guid) {
-    selectedCategories =
-        selectedCategories.where((item) => item.guid != guid).toList();
-    updateCounter();
-    notifyListeners();
-  }
-
-  updateCounter() {
-    filtersCount = 0;
-    if (this.title.isNotEmpty) filtersCount++;
-    if(this.startDate != null)  filtersCount++;
-    if(this.place.isNotEmpty)  filtersCount++;
-    filtersCount += this.selectedCategories.length;
-  }
-
-  void reset() {
+  @override
+  void resetAllFields() {
     setTitle("");
     setStartDate(null);
     setPlace("");
-    selectedCategories = new List<Category>();
-    notifyListeners();
   }
 }

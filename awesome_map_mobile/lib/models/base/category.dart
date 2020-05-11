@@ -1,8 +1,19 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+import 'amIcon.dart';
+part 'category.g.dart';
+
+@JsonSerializable()
 class Category {
-  String guid;
+  String id;
   String name;
-  int iconCode;
-  Category({@required this.guid, @required this.name, this.iconCode});
+  AMIcon icon;
+  Category({@required this.id, @required this.name, this.icon});
+
+factory Category.fromJson(Map<String, dynamic> json) =>
+      _$CategoryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CategoryToJson(this);
+
 }

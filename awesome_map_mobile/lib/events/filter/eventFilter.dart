@@ -2,20 +2,16 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filter/filterItem.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
+import 'package:awesome_map_mobile/models/base/categoryAutoComplete.dart';
+import 'package:awesome_map_mobile/models/categories/eventTypes.dart';
 import 'package:awesome_map_mobile/models/event/eventFilterModel.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EventFilter extends StatelessWidget {
   EventFilter({Key key}) : super(key: key);
-  final List<Category> categories = <Category>[
-    Category(guid: "CVsdf", name: "Сміття", iconCode: Icons.delete.codePoint),
-    Category(
-        guid: "asdasd",
-        name: "Охорона здоров'я",
-        iconCode: Icons.security.codePoint)
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +24,7 @@ class EventFilter extends StatelessWidget {
                 ? Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 8, horizontal: 8.0),
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: <
-                        Widget>[
+                    child: ListView(shrinkWrap: true, children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -100,41 +93,12 @@ class EventFilter extends StatelessWidget {
                       ),
                       Row(
                         children: <Widget>[
-                          Flexible(
-                              child: AutoCompleteTextField<Category>(
-                            style: TextStyle(color: mainColor),
-                            decoration: InputDecoration(
-                                hintStyle: TextStyle(color: mainColor),
-                                labelStyle: TextStyle(color: mainColor),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: mainColor)),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        style: BorderStyle.solid,
-                                        color: mainColor)),
-                                labelText: "Категорії"),
-                            suggestions: categories
-                                .where((item) => model.selectedCategories
-                                    .every((item2) => item2.guid != item.guid))
-                                .toList(),
-                            itemBuilder:
-                                (BuildContext context, Category suggestion) =>
-                                    ListTile(
-                              leading: Icon(IconData(suggestion.iconCode,
-                                  fontFamily: 'MaterialIcons')),
-                              title: Text(suggestion.name),
-                            ),
-                            itemSorter: (a, b) => a.name.compareTo(b.name),
-                            itemFilter: (Category suggestion, String query) =>
-                                suggestion.name
-                                    .toLowerCase()
-                                    .contains(query.toLowerCase()),
-                            itemSubmitted: (Category data) =>
-                                Provider.of<EventFilterModel>(context)
-                                    .addCategory(data),
-                            key: new GlobalKey<
-                                AutoCompleteTextFieldState<Category>>(),
-                          )),
+                          Flexible(child: Consumer<EventTypes>(builder:
+                              (BuildContext context, EventTypes store,
+                                  Widget child) {
+                            return CategoryAutoComplete(
+                                model: model, store: store);
+                          }))
                         ],
                       ),
                       SizedBox(
@@ -147,11 +111,13 @@ class EventFilter extends StatelessWidget {
                               padding: const EdgeInsets.only(right: 5.0),
                               child: FilterItem(
                                 label: Text(item.name),
-                                icon: Icon(IconData(item.iconCode,
-                                    fontFamily: 'MaterialIcons')),
+                                icon: item.icon != null
+                                    ? Icon(IconData(item.icon.iconCode,
+                                        fontFamily: item.icon.fontFamily,
+                                        fontPackage: item.icon.fontPackage))
+                                    : null,
                                 onDelete: () {
-                                  Provider.of<EventFilterModel>(context)
-                                      .removeCategory(item.guid);
+                                  model.removeCategory(item.id);
                                 },
                               ),
                             )
@@ -162,9 +128,7 @@ class EventFilter extends StatelessWidget {
                           child: FlatButton(
                             child: Text("Cкинути",
                                 style: TextStyle(color: mainColor)),
-                            onPressed:
-                                Provider.of<EventFilterModel>(context)
-                                    .reset,
+                            onPressed: model.reset,
                           ))
                     ]),
                   )
