@@ -1,1 +1,9 @@
 /awesome_map_server/.vs
+/awesome_map_server/Contracts/bin
+/awesome_map_server/DataBaseModels/bin
+/awesome_map_server/DataBaseContext/bin
+/awesome_map_server/DataBaseContext/obj
+/awesome_map_server/Contracts/obj
+/awesome_map_server/DataBaseModels/obj
+/awesome_map_server/Implementations/obj
+/awesome_map_server/Implementations/bin
