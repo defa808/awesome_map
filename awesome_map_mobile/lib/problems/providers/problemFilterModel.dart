@@ -1,10 +1,11 @@
 
 import 'package:awesome_map_mobile/base/providers/filterModel.dart';
+import 'package:awesome_map_mobile/models/problem/problemStatus.dart';
 
 class ProblemFilterModel extends FilterModel {
   DateTime startDate;
-  DateTime endDate;
   String title = "";
+  ProblemStatus status;
 
   void setTitle(String value) {
     this.title = value;
@@ -18,8 +19,8 @@ class ProblemFilterModel extends FilterModel {
     notifyListeners();
   }
 
-  void setEndDate(DateTime date) {
-    this.endDate = date;
+ void setStatus(ProblemStatus value) {
+    this.status = value;
     updateCounter();
     notifyListeners();
   }
@@ -29,7 +30,7 @@ class ProblemFilterModel extends FilterModel {
     int res = 0;
     if (this.title.isNotEmpty) res++;
     if (this.startDate != null) res++;
-    if (this.endDate != null) res++;
+    if (this.status != null) res++;
     return res;
   }
 
@@ -37,6 +38,6 @@ class ProblemFilterModel extends FilterModel {
   resetAllFields() {
     setTitle("");
     setStartDate(null);
-    setEndDate(null);
+    setStatus(null);
   }
 }

@@ -1,14 +1,17 @@
 import 'package:awesome_map_mobile/base/categoryAutoComplete.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filter/filterItem.dart';
+import 'package:awesome_map_mobile/models/problem/problemStatus.dart';
 import 'package:awesome_map_mobile/problems/providers/problemFilterModel.dart';
 import 'package:awesome_map_mobile/problems/providers/problemTypes.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
+import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProblemFilter extends StatelessWidget {
-  ProblemFilter({Key key}) : super(key: key) {}
+  ProblemFilter({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +54,13 @@ class ProblemFilter extends StatelessWidget {
                         height: 5,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Flexible(
                             child: DatePicker(
-                              labelText: "Початкова дата",
+                              labelText: "Дата створення",
                               initDate: model.startDate,
-                              endDate: model.endDate ?? DateTime(2100),
+                              endDate: DateTime(2100),
                               onChange: (value) {
                                 model.setStartDate(value);
                               },
@@ -67,15 +71,31 @@ class ProblemFilter extends StatelessWidget {
                             width: 8,
                           ),
                           Flexible(
-                            child: DatePicker(
-                              labelText: "Кінцева дата",
-                              firstDate: model.startDate ?? DateTime(2020),
-                              endDate: DateTime(2100),
-                              initDate: model.endDate,
-                              onChange: (value) {
-                                model.setEndDate(value);
-                              },
-                            ),
+                            child: DropdownButtonFormField<ProblemStatus>(
+                                iconEnabledColor: mainColor,
+                                decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: mainColor)),
+                                  hintStyle: TextStyle(color: mainColor),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: mainColor)),
+                                ),
+                                hint: Text("Статус",
+                                    style: TextStyle(color: mainColor)),
+                                value: model.status,
+                                style: TextStyle(color: mainColor),
+                                onChanged: (ProblemStatus newValue) {
+                                  model.setStatus(newValue);
+                                },
+                                items: ProblemStatus.values
+                                    .map((ProblemStatus classType) {
+                                  return DropdownMenuItem<ProblemStatus>(
+                                      value: classType,
+                                      child: Text(
+                                        EnumToString.parseCamelCase(classType),
+                                        style: TextStyle(color: Colors.black),
+                                      ));
+                                }).toList()),
                           ),
                         ],
                       ),

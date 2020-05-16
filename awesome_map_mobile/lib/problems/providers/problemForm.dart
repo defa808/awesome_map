@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:awesome_map_mobile/env/config.dart';
+import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,17 @@ class ProblemForm with ChangeNotifier {
       var t = 1;
     }
     return false;
+  }
+
+  addCategory(Category item) {
+    this.problem.typeProblems.add(item);
+    notifyListeners();
+  }
+
+  removeCategory(String guid) {
+    problem.typeProblems =
+        problem.typeProblems.where((item) => item.id != guid).toList();
+    notifyListeners();
   }
 
   void clear() {

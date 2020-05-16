@@ -4,6 +4,7 @@ import 'package:awesome_map_mobile/https/HttpsOverrides.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
+import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
@@ -28,19 +29,21 @@ import 'problems/providers/problemTypes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-   runApp(MultiProvider(
-      child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
-      providers: <SingleChildCloneableWidget>[
-        ChangeNotifierProvider<ProblemFilterModel>.value(notifier: ProblemFilterModel()),
-        ChangeNotifierProvider<EventFilterModel>.value(notifier: EventFilterModel()),
-        ChangeNotifierProvider<GoogleMapModel>.value(notifier: GoogleMapModel()),
-        ChangeNotifierProvider<ProblemForm>.value(notifier: ProblemForm()),
-        ChangeNotifierProvider<EventForm>.value(notifier: EventForm.empty()),
-        ChangeNotifierProvider<ProblemTypes>.value(notifier: ProblemTypes()),
-        ChangeNotifierProvider<EventTypes>.value(notifier: EventTypes()),
-
-      ],
-    ));
+  runApp(MultiProvider(
+    child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
+    providers: <SingleChildCloneableWidget>[
+      ChangeNotifierProvider<ProblemFilterModel>.value(
+          notifier: ProblemFilterModel()),
+      ChangeNotifierProvider<EventFilterModel>.value(
+          notifier: EventFilterModel()),
+      ChangeNotifierProvider<GoogleMapModel>.value(notifier: GoogleMapModel()),
+      ChangeNotifierProvider<ProblemForm>.value(notifier: ProblemForm()),
+      ChangeNotifierProvider<EventForm>.value(notifier: EventForm.empty()),
+      ChangeNotifierProvider<ProblemTypes>.value(notifier: ProblemTypes()),
+      ChangeNotifierProvider<EventTypes>.value(notifier: EventTypes()),
+      ChangeNotifierProvider<ProblemService>.value(notifier: ProblemService())
+    ],
+  ));
 }
 
 class MyApp extends StatelessWidget {

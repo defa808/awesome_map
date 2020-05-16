@@ -1,9 +1,12 @@
+import 'package:awesome_map_mobile/base/ChooseCategoryAutoComplete.dart';
 import 'package:awesome_map_mobile/base/categoryAutoComplete.dart';
+import 'package:awesome_map_mobile/base/filter/filterItem.dart';
+import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/problems/providers/problemForm.dart';
-import 'package:awesome_map_mobile/problems/providers/problemTypes.dart';
+import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +19,7 @@ class CreateProblemItem extends StatefulWidget {
 }
 
 class _CreateProblemItemState extends State<CreateProblemItem> {
-  List<String> _typeProblems = [];
+  Future<List<Category>> _typeProblems;
   final _formKey = GlobalKey<FormState>();
 
   void completeTicket(context) async {
@@ -45,20 +48,10 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
   String _selectedTypeProblem;
   @override
   void initState() {
+    _typeProblems = Provider.of<ProblemService>(context).getCategories();
+
     super.initState();
-    setState(() {
-      _typeProblems = [
-        "Довкілля",
-        "Електоенергія",
-        "Закон  і Порядок",
-        "Здоров’я",
-        "Каналізація",
-        "Комунікація",
-        "Надзвичайна Ситуація",
-        "Сміття",
-        "Інше"
-      ];
-    });
+ 
   }
 
   @override
@@ -136,6 +129,8 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                           ],
                         ),
                         TextFormField(
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: "Назва"),
@@ -143,25 +138,6 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                               model.problem.title = value;
                             }),
                         SizedBox(height: 10),
-                        DropdownButtonFormField<String>(
-                          isExpanded: true,
-                          hint: Text("Тип проблеми"),
-                          items: _typeProblems.map((String value) {
-                            return new DropdownMenuItem<String>(
-                              value: value,
-                              child: new Text(value),
-                            );
-                          }).toList(),
-                          value: _selectedTypeProblem,
-                          onSaved: (String value) {
-                            model.problem.typeProblemId = 0; //hard code
-                          },
-                          onChanged: (String value) {
-                            setState(() {
-                              _selectedTypeProblem = value;
-                            });
-                          },
-                        ),
                         TextFormField(
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
@@ -172,6 +148,33 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                               model.problem.description = value;
                             }),
                         SizedBox(height: 10),
+                        FutureBuilder<List<Category>>(
+                            future: _typeProblems,
+                            builder: (context, snapshot) {
+                              return ChooseCategoryAutoComplete(
+                                  store: snapshot.hasData ? snapshot.data : new List<Category>(),
+                                  selectedCategories:
+                                      model.problem.typeProblems,
+                                  addCategory: model.addCategory);
+                            }),
+                        if (model.problem.typeProblems.length > 0)
+                          Row(
+                            children: <Widget>[
+                              for (var item in model.problem.typeProblems)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 5.0),
+                                  child: FilterItem(
+                                    label: Text(item.name),
+                                    icon: item.icon != null
+                                        ? Icon(IconData(item.icon.iconCode,
+                                            fontFamily: item.icon.fontFamily,
+                                            fontPackage: item.icon.fontPackage))
+                                        : null,
+                                    onDelete: model.removeCategory,
+                                  ),
+                                )
+                            ],
+                          ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
