@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'fileBody.g.dart';
 

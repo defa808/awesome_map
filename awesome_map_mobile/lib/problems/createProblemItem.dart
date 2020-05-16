@@ -1,7 +1,9 @@
+import 'package:awesome_map_mobile/base/categoryAutoComplete.dart';
 import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/problems/providers/problemForm.dart';
+import 'package:awesome_map_mobile/problems/providers/problemTypes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -16,20 +18,22 @@ class CreateProblemItem extends StatefulWidget {
 class _CreateProblemItemState extends State<CreateProblemItem> {
   List<String> _typeProblems = [];
   final _formKey = GlobalKey<FormState>();
-  ProblemForm _data = new ProblemForm();
 
   void completeTicket(context) async {
     Provider.of<GoogleMapModel>(context).removeLast();
     _formKey.currentState.save();
-    if (await _data.save()) {
+    ProblemForm provider = Provider.of<ProblemForm>(context);
+    if (await provider.save()) {
       Provider.of<GoogleMapModel>(context).add(AwesomeMarker(
           marker: Marker(
               markerId: null,
-              position: LatLng(_data.problem.latitude, _data.problem.longitude),
-              infoWindow:
-                  InfoWindow(title: _data.problem.title, snippet: _data.problem.description)),
+              position:
+                  LatLng(provider.problem.latitude, provider.problem.longitude),
+              infoWindow: InfoWindow(
+                  title: provider.problem.title,
+                  snippet: provider.problem.description)),
           type: MarkerType.Problem));
-      _data.clear();
+      provider.clear();
     }
   }
 
@@ -107,9 +111,11 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                       labelText: "Широта",
                                       hintText: "Широта"),
                                   keyboardType: TextInputType.number,
-                                  initialValue: model.problem.latitude.toString(),
+                                  initialValue:
+                                      model.problem.latitude.toString(),
                                   onSaved: (String value) {
-                                    this._data.problem.latitude = double.parse(value);
+                                    model.problem.latitude =
+                                        double.parse(value);
                                   }),
                             ),
                             SizedBox(width: 50),
@@ -120,9 +126,11 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                       labelText: "Довгота",
                                       hintText: "Довгота"),
                                   keyboardType: TextInputType.number,
-                                  initialValue: model.problem.longitude.toString(),
+                                  initialValue:
+                                      model.problem.longitude.toString(),
                                   onSaved: (String value) {
-                                    this._data.problem.longitude = double.parse(value);
+                                    model.problem.longitude =
+                                        double.parse(value);
                                   }),
                             ),
                           ],
@@ -132,7 +140,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                 border: UnderlineInputBorder(),
                                 labelText: "Назва"),
                             onSaved: (String value) {
-                              this._data.problem.title = value;
+                              model.problem.title = value;
                             }),
                         SizedBox(height: 10),
                         DropdownButtonFormField<String>(
@@ -146,7 +154,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                           }).toList(),
                           value: _selectedTypeProblem,
                           onSaved: (String value) {
-                            this._data.problem.typeProblemId = 0; //hard code
+                            model.problem.typeProblemId = 0; //hard code
                           },
                           onChanged: (String value) {
                             setState(() {
@@ -161,7 +169,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                 border: UnderlineInputBorder(),
                                 labelText: "Опис"),
                             onSaved: (String value) {
-                              this._data.problem.description = value;
+                              model.problem.description = value;
                             }),
                         SizedBox(height: 10),
                         Row(

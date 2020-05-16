@@ -17,6 +17,7 @@ class CategoryAutoComplete extends StatelessWidget {
   Widget build(BuildContext context) {
     store.tryLoad();
     return AutoCompleteTextField<Category>(
+      
       style: TextStyle(color: mainColor),
       decoration: InputDecoration(
           hintStyle: TextStyle(color: mainColor),
@@ -39,7 +40,7 @@ class CategoryAutoComplete extends StatelessWidget {
             : null,
         title: Text(suggestion.name),
       ),
-      itemSorter: (a, b) => a.name.compareTo(b.name),
+      itemSorter: (a, b) => (a!= null && b != null)?a.name.compareTo(b.name) : true,
       itemFilter: (Category suggestion, String query) =>
           suggestion.name.toLowerCase().contains(query.toLowerCase()),
       itemSubmitted: (Category data) => model.addCategory(data),

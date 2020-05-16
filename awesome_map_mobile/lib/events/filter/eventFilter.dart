@@ -50,13 +50,13 @@ class EventFilter extends StatelessWidget {
                       SizedBox(
                         height: 5,
                       ),
-                      Row(
+                       Row(
                         children: <Widget>[
                           Flexible(
                             child: DatePicker(
                               labelText: "Початкова дата",
                               initDate: model.startDate,
-                              endDate: DateTime(2100),
+                              endDate: model.endDate ?? DateTime(2100),
                               onChange: (value) {
                                 model.setStartDate(value);
                               },
@@ -66,6 +66,21 @@ class EventFilter extends StatelessWidget {
                           SizedBox(
                             width: 8,
                           ),
+                          Flexible(
+                            child: DatePicker(
+                              labelText: "Кінцева дата",
+                              firstDate: model.startDate ?? DateTime(2020),
+                              endDate: DateTime(2100),
+                              initDate: model.endDate,
+                              onChange: (value) {
+                                model.setEndDate(value);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
                           Flexible(
                             child: TextFormField(
                                 cursorColor: mainColor,

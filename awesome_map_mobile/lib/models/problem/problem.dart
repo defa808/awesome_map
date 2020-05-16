@@ -6,6 +6,7 @@ part 'problem.g.dart';
 class Problem {
   @JsonKey(required: true)
   double latitude;
+  @JsonKey(required: true)
   double longitude;
   @JsonKey(required: true)
   String title;

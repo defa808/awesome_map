@@ -2,6 +2,7 @@ import 'package:awesome_map_mobile/base/providers/filterModel.dart';
 
 class EventFilterModel extends FilterModel {
   DateTime startDate;
+  DateTime endDate;
   String place = "";
   String title = "";
 
@@ -13,6 +14,12 @@ class EventFilterModel extends FilterModel {
 
   void setStartDate(DateTime date) {
     this.startDate = date;
+    updateCounter();
+    notifyListeners();
+  }
+
+  void setEndDate(DateTime date) {
+    this.endDate = date;
     updateCounter();
     notifyListeners();
   }
@@ -29,6 +36,7 @@ class EventFilterModel extends FilterModel {
     int res = 0;
     if (this.title.isNotEmpty) res++;
     if (this.startDate != null) res++;
+    if (this.endDate != null) res++;
     if (this.place.isNotEmpty) res++;
     return res;
   }
@@ -37,6 +45,7 @@ class EventFilterModel extends FilterModel {
   void resetAllFields() {
     setTitle("");
     setStartDate(null);
+    setEndDate(null);
     setPlace("");
   }
 }

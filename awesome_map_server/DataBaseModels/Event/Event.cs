@@ -1,4 +1,5 @@
-﻿using DataBaseModels.Models.Base;
+﻿using DataBaseModels.Event;
+using DataBaseModels.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace DataBaseModels.Models {
         public string Title { get; set; }
         public string Description { get; set; }
         public string PlaceDescription { get; set; }
+        public EventStatus Status { get; set; }
         public DateTime StartDate { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime EndDate { get { return StartDate + Duration; } }

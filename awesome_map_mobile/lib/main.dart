@@ -28,14 +28,13 @@ import 'problems/providers/problemTypes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  HttpOverrides.global = new HttpsOverrides();
    runApp(MultiProvider(
       child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
       providers: <SingleChildCloneableWidget>[
         ChangeNotifierProvider<ProblemFilterModel>.value(notifier: ProblemFilterModel()),
         ChangeNotifierProvider<EventFilterModel>.value(notifier: EventFilterModel()),
         ChangeNotifierProvider<GoogleMapModel>.value(notifier: GoogleMapModel()),
-        ChangeNotifierProvider<ProblemForm>.value(notifier: ProblemForm.empty()),
+        ChangeNotifierProvider<ProblemForm>.value(notifier: ProblemForm()),
         ChangeNotifierProvider<EventForm>.value(notifier: EventForm.empty()),
         ChangeNotifierProvider<ProblemTypes>.value(notifier: ProblemTypes()),
         ChangeNotifierProvider<EventTypes>.value(notifier: EventTypes()),

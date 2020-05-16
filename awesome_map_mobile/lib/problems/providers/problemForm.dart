@@ -21,11 +21,16 @@ class ProblemForm with ChangeNotifier {
   Future<bool> save() async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
+      Map<String, dynamic> problem = this.problem.toJson();
       Response res = await http.post(config.apiUrl + "api/Problems",
           headers: {"Content-type": "application/json"},
-          body: json.encode(problem.toJson()));
+          body: jsonEncode(problem));
+      this.problem = Problem.fromJson(jsonDecode(res.body));
+      readyToFill = false;
       return true;
-    } catch (Exception) {}
+    } catch (e) {
+      var t = 1;
+    }
     return false;
   }
 

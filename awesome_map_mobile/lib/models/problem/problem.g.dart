@@ -7,7 +7,8 @@ part of 'problem.dart';
 // **************************************************************************
 
 Problem _$ProblemFromJson(Map<String, dynamic> json) {
-  $checkKeys(json, requiredKeys: const ['latitude', 'title', 'typeProblemId']);
+  $checkKeys(json,
+      requiredKeys: const ['latitude', 'longitude', 'title', 'typeProblemId']);
   return Problem(
     (json['latitude'] as num)?.toDouble(),
     (json['longitude'] as num)?.toDouble(),
