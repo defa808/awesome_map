@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DataBaseContext;
 using DataBaseModels.Models;
+using AutoMapper;
+using awesome_map_server.Mapper;
 
 namespace awesome_map_server {
     public class Startup {
@@ -40,6 +42,7 @@ namespace awesome_map_server {
             services.AddSpaStaticFiles(configuration => {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddAutoMapper(typeof(MapperProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

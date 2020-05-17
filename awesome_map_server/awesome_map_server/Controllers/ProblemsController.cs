@@ -2,72 +2,68 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using awesome_map_server.ViewModels;
 using DataBaseContext;
 using DataBaseModels.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace awesome_map_server.Controllers
-{
-    
+namespace awesome_map_server.Controllers {
+
     [Route("api/[controller]")]
     [ApiController]
-    public class ProblemsController : ControllerBase
-    {
+    public class ProblemsController : ControllerBase {
         private readonly ApplicationDbContext _context;
-
-        public ProblemsController(ApplicationDbContext context)
-        {
+        private IMapper _mapper;
+        public ProblemsController(ApplicationDbContext context, IMapper autoMapper) {
             _context = context;
+            _mapper = autoMapper;
         }
 
         // GET: api/Problems
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Problem>>> GetProblems()
-        {
-            return await _context.Problems.ToListAsync();
+        public async Task<ActionResult<IEnumerable<ProblemViewModel>>> GetProblems() {
+            List<Problem> problems = await _context.Problems.Include(x=> x.ProblemTypeProblems).ThenInclude(x=> x.ProblemType).ToListAsync();
+            List<ProblemViewModel> problemsViewModel = new List<ProblemViewModel>();
+            foreach (var item in problems) {
+                ProblemViewModel viewModel = _mapper.Map<ProblemViewModel>(item);
+                viewModel.ProblemTypes = _mapper.ProjectTo<ProblemTypeViewModel>(item.ProblemTypeProblems.Select(x => x.ProblemType).AsQueryable()).ToList();
+                problemsViewModel.Add(viewModel);
+            }
+            return problemsViewModel;
         }
 
         // GET: api/Problems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Problem>> GetProblem(Guid id)
-        {
+        public async Task<ActionResult<ProblemViewModel>> GetProblem(Guid id) {
             var problem = await _context.Problems.FindAsync(id);
 
-            if (problem == null)
-            {
+            if (problem == null) {
                 return NotFound();
             }
 
-            return problem;
+            return _mapper.Map<ProblemViewModel>(problem);
         }
 
         // PUT: api/Problems/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProblem(Guid id, [FromBody] Problem problem)
-        {
-            if (id != problem.Id)
-            {
+        public async Task<IActionResult> PutProblem(Guid id, [FromBody] Problem problem) {
+            if (id != problem.Id) {
                 return BadRequest();
             }
 
             _context.Entry(problem).State = EntityState.Modified;
 
-            try
-            {
+            try {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProblemExists(id))
-                {
+            } catch (DbUpdateConcurrencyException) {
+                if (!ProblemExists(id)) {
                     return NotFound();
-                }
-                else
-                {
+                } else {
                     throw;
                 }
             }
@@ -79,21 +75,25 @@ namespace awesome_map_server.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Problem>> PostProblem(Problem problem)
-        {
-            _context.Problems.Add(problem);
+        public async Task<ActionResult<Problem>> PostProblem(ProblemViewModel problem) {
+            Problem newProblem = _mapper.Map<Problem>(problem);
+            
+            foreach (var item in problem.ProblemTypes)
+                newProblem.ProblemTypeProblems.Add(new ProblemTypeProblem() { Problem = newProblem, ProblemTypeId = item.Id });
+
+            _context.Problems.Add(newProblem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProblem", new { id = problem.Id }, problem);
+            ProblemViewModel loadedProblem = _mapper.Map<ProblemViewModel>(newProblem);
+            loadedProblem.ProblemTypes = problem.ProblemTypes;
+            return CreatedAtAction("GetProblem", new { id = newProblem.Id },loadedProblem);
         }
 
         // DELETE: api/Problems/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Problem>> DeleteProblem(Guid id)
-        {
+        public async Task<ActionResult<Problem>> DeleteProblem(Guid id) {
             var problem = await _context.Problems.FindAsync(id);
-            if (problem == null)
-            {
+            if (problem == null) {
                 return NotFound();
             }
 
@@ -103,8 +103,7 @@ namespace awesome_map_server.Controllers
             return problem;
         }
 
-        private bool ProblemExists(Guid id)
-        {
+        private bool ProblemExists(Guid id) {
             return _context.Problems.Any(e => e.Id == id);
         }
     }
