@@ -26,7 +26,7 @@ class BaseMap extends StatelessWidget {
             .where((x) => x.type == (filter ?? x.type))
             .map((x) => x.marker)),
         onMapCreated: (GoogleMapController controller) {
-          Provider.of<GoogleMapModel>(context).setController(controller);
+          context.read<GoogleMapModel>().setController(controller);
         },
       );
     });

@@ -1,6 +1,6 @@
 import 'package:awesome_map_mobile/base/categoryAutoComplete.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
-import 'package:awesome_map_mobile/base/filter/filterItem.dart';
+import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
 import 'package:awesome_map_mobile/models/problem/problemStatus.dart';
 import 'package:awesome_map_mobile/problems/providers/problemFilterModel.dart';
 import 'package:awesome_map_mobile/problems/providers/problemTypes.dart';
@@ -117,7 +117,7 @@ class ProblemFilter extends StatelessWidget {
                           for (var item in model.selectedCategories)
                             Padding(
                               padding: const EdgeInsets.only(right: 5.0),
-                              child: FilterItem(
+                              child: CategoryItem(
                                 label: Text(item.name),
                                 icon: item.icon != null
                                     ? Icon(IconData(item.icon.iconCode,

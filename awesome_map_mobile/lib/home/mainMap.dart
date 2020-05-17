@@ -38,7 +38,7 @@ void initState() {
               backgroundColor: Colors.white,
               child: const Icon(Icons.my_location, color: Colors.blue),
               onPressed: () {
-                Provider.of<GoogleMapModel>(context).setCurrentLocation();
+               context.read<GoogleMapModel>().setCurrentLocation();
               }),
         ],
       ),

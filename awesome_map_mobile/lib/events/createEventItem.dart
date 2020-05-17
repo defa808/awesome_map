@@ -21,22 +21,22 @@ class _CreateEventItemState extends State<CreateEventItem> {
   EventForm _data = EventForm.empty();
 
   void completeTicket(context) {
-    Provider.of<GoogleMapModel>(context).removeLast();
+    context.read<GoogleMapModel>().removeLast();
     _formKey.currentState.save();
-    Provider.of<EventForm>(context).save(_data);
-    Provider.of<GoogleMapModel>(context).add(AwesomeMarker(
+    context.read<EventForm>().save(_data);
+    context.read<GoogleMapModel>().add(AwesomeMarker(
         marker: Marker(
             markerId: null,
             position: LatLng(_data.latitude, _data.longitude),
             infoWindow:
                 InfoWindow(title: _data.title, snippet: _data.description)),
         type: MarkerType.Event));
-    Provider.of<EventForm>(context).clear();
+    context.read<EventForm>().clear();
   }
 
   void removeTicket() {
-    Provider.of<GoogleMapModel>(context).removeLast();
-    Provider.of<EventForm>(context).clear();
+    context.read<GoogleMapModel>().removeLast();
+    context.read<EventForm>().clear();
   }
 
   String _selectedTypeProblem;

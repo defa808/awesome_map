@@ -18,7 +18,7 @@ class ProblemFilterButton extends StatelessWidget {
                   color: Colors.white,
                   icon: Icon(Icons.filter_list),
                   onPressed: () {
-                    Provider.of<ProblemFilterModel>(context).showOrHide();
+                    context.read<ProblemFilterModel>().showOrHide();
                   }),
               if (model.filtersCount > 0)
                 Positioned(

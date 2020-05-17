@@ -6,6 +6,7 @@ import 'package:awesome_map_mobile/problems/filter/problemFilter.dart';
 import 'package:awesome_map_mobile/problems/problemDetailsContent.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
+import 'package:awesome_map_mobile/problems/providers/problemMarkers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,8 @@ class _ProblemHomeState extends State<ProblemHome> {
   @override
   void initState() {
     super.initState();
+
+    loadData();
   }
 
   void showMap() {
@@ -34,6 +37,7 @@ class _ProblemHomeState extends State<ProblemHome> {
   MarkerId selectedItemLast;
   @override
   Widget build(BuildContext context) {
+    // context.watch<ProblemMarkers>().getProblems();
     // Provider.of<GoogleMapModel>(context, listen: false).addListener(() {
     //   MarkerId selectedItem =
     //       Provider.of<GoogleMapModel>(context, listen: false).getSelectedItem();
@@ -86,5 +90,9 @@ class _ProblemHomeState extends State<ProblemHome> {
         ]);
       },
     );
+  }
+
+  void loadData() async {
+    context.read<ProblemMarkers>().getProblems();
   }
 }

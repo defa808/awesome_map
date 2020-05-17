@@ -17,24 +17,24 @@ class GoogleMapModel extends ChangeNotifier {
 
   GoogleMapModel() {
     currentCameraPosition = new CameraPosition(target: centerKPI);
-    add(AwesomeMarker(
-        marker: Marker(
-          position: LatLng(50.449301, 30.459368),
-          infoWindow:
-              InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
-          markerId: null,
-        ),
-        type: MarkerType.Event));
-    add(
-      AwesomeMarker(
-          marker: Marker(
-            position: LatLng(50.449891, 30.457668),
-            infoWindow:
-                InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
-            markerId: null,
-          ),
-          type: MarkerType.Problem),
-    );
+    // add(AwesomeMarker(
+    //     marker: Marker(
+    //       position: LatLng(50.449301, 30.459368),
+    //       infoWindow:
+    //           InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
+    //       markerId: null,
+    //     ),
+    //     type: MarkerType.Event));
+    // add(
+    //   AwesomeMarker(
+    //       marker: Marker(
+    //         position: LatLng(50.449891, 30.457668),
+    //         infoWindow:
+    //             InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
+    //         markerId: null,
+    //       ),
+    //       type: MarkerType.Problem),
+    // );
   }
 
   void selectItem(MarkerId markerId) {
@@ -45,16 +45,8 @@ class GoogleMapModel extends ChangeNotifier {
     return selectedMarker;
   }
 
-  void initMarker(List<Marker> markers) {
-    for (var item in markers) {
-      add(AwesomeMarker(marker: item, type: MarkerType.Problem));
-    }
-  }
-
   void add(AwesomeMarker data) {
-    final String markerIdVal = 'marker_id_$_markerIdCounter';
-    _markerIdCounter++;
-    final MarkerId markerId = MarkerId(markerIdVal);
+    final MarkerId markerId = data.marker.markerId;
     final awesomeMarker = AwesomeMarker(
         marker: Marker(
           icon: getIconMarker(data.type),
@@ -75,11 +67,11 @@ class GoogleMapModel extends ChangeNotifier {
     notifyListeners();
   }
 
-getIconMarker(MarkerType type){
-  return type == MarkerType.Problem
-              ? BitmapDescriptor.defaultMarker
-              : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
-}
+  getIconMarker(MarkerType type) {
+    return type == MarkerType.Problem
+        ? BitmapDescriptor.defaultMarker
+        : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan);
+  }
 
   void onMarkerTapped(MarkerId markerId) {
     final Marker tappedMarker = markers[markerId].marker;
@@ -87,7 +79,7 @@ getIconMarker(MarkerType type){
       if (markers.containsKey(selectedMarker)) {
         final Marker resetOld = markers[selectedMarker]
             .marker
-            .copyWith(iconParam:getIconMarker(markers[selectedMarker].type));
+            .copyWith(iconParam: getIconMarker(markers[selectedMarker].type));
         markers[selectedMarker].marker = resetOld;
         selectedMarker = null;
       } else {
@@ -140,8 +132,7 @@ getIconMarker(MarkerType type){
   }
 
   void removeLast() {
-    final String markerIdVal = 'marker_id_' + (_markerIdCounter - 1).toString();
-    final MarkerId markerId = MarkerId(markerIdVal);
+    final MarkerId markerId = MarkerId("0");
     markers.remove(markerId);
     notifyListeners();
   }
@@ -162,5 +153,20 @@ getIconMarker(MarkerType type){
 
   LatLng getCurrentLatLon() {
     return currentCameraPosition.target;
+  }
+
+  void updateMarkers(List<AwesomeMarker> createMarkers, {MarkerType markerType}) {
+    if (markerType != null)
+      markers.removeWhere((markerId, awesomeMarker) {
+        return awesomeMarker.type == markerType;
+      });
+    else
+      markers.clear();
+
+    createMarkers.forEach((item) {
+      markers[item.marker.markerId] = item;
+    });
+    notifyListeners();
+
   }
 }

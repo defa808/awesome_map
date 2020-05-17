@@ -21,15 +21,15 @@ class _EventMapState extends State<EventMap> {
 
   void _add(EventForm model) {
     LatLng currentPosition =
-        Provider.of<GoogleMapModel>(context).getCurrentLatLon();
+        context.read<GoogleMapModel>().getCurrentLatLon();
     // model.setLatLon(currentPosition);
     Marker modelMarker = Marker(
         position: currentPosition,
         infoWindow: InfoWindow(title: model.title, snippet: model.description),
         markerId: null);
-    Provider.of<GoogleMapModel>(context)
+    context.read<GoogleMapModel>()
         .add(AwesomeMarker(marker: modelMarker, type: MarkerType.Event));
-    Provider.of<EventForm>(context).setLatLon(currentPosition);
+    context.read<EventForm>().setLatLon(currentPosition);
     setState(() {
       isPrepareAdd = false;
     });
@@ -91,7 +91,7 @@ class _EventMapState extends State<EventMap> {
                   backgroundColor: Colors.white,
                   child: Icon(Icons.my_location, color: Colors.blue),
                   onPressed: () {
-                    Provider.of<GoogleMapModel>(context).setCurrentLocation();
+                    context.read<GoogleMapModel>().setCurrentLocation();
                   }),
               SizedBox(
                 height: 15,

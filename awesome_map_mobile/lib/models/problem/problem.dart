@@ -6,21 +6,23 @@ part 'problem.g.dart';
 @JsonSerializable()
 class Problem {
   @JsonKey(required: true)
+  String id;
+  @JsonKey(required: true)
   double latitude;
   @JsonKey(required: true)
   double longitude;
   @JsonKey(required: true)
   String title;
   @JsonKey(required: true)
-  List<Category> typeProblems;
+  List<Category> problemTypes;
   
   String description;
   List<ServerFile> files;
-  Problem(this.latitude, this.longitude, this.title, this.typeProblems,
+  Problem(this.id,this.latitude, this.longitude, this.title, this.problemTypes,
       this.description,this.files);
 
   factory Problem.empty() {
-    return Problem(0, 0, "", new List<Category>(), "", new List<ServerFile>());
+    return Problem(null,0, 0, "", new List<Category>(), "", new List<ServerFile>());
   }
 
   factory Problem.fromJson(Map<String, dynamic> json) =>

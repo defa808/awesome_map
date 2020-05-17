@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
-import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -36,13 +34,13 @@ class ProblemForm with ChangeNotifier {
   }
 
   addCategory(Category item) {
-    this.problem.typeProblems.add(item);
+    this.problem.problemTypes.add(item);
     notifyListeners();
   }
 
   removeCategory(String guid) {
-    problem.typeProblems =
-        problem.typeProblems.where((item) => item.id != guid).toList();
+    problem.problemTypes =
+        problem.problemTypes.where((item) => item.id != guid).toList();
     notifyListeners();
   }
 

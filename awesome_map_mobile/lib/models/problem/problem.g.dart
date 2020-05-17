@@ -7,13 +7,19 @@ part of 'problem.dart';
 // **************************************************************************
 
 Problem _$ProblemFromJson(Map<String, dynamic> json) {
-  $checkKeys(json,
-      requiredKeys: const ['latitude', 'longitude', 'title', 'typeProblems']);
+  $checkKeys(json, requiredKeys: const [
+    'id',
+    'latitude',
+    'longitude',
+    'title',
+    'problemTypes'
+  ]);
   return Problem(
+    json['id'] as String,
     (json['latitude'] as num)?.toDouble(),
     (json['longitude'] as num)?.toDouble(),
     json['title'] as String,
-    (json['typeProblems'] as List)
+    (json['problemTypes'] as List)
         ?.map((e) =>
             e == null ? null : Category.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -26,10 +32,11 @@ Problem _$ProblemFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ProblemToJson(Problem instance) => <String, dynamic>{
+      'id': instance.id,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'title': instance.title,
-      'typeProblems': instance.typeProblems,
+      'problemTypes': instance.problemTypes,
       'description': instance.description,
       'files': instance.files,
     };

@@ -1,8 +1,8 @@
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
-class FilterItem extends StatelessWidget {
-  const FilterItem({Key key, this.label, this.icon, this.onDelete})
+class CategoryItem extends StatelessWidget {
+  const CategoryItem({Key key, this.label, this.icon, this.onDelete})
       : super(key: key);
   final Widget label;
   final Widget icon;

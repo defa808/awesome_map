@@ -18,7 +18,7 @@ class EventFilterButton extends StatelessWidget {
                   color: Colors.white,
                   icon: Icon(Icons.filter_list),
                   onPressed: () {
-                    Provider.of<EventFilterModel>(context).showOrHide();
+                    context.read<EventFilterModel>().showOrHide();
                   }),
               if (model.filtersCount > 0)
                 Positioned(

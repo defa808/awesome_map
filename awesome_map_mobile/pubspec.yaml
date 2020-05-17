@@ -21,7 +21,7 @@ dependencies:
   shared_preferences: ^0.4.2
   google_maps_flutter: ^0.5.25+2
   geolocator: ^5.3.0
-  provider: ^2.0.1+1
+  provider: ^4.1.2
   json_annotation: ^3.0.1
   photo_view: ^0.9.2
   datetime_picker_formfield: ^1.0.0
@@ -31,8 +31,7 @@ dependencies:
   http: ^0.12.0+2
   flutter_typeahead: ^0.2.0
   enum_to_string: ^1.0.4
-  async: 2.4.0
-
+  sliding_up_panel: ^1.0.2
   flutter:
     sdk: flutter
 

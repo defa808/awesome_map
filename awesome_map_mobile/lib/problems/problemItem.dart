@@ -87,7 +87,7 @@ class _ProblemItemState extends State<ProblemItem> {
                       color: CustomTheme.of(context).accentColor,
                       textColor: CustomTheme.of(context).bottomAppBarColor,
                       onPressed: () {
-                        Provider.of<GoogleMapModel>(context).selectItem(MarkerId("marker_id_1"));
+                       context.read<GoogleMapModel>().selectItem(MarkerId("marker_id_1"));
                       },
                       child: Text("На карті"),
                     ),

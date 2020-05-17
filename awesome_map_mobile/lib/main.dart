@@ -1,18 +1,15 @@
-import 'dart:io';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
-import 'package:awesome_map_mobile/https/HttpsOverrides.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
-import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'account/account.dart';
 import 'authorization/signIn.dart';
 import 'events/eventDetails.dart';
@@ -26,22 +23,26 @@ import 'models/googleMap/googleMapModel.dart';
 import 'problems/providers/problemFilterModel.dart';
 import 'problems/providers/problemForm.dart';
 import 'problems/providers/problemTypes.dart';
+import 'problems/providers/problemMarkers.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
     child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
-    providers: <SingleChildCloneableWidget>[
-      ChangeNotifierProvider<ProblemFilterModel>.value(
-          notifier: ProblemFilterModel()),
-      ChangeNotifierProvider<EventFilterModel>.value(
-          notifier: EventFilterModel()),
-      ChangeNotifierProvider<GoogleMapModel>.value(notifier: GoogleMapModel()),
-      ChangeNotifierProvider<ProblemForm>.value(notifier: ProblemForm()),
-      ChangeNotifierProvider<EventForm>.value(notifier: EventForm.empty()),
-      ChangeNotifierProvider<ProblemTypes>.value(notifier: ProblemTypes()),
-      ChangeNotifierProvider<EventTypes>.value(notifier: EventTypes()),
-      ChangeNotifierProvider<ProblemService>.value(notifier: ProblemService())
+    providers: <SingleChildWidget>[
+      ChangeNotifierProvider<ProblemFilterModel>(create: (context) => ProblemFilterModel()),
+      ChangeNotifierProvider<EventFilterModel>(create: (context) => EventFilterModel()),
+      ChangeNotifierProvider<GoogleMapModel>(create: (context) => GoogleMapModel()),
+      ChangeNotifierProvider<ProblemForm>(create: (context) => ProblemForm()),
+      ChangeNotifierProvider<EventForm>(
+        create: (context) => EventForm.empty()),
+      ChangeNotifierProvider<ProblemTypes>(create: (context) => ProblemTypes()),
+      ChangeNotifierProvider<EventTypes>(create: (context) => EventTypes()),
+      ListenableProxyProvider<GoogleMapModel, ProblemMarkers>(
+        create: (context) => ProblemMarkers(),
+        update: (context, googleMapModel, problemMarkersModel) =>
+            ProblemMarkers(googleMapModel: googleMapModel),
+      )
     ],
   ));
 }

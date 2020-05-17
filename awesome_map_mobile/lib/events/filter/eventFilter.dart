@@ -1,6 +1,6 @@
 import 'package:awesome_map_mobile/base/categoryAutoComplete.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
-import 'package:awesome_map_mobile/base/filter/filterItem.dart';
+import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
 import 'package:awesome_map_mobile/events/providers/eventFilterModel.dart';
 import 'package:awesome_map_mobile/events/providers/eventTypes.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
@@ -50,7 +50,7 @@ class EventFilter extends StatelessWidget {
                       SizedBox(
                         height: 5,
                       ),
-                       Row(
+                      Row(
                         children: <Widget>[
                           Flexible(
                             child: DatePicker(
@@ -118,21 +118,28 @@ class EventFilter extends StatelessWidget {
                       ),
                       Row(
                         children: <Widget>[
-                          for (var item in model.selectedCategories)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 5.0),
-                              child: FilterItem(
-                                label: Text(item.name),
-                                icon: item.icon != null
-                                    ? Icon(IconData(item.icon.iconCode,
-                                        fontFamily: item.icon.fontFamily,
-                                        fontPackage: item.icon.fontPackage))
-                                    : null,
-                                onDelete: () {
-                                  model.removeCategory(item.id);
-                                },
-                              ),
-                            )
+                          Wrap(
+                              spacing: 0,
+                              alignment: WrapAlignment.start,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                for (var item in model.selectedCategories)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 5.0),
+                                    child: CategoryItem(
+                                      label: Text(item.name),
+                                      icon: item.icon != null
+                                          ? Icon(IconData(item.icon.iconCode,
+                                              fontFamily: item.icon.fontFamily,
+                                              fontPackage:
+                                                  item.icon.fontPackage))
+                                          : null,
+                                      onDelete: () {
+                                        model.removeCategory(item.id);
+                                      },
+                                    ),
+                                  )
+                              ])
                         ],
                       ),
                       Align(

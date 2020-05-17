@@ -6,7 +6,8 @@ import 'package:awesome_map_mobile/problems/createProblemItem.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'providers/problemMarkers.dart';
 import 'providers/problemForm.dart';
 
 class ProblemMap extends StatefulWidget {
@@ -18,18 +19,20 @@ class ProblemMap extends StatefulWidget {
 
 class _ProblemMapState extends State<ProblemMap> {
   bool isPrepareAdd = false;
-
+  final double _initFabHeight = 200.0;
+  double _fabHeight;
+  double _panelHeightOpen;
+  double _panelHeightClosed = 100.0;
   void _add(ProblemForm model) {
-    LatLng currentPosition =
-        Provider.of<GoogleMapModel>(context).getCurrentLatLon();
+    LatLng currentPosition = context.read<GoogleMapModel>().getCurrentLatLon();
     // model.setLatLon(currentPosition);
     Marker modelMarker = Marker(
         position: currentPosition,
-        infoWindow: InfoWindow(title: model.problem.title, snippet: model.problem.description),
-        markerId: null);
-    Provider.of<GoogleMapModel>(context)
-        .add(AwesomeMarker(marker: modelMarker, type: MarkerType.Problem));
-    Provider.of<ProblemForm>(context).setLatLon(currentPosition);
+        infoWindow: InfoWindow(
+            title: model.problem.title, snippet: model.problem.description),
+        markerId: MarkerId("0"));
+    context.read<GoogleMapModel>().add(AwesomeMarker(marker: modelMarker, type: MarkerType.Problem));
+    context.read<ProblemForm>().setLatLon(currentPosition);
     setState(() {
       isPrepareAdd = false;
     });
@@ -46,6 +49,7 @@ class _ProblemMapState extends State<ProblemMap> {
   @override
   void initState() {
     super.initState();
+    _fabHeight = _initFabHeight;
 
     setState(() {
       isPrepareAdd = false;
@@ -54,6 +58,11 @@ class _ProblemMapState extends State<ProblemMap> {
 
   @override
   Widget build(BuildContext context) {
+    _panelHeightOpen = MediaQuery.of(context).size.height * .68;
+// Provider.of<ProblemMarkers>(context).addListener((){
+
+// Provider.of<GoogleMapModel>(context).updateMarkers();
+// });
     return Consumer<ProblemForm>(builder: (context, problemFormModel, _) {
       return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -61,6 +70,30 @@ class _ProblemMapState extends State<ProblemMap> {
         body: Container(
           child: Stack(children: <Widget>[
             BaseMap(filter: MarkerType.Problem),
+
+            // Consumer<ProblemMarkers>(
+            //   builder:
+            //       (BuildContext context, ProblemMarkers value, Widget child) {
+            //     return BaseMap(filter: MarkerType.Problem);
+            //   },
+            // ),
+            SlidingUpPanel(
+              maxHeight: problemFormModel.readyToFill ? _panelHeightOpen : 0,
+              minHeight: problemFormModel.readyToFill ? _panelHeightClosed : 0,
+              parallaxEnabled: true,
+              parallaxOffset: .5,
+              body: Container(),
+              panelBuilder: (sc) => problemFormModel.readyToFill
+                  ? CreateProblemItem(scrollController: sc)
+                  : null,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(18.0),
+                  topRight: Radius.circular(18.0)),
+              onPanelSlide: (double pos) => setState(() {
+                _fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) +
+                    _initFabHeight;
+              }),
+            ),
             if (isPrepareAdd)
               Center(
                 child: Container(
@@ -72,7 +105,6 @@ class _ProblemMapState extends State<ProblemMap> {
                           Icon(Icons.location_on, color: Colors.red, size: 45)),
                 ),
               ),
-            if (problemFormModel.readyToFill) CreateProblemItem(),
           ]),
         ),
       );
@@ -91,7 +123,7 @@ class _ProblemMapState extends State<ProblemMap> {
                   backgroundColor: Colors.white,
                   child: Icon(Icons.my_location, color: Colors.blue),
                   onPressed: () {
-                    Provider.of<GoogleMapModel>(context).setCurrentLocation();
+                    context.read<GoogleMapModel>().setCurrentLocation();
                   }),
               SizedBox(
                 height: 15,
