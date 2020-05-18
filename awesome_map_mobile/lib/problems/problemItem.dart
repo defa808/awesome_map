@@ -1,12 +1,13 @@
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class ProblemItem extends StatefulWidget {
-  int id;
-  ProblemItem({Key key, this.id}) : super(key: key);
+  ProblemItem({Key key, @required this.problem}) : super(key: key);
+  final Problem problem;
   @override
   _ProblemItemState createState() => _ProblemItemState();
 }
@@ -15,7 +16,7 @@ class _ProblemItemState extends State<ProblemItem> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    int id = widget.id;
+    String id = widget.problem.id;
 
     return Card(
       child: Padding(
@@ -25,14 +26,13 @@ class _ProblemItemState extends State<ProblemItem> {
             ListTileTheme(
               contentPadding: EdgeInsets.all(0),
               child: ExpansionTile(
-                key: Key(id.toString()),
+                key: Key(id),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Flexible(
-                      child: Text(
-                        "Розкидане сміття біля скверу",
+                      child: Text(widget.problem.title,
                         maxLines: 3,
                         style: TextStyle(fontSize: 20),
                       ),
@@ -42,8 +42,7 @@ class _ProblemItemState extends State<ProblemItem> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                        "Посилаючись на наведене вище опис проблеми, Швеція пропонує, щоб в разі (цього) контейнерів - цистерн і багатоелементних газових, призначених для перевезення небезпечних вантажів автомобільним та залізничним транспортом, дата наступної перевірки вказувалася на табличках, розташованих на обох бічних сторонах контейнерів."),
+                    child: Text(widget.problem.description),
                   )
                 ],
               ),
@@ -56,7 +55,7 @@ class _ProblemItemState extends State<ProblemItem> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("10", style: TextStyle(fontSize: 18)),
+                      Text(widget.problem.subscribersCount.toString(), style: TextStyle(fontSize: 18)),
                       Text("Слідкують"),
                     ],
                   ),
@@ -97,7 +96,7 @@ class _ProblemItemState extends State<ProblemItem> {
                     child: Text("Детальніше"),
                     onPressed: () {
                       Navigator.pushNamed(context, '/problemDetail',
-                          arguments: {'id': widget.id});
+                          arguments: widget.problem);
                     },
                   ),
                   Expanded(

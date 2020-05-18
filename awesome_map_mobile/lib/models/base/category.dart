@@ -9,7 +9,7 @@ class Category {
   String id;
   String name;
   AMIcon icon;
-  Category({@required this.id, @required this.name, this.icon});
+  Category(this.id, this.name, this.icon);
 
 factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);

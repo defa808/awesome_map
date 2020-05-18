@@ -15,14 +15,38 @@ class Problem {
   String title;
   @JsonKey(required: true)
   List<Category> problemTypes;
-  
+
+  @JsonKey(required: true)
+  DateTime createDate;
+  DateTime updateDate;
+
   String description;
   List<ServerFile> files;
-  Problem(this.id,this.latitude, this.longitude, this.title, this.problemTypes,
-      this.description,this.files);
+  int subscribersCount;
+  Problem(
+      this.id,
+      this.latitude,
+      this.longitude,
+      this.title,
+      this.createDate,
+      this.updateDate,
+      this.description,
+      this.problemTypes,
+      this.files,
+      this.subscribersCount);
 
   factory Problem.empty() {
-    return Problem(null,0, 0, "", new List<Category>(), "", new List<ServerFile>());
+    return Problem(
+        "00000000-0000-0000-0000-000000000000",
+        0,
+        0,
+        "",
+        DateTime.now(),
+        null,
+        "",
+        new List<Category>(),
+        new List<ServerFile>(),
+        0);
   }
 
   factory Problem.fromJson(Map<String, dynamic> json) =>

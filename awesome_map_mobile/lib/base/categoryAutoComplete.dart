@@ -44,7 +44,7 @@ class CategoryAutoComplete extends StatelessWidget {
       itemFilter: (Category suggestion, String query) =>
           suggestion.name.toLowerCase().contains(query.toLowerCase()),
       itemSubmitted: (Category data) => model.addCategory(data),
-      key: new GlobalKey<AutoCompleteTextFieldState<Category>>(),
+      // key: new GlobalKey<AutoCompleteTextFieldState<Category>>(),
     );
   }
 }

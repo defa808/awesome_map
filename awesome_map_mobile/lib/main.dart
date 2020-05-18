@@ -30,19 +30,21 @@ void main() {
   runApp(MultiProvider(
     child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
     providers: <SingleChildWidget>[
-      ChangeNotifierProvider<ProblemFilterModel>(create: (context) => ProblemFilterModel()),
-      ChangeNotifierProvider<EventFilterModel>(create: (context) => EventFilterModel()),
-      ChangeNotifierProvider<GoogleMapModel>(create: (context) => GoogleMapModel()),
+      ChangeNotifierProvider<ProblemFilterModel>(
+          create: (context) => ProblemFilterModel()),
+      ChangeNotifierProvider<EventFilterModel>(
+          create: (context) => EventFilterModel()),
+      ChangeNotifierProvider<GoogleMapModel>(
+          create: (context) => GoogleMapModel()),
       ChangeNotifierProvider<ProblemForm>(create: (context) => ProblemForm()),
-      ChangeNotifierProvider<EventForm>(
-        create: (context) => EventForm.empty()),
+      ChangeNotifierProvider<EventForm>(create: (context) => EventForm.empty()),
       ChangeNotifierProvider<ProblemTypes>(create: (context) => ProblemTypes()),
       ChangeNotifierProvider<EventTypes>(create: (context) => EventTypes()),
-      ListenableProxyProvider<GoogleMapModel, ProblemMarkers>(
-        create: (context) => ProblemMarkers(),
-        update: (context, googleMapModel, problemMarkersModel) =>
-            ProblemMarkers(googleMapModel: googleMapModel),
-      )
+      ChangeNotifierProvider<ProblemMarkers>(create: (context) => ProblemMarkers()),
+      // ProxyProvider<GoogleMapModel, ProblemMarkers>(
+      //   update: (context, googleMapModel, problemMarkersModel) =>
+      //       ProblemMarkers(googleMapModel: googleMapModel),
+      // )
     ],
   ));
 }

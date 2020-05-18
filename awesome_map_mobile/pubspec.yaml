@@ -32,6 +32,8 @@ dependencies:
   flutter_typeahead: ^0.2.0
   enum_to_string: ^1.0.4
   sliding_up_panel: ^1.0.2
+  image_picker: ^0.6.6+1
+
   flutter:
     sdk: flutter
 
@@ -42,7 +44,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^1.0.0
-  json_serializable: ^3.0.0
+  json_serializable: ^3.3.0
 
 
   flutter_test:

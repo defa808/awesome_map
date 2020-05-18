@@ -16,6 +16,8 @@ namespace DataBaseModels.Models {
         public ProblemStatus Status { get; set; } = ProblemStatus.Open;
         public virtual List<ServerFile> Files { get; set; }
         public virtual List<Comment> Comments { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
 
 
         Problem() {

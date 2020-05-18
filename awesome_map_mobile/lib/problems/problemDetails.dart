@@ -1,12 +1,12 @@
 import 'package:awesome_map_mobile/base/title.dart';
 import 'package:awesome_map_mobile/comments/commentsMain.dart';
+import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/problems/problemDetailsContent.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 class ProblemDetails extends StatefulWidget {
   ProblemDetails({Key key}) : super(key: key);
-
   @override
   _ProblemDetailsState createState() => _ProblemDetailsState();
 }
@@ -14,6 +14,9 @@ class ProblemDetails extends StatefulWidget {
 class _ProblemDetailsState extends State<ProblemDetails> {
   @override
   Widget build(BuildContext context) {
+
+    Problem problem = ModalRoute.of(context).settings.arguments;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -25,7 +28,7 @@ class _ProblemDetailsState extends State<ProblemDetails> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Header(
-                  text: "Розкидане сміття біля скверу",
+                  text: problem.title
                 ),
               ),
               Divider(),
@@ -46,7 +49,7 @@ class _ProblemDetailsState extends State<ProblemDetails> {
                   child: TabBarView(children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: ProblemDetailsContent(),
+                  child: ProblemDetailsContent(problem),
                 ),
                 CommentsMain(),
               ])),

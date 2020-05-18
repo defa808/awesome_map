@@ -11,22 +11,31 @@ class ProblemMarkers with ChangeNotifier {
   GoogleMapModel googleMapModel;
   ProblemMarkers({this.googleMapModel});
 
-  getProblems() async {
+  Future<List<Problem>> getProblems() async {
     problems = await ProblemService.getProblems();
-    // notifyListeners();
-    googleMapModel?.updateMarkers(createMarkers(problems));
+    notifyListeners();
+    return problems;
+    // googleMapModel?.updateMarkers(createMarkers());
   }
 
-  List<AwesomeMarker> createMarkers(List<Problem> problems) {
+  List<AwesomeMarker> createMarkers() {
     return problems.map<AwesomeMarker>((item) {
       return new AwesomeMarker(
           marker: new Marker(
             markerId: MarkerId(item.id),
             position: LatLng(item.latitude, item.longitude),
             infoWindow:
-                InfoWindow(title: item.title, snippet: item.description),
+                InfoWindow(title: item.title),
           ),
           type: MarkerType.Problem);
     }).toList();
+  }
+
+  Problem getProblemDetails(String id) {
+    return problems.where((element) => element.id == id)?.first;
+  }
+
+  void add(Problem problem) {
+    problems.add(problem);
   }
 }

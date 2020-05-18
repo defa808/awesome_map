@@ -25,7 +25,7 @@ class _EventMapState extends State<EventMap> {
     // model.setLatLon(currentPosition);
     Marker modelMarker = Marker(
         position: currentPosition,
-        infoWindow: InfoWindow(title: model.title, snippet: model.description),
+        infoWindow: InfoWindow(title: model.title),
         markerId: null);
     context.read<GoogleMapModel>()
         .add(AwesomeMarker(marker: modelMarker, type: MarkerType.Event));
@@ -38,7 +38,7 @@ class _EventMapState extends State<EventMap> {
   static List<Marker> problems = <Marker>[
     Marker(
       position: LatLng(52.449601, 32.457368),
-      infoWindow: InfoWindow(title: 'Test Title', snippet: 'Sub Description'),
+      infoWindow: InfoWindow(title: 'Temp Title'),
       markerId: null,
     )
   ];

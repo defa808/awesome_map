@@ -45,30 +45,52 @@ class _ChooseCategoryAutoCompleteState
             case ConnectionState.waiting:
               return LinearProgressIndicator();
             case ConnectionState.done:
-              return AutoCompleteTextField<Category>(
-                clearOnSubmit: true,
-                controller: TextEditingController(text: ""),
-                decoration: InputDecoration(labelText: "Категорії"),
-                suggestions: snapshot.data
-                    .where((item) => widget.selectedCategories
-                        .every((item2) => item2.id != item.id))
-                    .toList(),
-                itemBuilder: (BuildContext context, Category suggestion) =>
-                    ListTile(
-                  leading: suggestion.icon != null
-                      ? Icon(IconData(suggestion.icon.iconCode,
-                          fontFamily: suggestion.icon.fontFamily,
-                          fontPackage: suggestion.icon.fontPackage))
-                      : null,
-                  title: Text(suggestion.name),
-                ),
-                itemSorter: (a, b) =>
-                    (a != null && b != null) ? a.name.compareTo(b.name) : true,
-                itemFilter: (Category suggestion, String query) =>
-                    suggestion.name.toLowerCase().contains(query.toLowerCase()),
-                itemSubmitted: (Category data) => widget.addCategory(data),
-                key: null, //without key! it's important not rerendering
-              );
+              {
+                if (snapshot.hasError)
+                  return Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Something go wrong",
+                            style: TextStyle(color: Colors.red)),
+                      ),
+                      LinearProgressIndicator(
+                        value: 100,
+                      )
+                    ],
+                  );
+                else
+                  return AutoCompleteTextField<Category>(
+                    clearOnSubmit: true,
+                    controller: TextEditingController(text: ""),
+                    decoration: InputDecoration(labelText: "Категорії"),
+                    suggestions: snapshot.data != null
+                        ? snapshot.data
+                            .where((item) => widget.selectedCategories
+                                .every((item2) => item2.id != item.id))
+                            .toList()
+                        : List(),
+                    itemBuilder: (BuildContext context, Category suggestion) =>
+                        ListTile(
+                      leading: suggestion.icon != null
+                          ? Icon(IconData(suggestion.icon.iconCode,
+                              fontFamily: suggestion.icon.fontFamily,
+                              fontPackage: suggestion.icon.fontPackage))
+                          : null,
+                      title: Text(suggestion.name),
+                    ),
+                    itemSorter: (a, b) => (a != null && b != null)
+                        ? a.name.compareTo(b.name)
+                        : true,
+                    itemFilter: (Category suggestion, String query) =>
+                        suggestion.name
+                            .toLowerCase()
+                            .contains(query.toLowerCase()),
+                    itemSubmitted: (Category data) => widget.addCategory(data),
+                    key: null, //without key! it's important not rerendering
+                  );
+                break;
+              }
             default:
               Text("done");
           }

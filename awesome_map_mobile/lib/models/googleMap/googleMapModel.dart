@@ -81,8 +81,8 @@ class GoogleMapModel extends ChangeNotifier {
             .marker
             .copyWith(iconParam: getIconMarker(markers[selectedMarker].type));
         markers[selectedMarker].marker = resetOld;
-        selectedMarker = null;
-      } else {
+      } 
+      if(selectedMarker != markerId) {
         selectedMarker = markerId;
         final Marker newMarker = tappedMarker.copyWith(
           iconParam: BitmapDescriptor.defaultMarkerWithHue(
@@ -90,7 +90,9 @@ class GoogleMapModel extends ChangeNotifier {
           ),
         );
         markers[markerId].marker = newMarker;
-      }
+      }else
+        selectedMarker = null;
+
 
       notifyListeners();
     }
@@ -158,15 +160,13 @@ class GoogleMapModel extends ChangeNotifier {
   void updateMarkers(List<AwesomeMarker> createMarkers, {MarkerType markerType}) {
     if (markerType != null)
       markers.removeWhere((markerId, awesomeMarker) {
-        return awesomeMarker.type == markerType;
+        return markerId != MarkerId("0") && awesomeMarker.type == markerType;
       });
     else
       markers.clear();
 
     createMarkers.forEach((item) {
-      markers[item.marker.markerId] = item;
+      add(item);
     });
-    notifyListeners();
-
   }
 }

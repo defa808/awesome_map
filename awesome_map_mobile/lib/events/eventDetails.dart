@@ -23,7 +23,6 @@ class _EventDetailsState extends State<EventDetails> {
       child: Scaffold(
           resizeToAvoidBottomPadding: true,
           body: NestedScrollView(
-            key: UniqueKey(),
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[

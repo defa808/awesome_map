@@ -29,7 +29,7 @@ class _CreateEventItemState extends State<CreateEventItem> {
             markerId: null,
             position: LatLng(_data.latitude, _data.longitude),
             infoWindow:
-                InfoWindow(title: _data.title, snippet: _data.description)),
+                InfoWindow(title: _data.title)),
         type: MarkerType.Event));
     context.read<EventForm>().clear();
   }

@@ -1,15 +1,21 @@
 import 'package:awesome_map_mobile/base/filterContainer.dart';
+import 'package:awesome_map_mobile/base/slidingUpPanelContainer.dart';
+import 'package:awesome_map_mobile/base/title.dart';
 import 'package:awesome_map_mobile/home/mapDetails.dart';
 import 'package:awesome_map_mobile/home/mapListButton.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
+import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/problems/filter/problemFilter.dart';
 import 'package:awesome_map_mobile/problems/problemDetailsContent.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
 import 'package:awesome_map_mobile/problems/providers/problemMarkers.dart';
+import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ProblemHome extends StatefulWidget {
   ProblemHome({Key key}) : super(key: key);
@@ -23,7 +29,6 @@ class _ProblemHomeState extends State<ProblemHome> {
   @override
   void initState() {
     super.initState();
-
     loadData();
   }
 
@@ -42,52 +47,73 @@ class _ProblemHomeState extends State<ProblemHome> {
     //   MarkerId selectedItem =
     //       Provider.of<GoogleMapModel>(context, listen: false).getSelectedItem();
     // });
+
     return Consumer<GoogleMapModel>(
       builder: (BuildContext context, GoogleMapModel model, Widget child) {
-        MarkerId selectedItem = model.selectedMarker;
-        if (selectedItemLast != selectedItem) isShowList = false;
-        selectedItemLast = selectedItem;
+        return Consumer<ProblemMarkers>(
+          builder: (BuildContext context, ProblemMarkers problemMarkers,
+              Widget child) {
+            context.watch<GoogleMapModel>().updateMarkers(
+                problemMarkers.createMarkers(),
+                markerType: MarkerType.Problem);
 
-        mapListButton = MapListButton(
-          initialValue: isShowList ? 1 : 0,
-          onListChange: () => setState(
-            () {
-              isShowList = true;
-            },
-          ),
-          onMapChange: () => setState(() {
-            isShowList = false;
-          }),
+            MarkerId selectedItem = model.selectedMarker;
+            Problem problem;
+
+            if (selectedItemLast != selectedItem) isShowList = false;
+            selectedItemLast = selectedItem;
+
+            if (selectedItemLast != null)
+              problem =
+                  problemMarkers.getProblemDetails(selectedItemLast.value);
+
+            mapListButton = MapListButton(
+              initialValue: isShowList ? 1 : 0,
+              onListChange: () => setState(
+                () {
+                  isShowList = true;
+                },
+              ),
+              onMapChange: () => setState(() {
+                isShowList = false;
+              }),
+            );
+
+            return Stack(children: <Widget>[
+              isShowList
+                  ? Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: mapListButton,
+                        ),
+                        Divider(),
+                        Expanded(child: ProblemList()),
+                      ],
+                    )
+                  : Stack(
+                      children: <Widget>[
+                        ProblemMap(),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: mapListButton,
+                        ),
+                        if (selectedItemLast != null)
+                          SlidingUpPanelContainer(
+                              renderChild: (sc) => MapDetails(
+                                    title: Header(
+                                      text: problem?.title,
+                                    ),
+                                    child: ProblemDetailsContent(problem),
+                                    scrollController: sc,
+                                  ),
+                              isShow: selectedItemLast != null)
+                      ],
+                    ),
+              FilterContainer(child: ProblemFilter())
+            ]);
+          },
         );
-
-        return Stack(children: <Widget>[
-          isShowList
-              ? Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: mapListButton,
-                    ),
-                    Divider(),
-                    Expanded(child: ProblemList()),
-                  ],
-                )
-              : Stack(
-                  children: <Widget>[
-                    ProblemMap(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: mapListButton,
-                    ),
-                    if (selectedItemLast != null)
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: MapDetails(child: ProblemDetailsContent()),
-                      )
-                  ],
-                ),
-          FilterContainer(child: ProblemFilter())
-        ]);
       },
     );
   }

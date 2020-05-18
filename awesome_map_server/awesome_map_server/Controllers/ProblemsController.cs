@@ -25,11 +25,15 @@ namespace awesome_map_server.Controllers {
         // GET: api/Problems
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProblemViewModel>>> GetProblems() {
-            List<Problem> problems = await _context.Problems.Include(x=> x.ProblemTypeProblems).ThenInclude(x=> x.ProblemType).ToListAsync();
+            List<Problem> problems = await _context.Problems
+                .Include(x=> x.ProblemTypeProblems).ThenInclude(x=> x.ProblemType)
+                .ThenInclude(x=> x.Icon)
+                .ToListAsync();
             List<ProblemViewModel> problemsViewModel = new List<ProblemViewModel>();
             foreach (var item in problems) {
                 ProblemViewModel viewModel = _mapper.Map<ProblemViewModel>(item);
                 viewModel.ProblemTypes = _mapper.ProjectTo<ProblemTypeViewModel>(item.ProblemTypeProblems.Select(x => x.ProblemType).AsQueryable()).ToList();
+                viewModel.SubscribersCount = item.Subscribers.Count;
                 problemsViewModel.Add(viewModel);
             }
             return problemsViewModel;
@@ -77,7 +81,8 @@ namespace awesome_map_server.Controllers {
         [HttpPost]
         public async Task<ActionResult<Problem>> PostProblem(ProblemViewModel problem) {
             Problem newProblem = _mapper.Map<Problem>(problem);
-            
+            newProblem.CreateDate = DateTime.Now;
+
             foreach (var item in problem.ProblemTypes)
                 newProblem.ProblemTypeProblems.Add(new ProblemTypeProblem() { Problem = newProblem, ProblemTypeId = item.Id });
 
@@ -86,6 +91,7 @@ namespace awesome_map_server.Controllers {
 
             ProblemViewModel loadedProblem = _mapper.Map<ProblemViewModel>(newProblem);
             loadedProblem.ProblemTypes = problem.ProblemTypes;
+            loadedProblem.SubscribersCount = newProblem.Subscribers.Count;
             return CreatedAtAction("GetProblem", new { id = newProblem.Id },loadedProblem);
         }
 

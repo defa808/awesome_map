@@ -1,5 +1,8 @@
+import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/problems/problemItem.dart';
+import 'package:awesome_map_mobile/problems/providers/problemMarkers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProblemList extends StatefulWidget {
   ProblemList({Key key}) : super(key: key);
@@ -11,11 +14,14 @@ class ProblemList extends StatefulWidget {
 class _ProblemListState extends State<ProblemList> {
   @override
   Widget build(BuildContext context) {
-    Widget templateWidget = ProblemItem();
+    List<Widget> problems = context
+        .watch<ProblemMarkers>()
+        .problems
+        .map<Widget>((x) => ProblemItem(problem: x))
+        .toList();
 
     return ListView(
-        children: ListTile.divideTiles(
-            context: context,
-            tiles: List.generate(10, (i) => templateWidget)).toList());
+      children: problems,
+    );
   }
 }

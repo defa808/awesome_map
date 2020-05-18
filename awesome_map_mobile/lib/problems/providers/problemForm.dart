@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/problem/problem.dart';
+import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -19,16 +20,11 @@ class ProblemForm with ChangeNotifier {
 
   Future<bool> save() async {
     try {
-      AppConfig config = await AppConfig.forEnvironment();
-      Map<String, dynamic> problem = this.problem.toJson();
-      Response res = await http.post(config.apiUrl + "api/Problems",
-          headers: {"Content-type": "application/json"},
-          body: jsonEncode(problem));
-      this.problem = Problem.fromJson(jsonDecode(res.body));
+      this.problem = await ProblemService.save(this.problem);
       readyToFill = false;
       return true;
     } catch (e) {
-      var t = 1;
+      var exception = e;
     }
     return false;
   }
