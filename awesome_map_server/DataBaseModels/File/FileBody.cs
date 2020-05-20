@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataBaseModels.Models {
     public class FileBody {
-        [Key]
-        public Guid FileId { get; set; }
         public byte[] Body { get; set; }
-        
+        [Key]
+        public Guid ServerFileId { get; set; }
+        public ServerFile ServerFile { get; set; }
+        public string ContentType { get; set; }
     }
 }

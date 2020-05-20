@@ -1,12 +1,14 @@
-import 'package:awesome_map_mobile/base/photo/photoItem.dart';
+import 'package:awesome_map_mobile/base/system/transparentPageRoute.dart';
+import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'FileItemThumbnail.dart';
 
 class PhotoViewer extends StatelessWidget {
-  const PhotoViewer({Key key, @required this.galleryItems}) : super(key: key);
-  final List<PhotoItem> galleryItems;
-
+  PhotoViewer({Key key, @required this.galleryItems}) : super(key: key);
+  final List<ServerFile> galleryItems;
+  final List<String> pathFiles = new List<String>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,10 +18,10 @@ class PhotoViewer extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           for (var i = 0; i < this.galleryItems.length; i++)
-            PhotoItemThumbnail(
-              photoItem: this.galleryItems[i],
-              onTap: () {
-                open(context, i);
+            FileItemThumbnail(
+              file: this.galleryItems[i],
+              onTap: (path) {
+                open(context, i, path);
               },
             )
         ],
@@ -28,16 +30,17 @@ class PhotoViewer extends StatelessWidget {
     );
   }
 
-  void open(BuildContext context, final int index) {
+  void open(BuildContext context, final int index, String mainPath) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      TransparentPageRoute(
         builder: (context) => PhotoViewerGalary(
           galleryItems: galleryItems,
           backgroundDecoration: const BoxDecoration(
             color: Colors.black,
           ),
           initialIndex: index,
+          mainPath: mainPath,
           scrollDirection: Axis.horizontal,
         ),
       ),
@@ -53,6 +56,7 @@ class PhotoViewerGalary extends StatefulWidget {
     this.maxScale,
     this.initialIndex,
     @required this.galleryItems,
+    this.mainPath,
     this.scrollDirection = Axis.horizontal,
   }) : pageController = PageController(initialPage: initialIndex);
 
@@ -62,9 +66,9 @@ class PhotoViewerGalary extends StatefulWidget {
   final dynamic maxScale;
   final int initialIndex;
   final PageController pageController;
-  final List<PhotoItem> galleryItems;
+  final List<ServerFile> galleryItems;
   final Axis scrollDirection;
-
+  final String mainPath;
   @override
   State<StatefulWidget> createState() {
     return _PhotoViewerGalaryState();
@@ -86,53 +90,39 @@ class _PhotoViewerGalaryState extends State<PhotoViewerGalary> {
     });
   }
 
+  // onVerticalDragUpdate: (drapUpdateDetails) {
+  //   if (drapUpdateDetails.delta.distanceSquared > MediaQuery.of(context).size.height /4)
+  //     Navigator.of(context).pop();
+  // },
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: InkWell(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Container(
-          decoration: widget.backgroundDecoration,
-          constraints: BoxConstraints.expand(
-            height: MediaQuery.of(context).size.height,
+    return Dismissible(
+      key: Key('key'),
+      direction: DismissDirection.vertical,
+      onDismissed: (_) => Navigator.of(context).pop(),
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: <Widget>[
+          PhotoViewGallery.builder(
+            scrollPhysics: const BouncingScrollPhysics(),
+            builder: _buildItem,
+            itemCount: widget.galleryItems.length,
+            loadingBuilder: widget.loadingBuilder,
+            backgroundDecoration: widget.backgroundDecoration,
+            pageController: widget.pageController,
+            onPageChanged: onPageChanged,
+            scrollDirection: widget.scrollDirection,
           ),
-          child: Stack(
-            alignment: Alignment.bottomRight,
-            children: <Widget>[
-              PhotoViewGallery.builder(
-                scrollPhysics: const BouncingScrollPhysics(),
-                builder: _buildItem,
-                itemCount: widget.galleryItems.length,
-                loadingBuilder: widget.loadingBuilder,
-                backgroundDecoration: widget.backgroundDecoration,
-                pageController: widget.pageController,
-                onPageChanged: onPageChanged,
-                scrollDirection: widget.scrollDirection,
-              ),
-              Container(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  "${widget.galleryItems[currentIndex].name}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 17.0,
-                    decoration: null,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
-    final PhotoItem item = widget.galleryItems[index];
+    final ServerFile item = widget.galleryItems[index];
     return PhotoViewGalleryPageOptions(
-      imageProvider: AssetImage(item.resource),
+      imageProvider:
+          AssetImage(this.widget.mainPath + '/' + item.id + '/' + item.name),
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 1.1,

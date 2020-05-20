@@ -15,6 +15,9 @@ class BaseMap extends StatelessWidget {
         mapToolbarEnabled: false,
         myLocationEnabled: true,
         myLocationButtonEnabled: false,
+        onTap: (position) {
+          context.read<GoogleMapModel>().onMarkerTapped(null);
+        },
         initialCameraPosition: CameraPosition(
           target: model.centerKPI,
           zoom: 15.0,

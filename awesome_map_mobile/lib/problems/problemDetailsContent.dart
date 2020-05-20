@@ -1,5 +1,5 @@
 import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
-import 'package:awesome_map_mobile/base/photo/photoItem.dart';
+import 'package:awesome_map_mobile/base/photo/fileItemThumbnail.dart';
 import 'package:awesome_map_mobile/base/photo/photoVIewer.dart';
 import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
@@ -11,14 +11,6 @@ class ProblemDetailsContent extends StatelessWidget {
   final Problem problem;
   @override
   Widget build(BuildContext context) {
-    List<PhotoItem> photoes = [
-      PhotoItem(
-          id: "123", name: "First Image", resource: "images/gallery1.jpg"),
-      PhotoItem(
-          id: "1223", name: "Second Image", resource: "images/gallery2.jpg"),
-      PhotoItem(
-          id: "122343", name: "Third Image", resource: "images/gallery3.jpg")
-    ];
 
     return SingleChildScrollView(
       child: Column(
@@ -61,8 +53,9 @@ class ProblemDetailsContent extends StatelessWidget {
                 ],
               ),
               children: <Widget>[
+                // FileItemThumbnail(file: problem.files[0],),
                 PhotoViewer(
-                  galleryItems: photoes,
+                  galleryItems: problem.files,
                 )
               ],
             ),

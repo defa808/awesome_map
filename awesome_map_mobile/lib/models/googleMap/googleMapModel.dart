@@ -74,15 +74,15 @@ class GoogleMapModel extends ChangeNotifier {
   }
 
   void onMarkerTapped(MarkerId markerId) {
-    final Marker tappedMarker = markers[markerId].marker;
-    if (tappedMarker != null) {
+    final Marker tappedMarker = markers[markerId]?.marker;
+    if (tappedMarker != null ) {
       if (markers.containsKey(selectedMarker)) {
         final Marker resetOld = markers[selectedMarker]
             .marker
             .copyWith(iconParam: getIconMarker(markers[selectedMarker].type));
         markers[selectedMarker].marker = resetOld;
-      } 
-      if(selectedMarker != markerId) {
+      }
+      if (selectedMarker != markerId) {
         selectedMarker = markerId;
         final Marker newMarker = tappedMarker.copyWith(
           iconParam: BitmapDescriptor.defaultMarkerWithHue(
@@ -90,12 +90,13 @@ class GoogleMapModel extends ChangeNotifier {
           ),
         );
         markers[markerId].marker = newMarker;
-      }else
+      } else
         selectedMarker = null;
-
-
-      notifyListeners();
+    } else {
+      selectedMarker = null;
     }
+
+    notifyListeners();
   }
 
   void _onMarkerDragEnd(MarkerId markerId, LatLng newPosition) async {
@@ -157,7 +158,8 @@ class GoogleMapModel extends ChangeNotifier {
     return currentCameraPosition.target;
   }
 
-  void updateMarkers(List<AwesomeMarker> createMarkers, {MarkerType markerType}) {
+  void updateMarkers(List<AwesomeMarker> createMarkers,
+      {MarkerType markerType}) {
     if (markerType != null)
       markers.removeWhere((markerId, awesomeMarker) {
         return markerId != MarkerId("0") && awesomeMarker.type == markerType;

@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:awesome_map_mobile/base/baseMap.dart';
 import 'package:awesome_map_mobile/base/slidingUpPanelContainer.dart';
 import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/problems/createProblemItem.dart';
+import 'package:awesome_map_mobile/services/fileService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'providers/problemMarkers.dart';
 import 'providers/problemForm.dart';
+import 'package:image/image.dart' as im;
 
 class ProblemMap extends StatefulWidget {
   ProblemMap({Key key}) : super(key: key);
@@ -25,8 +29,7 @@ class _ProblemMapState extends State<ProblemMap> {
     // model.setLatLon(currentPosition);
     Marker modelMarker = Marker(
         position: currentPosition,
-        infoWindow: InfoWindow(
-            title: model.problem.title),
+        infoWindow: InfoWindow(title: model.problem.title),
         markerId: MarkerId("0"));
     context
         .read<GoogleMapModel>()
@@ -44,14 +47,41 @@ class _ProblemMapState extends State<ProblemMap> {
       markerId: null,
     )
   ];
-
+  String path = "asdasd";
   @override
   void initState() {
     super.initState();
-
+    path = "asdasdR";
     setState(() {
       isPrepareAdd = false;
     });
+  }
+
+  Future<Widget> getImage() async {
+    // final Completer<Widget> completer = Completer();
+    // return Container(
+    //     child: Image.memory(im.decode(await FileService.getFileBytes(
+    //         "5F6422D1-BCD0-405D-1CF7-08D7FB72B7AC"))));
+
+    // final url = 'http://192.168.0.110:5000/api/FileBodies/5F6422D1-BCD0-405D-1CF7-08D7FB72B7AC';
+    // final image = NetworkImage(url);
+    // final config2 = await image.obtainKey(const ImageConfiguration());
+    // ImageStream stream = image.resolve(ImageConfiguration()).addListener();
+    // final load = image.load(config2, null);
+
+    // final listener = new ImageStreamListener((ImageInfo info, isSync) async {
+    //   print(info.image.width);
+    //   print(info.image.height);
+
+    //   if (info.image.width == 80 && info.image.height == 160) {
+    //     completer.complete(Container(child: Text('AZAZA')));
+    //   } else {
+    //     completer.complete(Container(child: Image(image: image)));
+    //   }
+    // });
+
+    // load.addListener(listener);
+    // return completer.future;
   }
 
   @override
@@ -63,7 +93,33 @@ class _ProblemMapState extends State<ProblemMap> {
         body: Container(
           child: Stack(children: <Widget>[
             BaseMap(filter: MarkerType.Problem),
+            // Text(path, style: TextStyle(color: Colors.red)),
+            // IconButton(
+            //   icon: Icon(Icons.description),
+            //   onPressed: () {
+            //     try {
+            //       FileService.getFile("5F6422D1-BCD0-405D-1CF7-08D7FB72B7AC")
+            //           .then((value) => setState(() {
+            //                 // path = value.path;
+            //               }));
+            //     } catch (e) {
+            //       print(e.toString());
+            //     }
+            //   },
+            // ),
+            // FutureBuilder<Widget>(
+            //   future: getImage(),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasData) {
+            //       return snapshot.data;
+            //     } else {
+            //       return Text('LOADING...');
+            //     }
+            //   },
+            // ),
 
+            // NetworkImage(
+            //     "http://192.168.0.110:5000/api/FileBodies/5F6422D1-BCD0-405D-1CF7-08D7FB72B7AC"),
             // Consumer<ProblemMarkers>(
             //   builder:
             //       (BuildContext context, ProblemMarkers value, Widget child) {

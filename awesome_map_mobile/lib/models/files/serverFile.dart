@@ -8,11 +8,13 @@ class ServerFile {
   String name;
   double size;
   FileBody fileBody;
+  String problemId;
+  String eventId;
 
-  ServerFile(this.id, this.name, this.size, this.fileBody);
+  ServerFile(this.id, this.name, this.size, this.fileBody, this.problemId, this.eventId);
 
   factory ServerFile.empty() {
-    return ServerFile(null, null, 0, null);
+    return ServerFile("00000000-0000-0000-0000-000000000000", null, 0, null, null,null);
   }
 
   factory ServerFile.fromJson(Map<String, dynamic> json) =>

@@ -26,6 +26,7 @@ namespace awesome_map_server.Controllers {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProblemViewModel>>> GetProblems() {
             List<Problem> problems = await _context.Problems
+                .Include(x=> x.Files)
                 .Include(x=> x.ProblemTypeProblems).ThenInclude(x=> x.ProblemType)
                 .ThenInclude(x=> x.Icon)
                 .ToListAsync();
