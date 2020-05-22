@@ -53,13 +53,14 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
 
   @override
   Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return SingleChildScrollView(
+      // padding: EdgeInsets.only(bottom: bottom*2),
       controller: widget.scrollController,
       child: Consumer<ProblemForm>(builder: (context, model, _) {
         return Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Center(
                 child: Container(
@@ -145,6 +146,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                   onSaved: (String value) {
                     model.problem.description = value;
                   }),
+                  
               SizedBox(height: 10),
               FilePicker(),
               SizedBox(height: 10),
@@ -170,7 +172,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                     },
                   ),
                 ],
-              )
+              ),
             ],
           ),
         );

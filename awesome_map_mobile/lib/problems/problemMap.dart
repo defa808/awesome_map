@@ -88,6 +88,7 @@ class _ProblemMapState extends State<ProblemMap> {
   Widget build(BuildContext context) {
     return Consumer<ProblemForm>(builder: (context, problemFormModel, _) {
       return Scaffold(
+         resizeToAvoidBottomInset: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: getFloatingButton(problemFormModel, context),
         body: Container(
@@ -128,6 +129,7 @@ class _ProblemMapState extends State<ProblemMap> {
             // ),
             SlidingUpPanelContainer(
               isShow: problemFormModel.readyToFill,
+              
               renderChild: (sc) => CreateProblemItem(scrollController: sc),
             ),
 

@@ -18,11 +18,16 @@ class ProblemService {
   }
 
   static Future<List<Problem>> getProblems() async {
+    try{
     AppConfig config = await AppConfig.forEnvironment();
     Response res = await http.get(config.apiUrl + "api/Problems",
         headers: {"Content-type": "application/json"});
     List<dynamic> jsonModel = json.decode(res.body);
+    
     return jsonModel.map<Problem>((x) => Problem.fromJson(x)).toList();
+    }catch(e){
+      print(e.toString());
+    }
   }
 
   static Future<Problem> save(Problem problem) async {

@@ -13,6 +13,7 @@ Problem _$ProblemFromJson(Map<String, dynamic> json) {
     'longitude',
     'title',
     'problemTypes',
+    'status',
     'createDate'
   ]);
   return Problem(
@@ -20,6 +21,7 @@ Problem _$ProblemFromJson(Map<String, dynamic> json) {
     (json['latitude'] as num)?.toDouble(),
     (json['longitude'] as num)?.toDouble(),
     json['title'] as String,
+    json['status'] as int,
     json['createDate'] == null
         ? null
         : DateTime.parse(json['createDate'] as String),
@@ -45,6 +47,7 @@ Map<String, dynamic> _$ProblemToJson(Problem instance) => <String, dynamic>{
       'longitude': instance.longitude,
       'title': instance.title,
       'problemTypes': instance.problemTypes,
+      'status': instance.status,
       'createDate': instance.createDate?.toIso8601String(),
       'updateDate': instance.updateDate?.toIso8601String(),
       'description': instance.description,

@@ -14,7 +14,6 @@ class ProblemDetails extends StatefulWidget {
 class _ProblemDetailsState extends State<ProblemDetails> {
   @override
   Widget build(BuildContext context) {
-
     Problem problem = ModalRoute.of(context).settings.arguments;
 
     return DefaultTabController(
@@ -27,9 +26,7 @@ class _ProblemDetailsState extends State<ProblemDetails> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Header(
-                  text: problem.title
-                ),
+                child: Header(text: problem.title),
               ),
               Divider(),
               TabBar(

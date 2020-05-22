@@ -1,5 +1,6 @@
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
+import 'package:awesome_map_mobile/models/problem/problemStatus.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'problem.g.dart';
 
@@ -15,7 +16,8 @@ class Problem {
   String title;
   @JsonKey(required: true)
   List<Category> problemTypes;
-
+  @JsonKey(required: true)
+  int status;
   @JsonKey(required: true)
   DateTime createDate;
   DateTime updateDate;
@@ -28,6 +30,7 @@ class Problem {
       this.latitude,
       this.longitude,
       this.title,
+      this.status,
       this.createDate,
       this.updateDate,
       this.description,
@@ -41,6 +44,7 @@ class Problem {
         0,
         0,
         "",
+        0,
         DateTime.now(),
         null,
         "",

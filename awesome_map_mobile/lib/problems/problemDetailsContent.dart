@@ -2,7 +2,9 @@ import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
 import 'package:awesome_map_mobile/base/photo/fileItemThumbnail.dart';
 import 'package:awesome_map_mobile/base/photo/photoVIewer.dart';
 import 'package:awesome_map_mobile/models/problem/problem.dart';
+import 'package:awesome_map_mobile/models/problem/problemStatus.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -11,8 +13,8 @@ class ProblemDetailsContent extends StatelessWidget {
   final Problem problem;
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -34,7 +36,27 @@ class ProblemDetailsContent extends StatelessWidget {
                     )),
             ],
           ),
-          Text(problem.description),
+           SizedBox(
+            height: 10,
+          ),
+          Text(problem.description, style: TextStyle(fontSize: 16)),
+          SizedBox(
+            height: 10,
+          ),
+          Divider(),
+           SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("Статус:", style: TextStyle(fontSize: 16)),
+              Text(
+                  EnumToString.parseCamelCase(
+                      ProblemStatus.values[this.problem.status]),
+                  style: TextStyle(fontSize: 16)),
+            ],
+          ),
           SizedBox(
             height: 10,
           ),
