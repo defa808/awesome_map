@@ -1,13 +1,12 @@
+import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'eventContent.dart';
 
 class SelectableEventItem extends StatefulWidget {
-  SelectableEventItem({Key key, int id}) : super(key: key) {
-    this.id = id;
-  }
-  int id;
+  SelectableEventItem({Key key, @required this.event}) : super(key: key);
+  final Event event;
 
   @override
   _SelectableEventItemState createState() => _SelectableEventItemState();
@@ -28,7 +27,7 @@ class _SelectableEventItemState extends State<SelectableEventItem> {
           });
         },
         onTap: () {
-          Navigator.pushNamed(context, '/event', arguments: {'id': widget.id});
+          Navigator.pushNamed(context, '/event', arguments: widget.event);
         },
         splashColor: colorScheme.onSurface.withOpacity(0.12),
         highlightColor: Colors.transparent,
@@ -38,7 +37,7 @@ class _SelectableEventItemState extends State<SelectableEventItem> {
                 color: _isSelected
                     ? colorScheme.primary.withOpacity(0.08)
                     : Colors.transparent),
-            EventContent(id: widget.id),
+            EventContent(event: widget.event),
             Align(
               alignment: Alignment.topRight,
               child: Padding(

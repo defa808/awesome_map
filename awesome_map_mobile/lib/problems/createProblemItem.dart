@@ -150,9 +150,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
               SizedBox(height: 10),
               FilePicker(),
               SizedBox(height: 10),
-              Divider(
-                height: 1,
-              ),
+              Divider(height: 1),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[

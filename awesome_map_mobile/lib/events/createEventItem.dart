@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_map_mobile/base/filePicker.dart';
 import 'package:awesome_map_mobile/events/providers/eventForm.dart';
 import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
@@ -18,20 +19,21 @@ class CreateEventItem extends StatefulWidget {
 class _CreateEventItemState extends State<CreateEventItem> {
   List<String> _typeEvents = [];
   final _formKey = GlobalKey<FormState>();
-  EventForm _data = EventForm.empty();
 
-  void completeTicket(context) {
+  void completeTicket(context) async {
     context.read<GoogleMapModel>().removeLast();
     _formKey.currentState.save();
-    context.read<EventForm>().save(_data);
-    context.read<GoogleMapModel>().add(AwesomeMarker(
-        marker: Marker(
-            markerId: null,
-            position: LatLng(_data.latitude, _data.longitude),
-            infoWindow:
-                InfoWindow(title: _data.title)),
-        type: MarkerType.Event));
-    context.read<EventForm>().clear();
+    EventForm provider = context.read<EventForm>();
+    if (await provider.save()) {
+      context.read<GoogleMapModel>().add(AwesomeMarker(
+          marker: Marker(
+              markerId: null,
+              position:
+                  LatLng(provider.event.latitude, provider.event.longitude),
+              infoWindow: InfoWindow(title: provider.event.title)),
+          type: MarkerType.Event));
+      context.read<EventForm>().clear();
+    }
   }
 
   void removeTicket() {
@@ -43,19 +45,6 @@ class _CreateEventItemState extends State<CreateEventItem> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _typeEvents = [
-        "Довкілля",
-        "Електоенергія",
-        "Закон  і Порядок",
-        "Здоров’я",
-        "Каналізація",
-        "Комунікація",
-        "Надзвичайна Ситуація",
-        "Сміття",
-        "Інше"
-      ];
-    });
   }
 
   @override
@@ -108,9 +97,9 @@ class _CreateEventItemState extends State<CreateEventItem> {
                                       labelText: "Широта",
                                       hintText: "Широта"),
                                   keyboardType: TextInputType.number,
-                                  initialValue: model.latitude.toString(),
+                                  initialValue: model.event.latitude.toString(),
                                   onSaved: (String value) {
-                                    this._data.latitude = double.parse(value);
+                                    model.event.latitude = double.parse(value);
                                   }),
                             ),
                             SizedBox(width: 50),
@@ -121,9 +110,10 @@ class _CreateEventItemState extends State<CreateEventItem> {
                                       labelText: "Довгота",
                                       hintText: "Довгота"),
                                   keyboardType: TextInputType.number,
-                                  initialValue: model.longitude.toString(),
+                                  initialValue:
+                                      model.event.longitude.toString(),
                                   onSaved: (String value) {
-                                    this._data.longitude = double.parse(value);
+                                    model.event.longitude = double.parse(value);
                                   }),
                             ),
                           ],
@@ -133,28 +123,9 @@ class _CreateEventItemState extends State<CreateEventItem> {
                                 border: UnderlineInputBorder(),
                                 labelText: "Назва"),
                             onSaved: (String value) {
-                              this._data.title = value;
+                              model.event.title = value;
                             }),
                         SizedBox(height: 10),
-                        DropdownButtonFormField<String>(
-                          isExpanded: true,
-                          hint: Text("Тип заходу"),
-                          items: _typeEvents.map((String value) {
-                            return new DropdownMenuItem<String>(
-                              value: value,
-                              child: new Text(value),
-                            );
-                          }).toList(),
-                          value: _selectedTypeProblem,
-                          onSaved: (String value) {
-                            this._data.typeEventId = 0; //hard code
-                          },
-                          onChanged: (String value) {
-                            setState(() {
-                              _selectedTypeProblem = value;
-                            });
-                          },
-                        ),
                         TextFormField(
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
@@ -162,64 +133,12 @@ class _CreateEventItemState extends State<CreateEventItem> {
                                 border: UnderlineInputBorder(),
                                 labelText: "Опис"),
                             onSaved: (String value) {
-                              this._data.description = value;
+                              model.event.description = value;
                             }),
                         SizedBox(height: 10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "photo1",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "(85 Kb)",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.cancel),
-                              color: Color.fromRGBO(77, 77, 77, 0.8),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "photo2",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "(1 Mb)",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.cancel),
-                              color: Color.fromRGBO(77, 77, 77, 0.8),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                        RaisedButton.icon(
-                          textColor: Color.fromRGBO(77, 77, 77, 0.8),
-                          label: Text("Додати зображення"),
-                          icon: Icon(Icons.file_upload),
-                          elevation: 0.0,
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(30.0)),
-                          onPressed: () {},
-                        ),
+                        FilePicker(),
                         SizedBox(height: 10),
-                        Divider(
-                          height: 1,
-                        ),
+                        Divider(height: 1),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[

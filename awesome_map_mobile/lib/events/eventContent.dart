@@ -1,20 +1,17 @@
+import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:flutter/material.dart';
 
 class EventContent extends StatefulWidget {
-  int id;
-
-  EventContent({Key key, int id}) : super(key: key) {
-    this.id = id;
-  }
+  EventContent({Key key, this.event}) : super(key: key);
   @override
   _EventContentState createState() => _EventContentState();
-  
+  Event event;
 }
 
 class _EventContentState extends State<EventContent> {
   @override
   Widget build(BuildContext context) {
-    int id = widget.id;
+    String id = widget.event.id;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -27,7 +24,7 @@ class _EventContentState extends State<EventContent> {
                   tag: 'event-details-$id',
                   child: Material(
                     child: Ink.image(
-                      image: id.isOdd ?  AssetImage("images/gitar.jpg") : AssetImage("images/it.jpg"),
+                      image: AssetImage("images/gitar.jpg"),
                       fit: BoxFit.cover,
                       child: Container(),
                     ),
@@ -50,7 +47,7 @@ class _EventContentState extends State<EventContent> {
                       child: Column(
                         children: <Widget>[
                           Text(
-                            id.isOdd ?"Гітарний вечір" : "Мастер класс Flutter",
+                            "Гітарний вечір",
                             style: TextStyle(color: Colors.black, fontSize: 25),
                           ),
                         ],
@@ -65,7 +62,7 @@ class _EventContentState extends State<EventContent> {
                   Row(
                     children: <Widget>[
                       Icon(Icons.location_on),
-                      Text( id.isOdd ?"Палац культури" : "Бібліотека НТУУ 'КПІ'")
+                      Text("Бібліотека НТУУ 'КПІ'")
                     ],
                   ),
                   Column(

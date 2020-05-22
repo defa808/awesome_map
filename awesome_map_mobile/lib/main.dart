@@ -16,6 +16,7 @@ import 'events/eventDetails.dart';
 import 'events/eventUserList.dart';
 import 'events/providers/eventFilterModel.dart';
 import 'events/providers/eventForm.dart';
+import 'events/providers/eventMarkers.dart';
 import 'events/providers/eventTypes.dart';
 import 'home/home.dart';
 import 'models/googleMap/googleMapModel.dart';
@@ -37,10 +38,11 @@ void main() {
       ChangeNotifierProvider<GoogleMapModel>(
           create: (context) => GoogleMapModel()),
       ChangeNotifierProvider<ProblemForm>(create: (context) => ProblemForm()),
-      ChangeNotifierProvider<EventForm>(create: (context) => EventForm.empty()),
+      ChangeNotifierProvider<EventForm>(create: (context) => EventForm()),
       ChangeNotifierProvider<ProblemTypes>(create: (context) => ProblemTypes()),
       ChangeNotifierProvider<EventTypes>(create: (context) => EventTypes()),
       ChangeNotifierProvider<ProblemMarkers>(create: (context) => ProblemMarkers()),
+      ChangeNotifierProvider<EventMarkers>(create: (context) => EventMarkers()),
       // ProxyProvider<GoogleMapModel, ProblemMarkers>(
       //   update: (context, googleMapModel, problemMarkersModel) =>
       //       ProblemMarkers(googleMapModel: googleMapModel),

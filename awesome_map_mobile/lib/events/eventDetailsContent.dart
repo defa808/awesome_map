@@ -1,8 +1,10 @@
+import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailsContent extends StatelessWidget {
-  const EventDetailsContent({Key key}) : super(key: key);
+  const EventDetailsContent(this.event,{Key key}) : super(key: key);
+  final Event event;
 
   @override
   Widget build(BuildContext context) {

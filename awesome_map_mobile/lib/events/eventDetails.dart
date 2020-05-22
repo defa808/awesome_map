@@ -1,5 +1,6 @@
 import 'package:awesome_map_mobile/comments/commentsList.dart';
 import 'package:awesome_map_mobile/comments/commentsMain.dart';
+import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +16,7 @@ class EventDetails extends StatefulWidget {
 class _EventDetailsState extends State<EventDetails> {
   @override
   Widget build(BuildContext context) {
-    final Map args = ModalRoute.of(context).settings.arguments;
-    final int id = args["id"];
+    Event event = ModalRoute.of(context).settings.arguments;
 
     return DefaultTabController(
       length: 2,
@@ -33,7 +33,7 @@ class _EventDetailsState extends State<EventDetails> {
                     expandedHeight: 200.0,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Hero(
-                        tag: 'event-details-$id',
+                        tag: 'event-details-' + event.id,
                         child: Material(
                           child: Ink.image(
                             image: AssetImage('images/gitar.jpg'),
@@ -65,8 +65,8 @@ class _EventDetailsState extends State<EventDetails> {
                 Expanded(
                   child: TabBarView(children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal:16.0),
-                      child: EventDetailsContent(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: EventDetailsContent(event),
                     ),
                     CommentsMain()
                   ]),
