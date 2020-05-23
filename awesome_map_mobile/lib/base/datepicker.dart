@@ -8,33 +8,31 @@ class DatePicker extends StatelessWidget {
   final DateTime firstDate;
   final DateTime endDate;
   final String labelText;
-  DatePicker({
-    Key key,
-    @required this.labelText,
-    @required this.initDate,
-    @required this.firstDate,
-    @required this.endDate,
-    @required this.onChange,
-  }) : super(key: key);
-
+  DatePicker(
+      {Key key,
+      @required this.labelText,
+      @required this.initDate,
+      @required this.firstDate,
+      @required this.endDate,
+      @required this.onChange,
+      this.color = Colors.white})
+      : super(key: key);
+  Color color;
   @override
   Widget build(BuildContext context) {
-
-    Color mainColor = Colors.white;
-
     return DateTimeField(
-        cursorColor: mainColor,
+        cursorColor: color,
         decoration: InputDecoration(
             focusedBorder:
-                UnderlineInputBorder(borderSide: BorderSide(color: mainColor)),
-            hintStyle: TextStyle(color: mainColor),
-            labelStyle: TextStyle(color: mainColor),
+                UnderlineInputBorder(borderSide: BorderSide(color: color)),
+            hintStyle: TextStyle(color: color),
+            labelStyle: TextStyle(color: color),
             enabledBorder:
-                UnderlineInputBorder(borderSide: BorderSide(color: mainColor)),
+                UnderlineInputBorder(borderSide: BorderSide(color: color)),
             labelText: labelText),
         format: DateFormat.yMMMd(),
         style: TextStyle(
-          color: mainColor,
+          color: color,
         ),
         onChanged: onChange,
         initialValue: initDate,

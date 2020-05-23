@@ -7,7 +7,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class FilePicker extends StatefulWidget {
-  const FilePicker({Key key}) : super(key: key);
+  const FilePicker({Key key, this.addFile, this.removeFile, this.files})
+      : super(key: key);
+  final List<File> files;
+  final void Function(File) addFile;
+  final void Function(File) removeFile;
 
   @override
   _FilePickerState createState() => _FilePickerState();
@@ -19,7 +23,7 @@ class _FilePickerState extends State<FilePicker> {
 
   void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
     try {
-      context.read<ProblemForm>().addFile(await ImagePicker.pickImage(
+      widget.addFile(await ImagePicker.pickImage(
           source: source, maxWidth: null, maxHeight: null, imageQuality: null));
       setState(() {});
     } catch (e) {
@@ -33,7 +37,7 @@ class _FilePickerState extends State<FilePicker> {
       return;
     }
     if (response.file != null) {
-      context.read<ProblemForm>().addFile(response.file);
+      widget.addFile(response.file);
     } else {
       _retrieveDataError = response.exception.code;
     }
@@ -48,14 +52,14 @@ class _FilePickerState extends State<FilePicker> {
     return null;
   }
 
-  List<Widget> _previewImages(ProblemForm problemForm) {
+  List<Widget> _previewImages() {
     final Text retrieveError = _getRetrieveErrorWidget();
     if (retrieveError != null) {
       return [retrieveError];
     }
-    
+
     List<Widget> fileInfos = List<Widget>();
-    for (var fileItem in problemForm.files)
+    for (var fileItem in widget.files)
       if (fileItem != null) {
         fileInfos.add(Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +84,7 @@ class _FilePickerState extends State<FilePicker> {
                   icon: Icon(Icons.cancel),
                   color: Color.fromRGBO(77, 77, 77, 0.8),
                   onPressed: () {
-                    problemForm.removeFile(fileItem);
+                    widget.removeFile(fileItem);
                   },
                 ),
               ],
@@ -104,54 +108,49 @@ class _FilePickerState extends State<FilePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProblemForm>(
-      builder: (BuildContext context, ProblemForm problemForm, Widget child) {
-        return Column(
-          children: <Widget>[
-            Platform.isAndroid
-                ? FutureBuilder<void>(
-                    future: retrieveLostData(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<void> snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                        case ConnectionState.waiting:
-                          return CircularProgressIndicator();
-                        case ConnectionState.done:
-                          return Wrap(
-                            children: _previewImages(problemForm),
-                          );
+    return Column(
+      children: <Widget>[
+        Platform.isAndroid
+            ? FutureBuilder<void>(
+                future: retrieveLostData(),
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return CircularProgressIndicator();
+                    case ConnectionState.done:
+                      return Wrap(
+                        children: _previewImages(),
+                      );
 
-                        default:
-                          if (snapshot.hasError) {
-                            return Text(
-                              'Pick image/video error: ${snapshot.error}}',
-                              textAlign: TextAlign.center,
-                            );
-                          } else {
-                            return const Text(
-                              'You have not yet picked an image.',
-                              textAlign: TextAlign.center,
-                            );
-                          }
+                    default:
+                      if (snapshot.hasError) {
+                        return Text(
+                          'Pick image/video error: ${snapshot.error}}',
+                          textAlign: TextAlign.center,
+                        );
+                      } else {
+                        return const Text(
+                          'You have not yet picked an image.',
+                          textAlign: TextAlign.center,
+                        );
                       }
-                    },
-                  )
-                : _previewImages(problemForm),
-            RaisedButton.icon(
-              textColor: Color.fromRGBO(77, 77, 77, 0.8),
-              label: Text("Додати зображення"),
-              icon: Icon(Icons.file_upload),
-              elevation: 0.0,
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0)),
-              onPressed: () {
-                _onImageButtonPressed(ImageSource.gallery, context: context);
-              },
-            )
-          ],
-        );
-      },
+                  }
+                },
+              )
+            : _previewImages(),
+        RaisedButton.icon(
+          textColor: Color.fromRGBO(77, 77, 77, 0.8),
+          label: Text("Додати зображення"),
+          icon: Icon(Icons.file_upload),
+          elevation: 0.0,
+          shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(30.0)),
+          onPressed: () {
+            _onImageButtonPressed(ImageSource.gallery, context: context);
+          },
+        )
+      ],
     );
   }
 }

@@ -162,7 +162,7 @@ class EventMapDetails extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            Text("5"),
+            Text(event.subscribersCount.toString()),
             Icon(Icons.people_outline),
             Expanded(
               child: Container(),

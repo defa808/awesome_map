@@ -51,7 +51,7 @@ class Event {
         "",
         DateTime.now(),
         DateTime.now(),
-        Duration(minutes: 10),
+        Duration(),
         0,
         false,
         0,

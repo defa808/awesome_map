@@ -183,7 +183,11 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                       model.problem.description = value;
                                     }),
                                 SizedBox(height: 10),
-                                FilePicker(),
+                                FilePicker(
+                                  addFile: model.addFile,
+                                  removeFile: model.removeFile,
+                                  files: model.files,
+                                ),
                                 SizedBox(height: 10),
                                 Divider(height: 1),
                                 Row(

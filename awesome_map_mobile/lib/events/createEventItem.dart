@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:awesome_map_mobile/base/chooseCategoryAutoComplete.dart';
+import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filePicker.dart';
 import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
+import 'package:awesome_map_mobile/base/timePicker.dart';
 import 'package:awesome_map_mobile/events/providers/eventForm.dart';
 import 'package:awesome_map_mobile/events/providers/eventMarkers.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
@@ -11,6 +13,7 @@ import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/services/eventService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_duration_picker/flutter_duration_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -173,7 +176,39 @@ class _CreateEventItemState extends State<CreateEventItem> {
                               model.event.description = value;
                             }),
                         SizedBox(height: 10),
-                        FilePicker(),
+                        DatePicker(
+                          color: Colors.black,
+                          labelText: "Дата проведення",
+                          initDate: DateTime.now(),
+                          endDate: DateTime.now().add(Duration(days: 365 * 2)),
+                          onChange: (value) {
+                            model.event.startDate = value;
+                          },
+                          firstDate: DateTime(2020),
+                        ),
+                        SizedBox(height: 10),
+                        TimePicker(
+                          labelText: "Тривалість",
+                          color: Colors.black,
+                          onChange: (val) {
+                            model.event.duration = val;
+                          },
+                        ),
+                        // Expanded(
+                        //   child: DurationPicker(
+                        //     duration: model.event.duration,
+                        //     onChange: (val) {
+                        //       model.event.duration = val;
+                        //     },
+                        //     snapToMins: 5.0,
+                        //   ),
+                        // ),
+                        SizedBox(height: 10),
+                        FilePicker(
+                          addFile: model.addFile,
+                          removeFile: model.removeFile,
+                          files: model.files,
+                        ),
                         SizedBox(height: 10),
                         Divider(height: 1),
                         Row(
