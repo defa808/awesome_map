@@ -1,15 +1,23 @@
+import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class EventDetailsContent extends StatelessWidget {
-  const EventDetailsContent(this.event, {Key key}) : super(key: key);
+class EventMapDetails extends StatelessWidget {
+  const EventMapDetails(this.event, {Key key}) : super(key: key);
   final Event event;
+  String getLabel(int inValue, String mainLabel) {
+    if (inValue % 10 == 1) return mainLabel + "у"; // годину || хвилину
+    if ((21 < inValue % 10 && inValue % 10 <= 24)) return mainLabel + "и"; //години || хвилини
+    return mainLabel;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
+    return SingleChildScrollView(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         IntrinsicHeight(
           child: Row(
@@ -56,12 +64,16 @@ class EventDetailsContent extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              "12.10.19",
+                              DateFormat.yMEd()
+                                  .format(event.startDate)
+                                  .toString(),
                               style: TextStyle(color: Colors.lightBlue),
                             ),
                             SizedBox(height: 2),
                             Text(
-                              "14:30",
+                              DateFormat.Hms()
+                                  .format(event.startDate)
+                                  .toString(),
                               style: TextStyle(color: Colors.lightBlue),
                             )
                           ],
@@ -86,14 +98,22 @@ class EventDetailsContent extends StatelessWidget {
                   child: Padding(
                     padding:
                         const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Column(
                       children: <Widget>[
-                        Icon(Icons.label, color: Colors.lightBlue),
-                        Flexible(
-                          child: Text("Концерт",
-                              style: TextStyle(color: Colors.lightBlue)),
-                        )
+                        for (Category type in event.eventTypes)
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              if (type.icon != null)
+                                Icon(IconData(type.icon.iconCode,
+                                    fontFamily: type.icon.fontFamily,
+                                    fontPackage: type.icon.fontPackage)),
+                              Flexible(
+                                child: Text(type.name,
+                                    style: TextStyle(color: Colors.lightBlue)),
+                              )
+                            ],
+                          ),
                       ],
                     ),
                   ),
@@ -102,18 +122,18 @@ class EventDetailsContent extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
-                  child: Center(child: Text("2 години")),
+                  padding: const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
+                  child: Center(
+                      child: Text(
+                          "${event.duration.inHours} ${getLabel(event.duration.inHours, 'годин')} \n" + 
+                          "${event.duration.inMinutes.remainder(60)} ${getLabel(event.duration.inMinutes.remainder(60), 'хвилин')}")),
                 ),
               ),
             ],
           ),
         ),
-        Flexible(
-          flex: 1,
-          child: Text(
-              "Тихий вечір. За вікном осінь щедро встеляє землю сухим листям, першими іскорками інею, густим туманом. А в приміщенні, де зібралися прихильники літератури та юні автори поетичних творів, панує атмосфера тепла й спокою. Усі в очікуванні початку вечора поезії, який, звісно, подарує незабутні емоції та враження, нові знайомства, допоможе відпочити від важких трудових буднів і поринути у світ поетичного слова.Тихий вечір. За вікном осінь щедро встеляє землю сухим листям, першими іскорками інею, густим туманом. А в приміщенні, де зібралися прихильники літератури та юні автори поетичних творів, панує атмосфера тепла й спокою. Усі в очікуванні початку вечора поезії, який, звісно, подарує незабутні емоції та враження, нові знайомства, допоможе відпочити від важких трудових буднів і поринути у світ поетичного слова.Тихий вечір. За вікном осінь щедро встеляє землю сухим листям, першими іскорками інею, густим туманом. А в приміщенні, де зібралися прихильники літератури та юні автори поетичних творів, панує атмосфера тепла й спокою. Усі в очікуванні початку вечора поезії, який, звісно, подарує незабутні емоції та враження, нові знайомства, допоможе відпочити від важких трудових буднів і поринути у світ поетичного слова."),
+        Wrap(
+          children: <Widget>[Text(event.description)],
         ),
         Divider(height: 1),
         Row(
@@ -138,6 +158,6 @@ class EventDetailsContent extends StatelessWidget {
         )
         // Expanded(child: CommentsList()),
       ],
-    );
+    ));
   }
 }

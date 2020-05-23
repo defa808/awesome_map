@@ -7,8 +7,13 @@ part of 'event.dart';
 // **************************************************************************
 
 Event _$EventFromJson(Map<String, dynamic> json) {
-  $checkKeys(json,
-      requiredKeys: const ['id', 'latitude', 'title', 'eventTypes']);
+  $checkKeys(json, requiredKeys: const [
+    'id',
+    'latitude',
+    'longitude',
+    'title',
+    'eventTypes'
+  ]);
   return Event(
     json['id'] as String,
     (json['latitude'] as num)?.toDouble(),

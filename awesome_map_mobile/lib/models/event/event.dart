@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -10,6 +9,7 @@ class Event {
   String id;
   @JsonKey(required: true)
   double latitude;
+  @JsonKey(required: true)
   double longitude;
   @JsonKey(required: true)
   String title;
@@ -19,7 +19,7 @@ class Event {
   String placeDescription;
   DateTime startDate;
   DateTime createdDate;
-  Duration duration;
+  Duration duration = new Duration(minutes: 10);
   int peopleCount;
   List<ServerFile> files;
   bool isClosed;
@@ -49,7 +49,7 @@ class Event {
         "",
         DateTime.now(),
         DateTime.now(),
-        Duration(),
+        Duration(minutes: 10),
         0,
         false,
         new List<ServerFile>());

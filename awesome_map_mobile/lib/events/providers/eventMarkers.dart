@@ -10,7 +10,6 @@ class EventMarkers with ChangeNotifier {
 
   Future<List<Event>> getEvents() async {
     events = await EventService.getEvents();
-    notifyListeners();
     return events;
   }
 

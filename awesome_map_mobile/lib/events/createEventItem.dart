@@ -28,12 +28,13 @@ class _CreateEventItemState extends State<CreateEventItem> {
     if (await provider.save()) {
       context.read<GoogleMapModel>().add(AwesomeMarker(
           marker: Marker(
-              markerId: null,
+              markerId: MarkerId(provider.event.id),
               position:
                   LatLng(provider.event.latitude, provider.event.longitude),
               infoWindow: InfoWindow(title: provider.event.title)),
           type: MarkerType.Event));
       context.read<EventForm>().clear();
+      provider.clear();
     }
     }
     catch(e){
@@ -46,7 +47,6 @@ class _CreateEventItemState extends State<CreateEventItem> {
     context.read<EventForm>().clear();
   }
 
-  String _selectedTypeProblem;
   @override
   void initState() {
     super.initState();

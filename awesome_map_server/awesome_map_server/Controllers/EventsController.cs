@@ -84,10 +84,11 @@ namespace awesome_map_server.Controllers {
         [HttpPost]
         public async Task<ActionResult<EventViewModel>> PostEvent(EventViewModel @event) {
             Event newEntity = _mapper.Map<Event>(@event);
-            newEntity.CreateDate = DateTime.Now;
-
+            
             foreach (var item in @event.EventTypes)
                 newEntity.EventTypeEvents.Add(new EventTypeEvent() { Event = newEntity, TypeId = item.Id });
+            
+            newEntity.CreateDate = DateTime.Now;
 
             _context.Events.Add(newEntity);
             await _context.SaveChangesAsync();

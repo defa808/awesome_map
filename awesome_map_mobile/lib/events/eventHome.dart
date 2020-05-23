@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 import 'eventList.dart';
 import 'eventMap.dart';
+import 'eventMapDetails.dart';
 import 'filter/eventFilter.dart';
 
 class EventHome extends StatefulWidget {
@@ -28,6 +29,11 @@ class _ProblemHomeState extends State<EventHome> {
   @override
   void initState() {
     super.initState();
+    loadData();
+  }
+
+  void loadData() async {
+    context.read<EventMarkers>().getEvents();
   }
 
   void showMap() {
@@ -45,7 +51,13 @@ class _ProblemHomeState extends State<EventHome> {
     //       Provider.of<GoogleMapModel>(context, listen: false).getSelectedItem();
     // });
     return Consumer<GoogleMapModel>(
-      builder: (BuildContext context, GoogleMapModel model, Widget child) {
+        builder: (BuildContext context, GoogleMapModel model, Widget child) {
+      return Consumer<EventMarkers>(builder:
+          (BuildContext context, EventMarkers eventMarkers, Widget child) {
+        context.watch<GoogleMapModel>().updateMarkers(
+            eventMarkers.createMarkers(),
+            markerType: MarkerType.Event);
+
         MarkerId selectedItem = model.selectedMarker;
         if (selectedItemLast != selectedItem) isShowList = false;
         selectedItemLast = selectedItem;
@@ -62,6 +74,10 @@ class _ProblemHomeState extends State<EventHome> {
           }),
         );
 
+        Event event;
+        if (selectedItemLast != null)
+          event = eventMarkers.getEventDetails(selectedItemLast.value);
+
         return Stack(children: <Widget>[
           isShowList
               ? Column(
@@ -74,41 +90,26 @@ class _ProblemHomeState extends State<EventHome> {
                     Expanded(child: EventList()),
                   ],
                 )
-              : Stack(
-                  children: <Widget>[
-                    EventMap(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: mapListButton,
-                    ),
-                    if (selectedItemLast != null)
-                      Consumer<EventMarkers>(
-                        builder: (BuildContext context,
-                            EventMarkers eventMarkers, Widget child) {
-                          context.watch<GoogleMapModel>().updateMarkers(
-                              eventMarkers.createMarkers(),
-                              markerType: MarkerType.Event);
-                          MarkerId selectedItem = model.selectedMarker;
-                          Event event = eventMarkers.getEventDetails(selectedItemLast.value);                  
-                          return SlidingUpPanelContainer(
-                              renderChild: (sc) => Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: MapDetails(
-                                      title: Header(
-                                        text: event?.title,
-                                      ),
-                                      child: EventDetailsContent(event),
-                                      scrollController: sc,
-                                    ),
-                                  ),
-                              isShow: selectedItemLast != null);
-                        },
-                      )
-                  ],
-                ),
-          FilterContainer(child: EventFilter())
+              : Stack(children: <Widget>[
+                  EventMap(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: mapListButton,
+                  ),
+                  if (selectedItemLast != null)
+                    SlidingUpPanelContainer(
+                        renderChild: (sc) => MapDetails(
+                              title: Header(
+                                text: event?.title,
+                              ),
+                              child: EventMapDetails(event),
+                              scrollController: sc,
+                            ),
+                        isShow: selectedItemLast != null),
+                  // FilterContainer(child: EventFilter())
+                ])
         ]);
-      },
-    );
+      });
+    });
   }
 }

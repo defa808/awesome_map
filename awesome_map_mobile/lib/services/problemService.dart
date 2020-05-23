@@ -28,6 +28,7 @@ class ProblemService {
     }catch(e){
       print(e.toString());
     }
+    return new List<Problem>();
   }
 
   static Future<Problem> save(Problem problem) async {

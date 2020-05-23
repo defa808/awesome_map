@@ -18,24 +18,30 @@ class EventService {
   }
 
   static Future<List<Event>> getEvents() async {
-    try{
-    AppConfig config = await AppConfig.forEnvironment();
-    Response res = await http.get(config.apiUrl + "api/Events",
-        headers: {"Content-type": "application/json"});
-    List<dynamic> jsonModel = json.decode(res.body);
-    
-    return jsonModel.map<Event>((x) => Event.fromJson(x)).toList();
-    }catch(e){
+    try {
+      AppConfig config = await AppConfig.forEnvironment();
+      Response res = await http.get(config.apiUrl + "api/Events",
+          headers: {"Content-type": "application/json"});
+      List<dynamic> jsonModel = json.decode(res.body);
+
+      return jsonModel.map<Event>((x) => Event.fromJson(x)).toList();
+    } catch (e) {
       print(e.toString());
     }
+    return new List<Event>();
   }
 
   static Future<Event> save(Event event) async {
-    AppConfig config = await AppConfig.forEnvironment();
-    Map<String, dynamic> jsonMap = event.toJson();
-    Response res = await http.post(config.apiUrl + "api/Events",
-        headers: {"Content-type": "application/json"},
-        body: jsonEncode(jsonMap));
-    return Event.fromJson(jsonDecode(res.body));
+    try {
+      event.duration = Duration(minutes: 30);
+      AppConfig config = await AppConfig.forEnvironment();
+      Map<String, dynamic> jsonMap = event.toJson();
+      Response res = await http.post(config.apiUrl + "api/Events",
+          headers: {"Content-type": "application/json"},
+          body: jsonEncode(jsonMap));
+      return Event.fromJson(jsonDecode(res.body));
+    } catch (e) {
+      print(e.message.toString());
+    }
   }
 }

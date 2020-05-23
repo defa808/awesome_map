@@ -35,14 +35,6 @@ class _EventMapState extends State<EventMap> {
     });
   }
 
-  static List<Marker> problems = <Marker>[
-    Marker(
-      position: LatLng(52.449601, 32.457368),
-      infoWindow: InfoWindow(title: 'Temp Title'),
-      markerId: null,
-    )
-  ];
-
   @override
   void initState() {
     super.initState();
