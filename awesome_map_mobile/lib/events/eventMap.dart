@@ -20,14 +20,14 @@ class _EventMapState extends State<EventMap> {
   bool isPrepareAdd = false;
 
   void _add(EventForm model) {
-    LatLng currentPosition =
-        context.read<GoogleMapModel>().getCurrentLatLon();
+    LatLng currentPosition = context.read<GoogleMapModel>().getCurrentLatLon();
     // model.setLatLon(currentPosition);
     Marker modelMarker = Marker(
         position: currentPosition,
         infoWindow: InfoWindow(title: model.event.title),
-        markerId: null);
-    context.read<GoogleMapModel>()
+        markerId: MarkerId("0"));
+    context
+        .read<GoogleMapModel>()
         .add(AwesomeMarker(marker: modelMarker, type: MarkerType.Event));
     context.read<EventForm>().setLatLon(currentPosition);
     setState(() {

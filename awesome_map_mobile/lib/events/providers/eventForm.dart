@@ -33,7 +33,7 @@ class EventForm with ChangeNotifier {
       readyToFill = false;
       return true;
     } catch (e) {
-      var exception = e;
+      print(e.message.toString());
     }
     return false;
     // this.latitude = form.latitude;

@@ -15,6 +15,9 @@ namespace awesome_map_server.Mapper {
             CreateMap<ProblemViewModel, Problem>();
             CreateMap<ProblemTypeViewModel, ProblemType>();
             CreateMap<ProblemType, ProblemTypeViewModel>();
+            CreateMap<Event, EventViewModel>().ForMember(x=> x.Duration, m=> m.MapFrom(z=>z.Duration.Ticks));
+            CreateMap<EventViewModel, Event>().ForMember(x=> x.Duration, m=> m.MapFrom(z=>TimeSpan.FromTicks(z.Duration)));
+
         }
     }
 }

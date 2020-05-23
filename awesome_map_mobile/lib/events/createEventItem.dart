@@ -20,7 +20,8 @@ class _CreateEventItemState extends State<CreateEventItem> {
   List<String> _typeEvents = [];
   final _formKey = GlobalKey<FormState>();
 
-  void completeTicket(context) async {
+  void completeTicket() async {
+    try{
     context.read<GoogleMapModel>().removeLast();
     _formKey.currentState.save();
     EventForm provider = context.read<EventForm>();
@@ -33,6 +34,10 @@ class _CreateEventItemState extends State<CreateEventItem> {
               infoWindow: InfoWindow(title: provider.event.title)),
           type: MarkerType.Event));
       context.read<EventForm>().clear();
+    }
+    }
+    catch(e){
+      print(e.toString());
     }
   }
 
@@ -147,7 +152,7 @@ class _CreateEventItemState extends State<CreateEventItem> {
                               icon: Icon(Icons.send, color: Colors.blue),
                               label: Text("Відправити"),
                               onPressed: () {
-                                completeTicket(context);
+                                completeTicket();
                               },
                             ),
                             FlatButton.icon(

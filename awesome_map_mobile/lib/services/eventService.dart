@@ -32,10 +32,10 @@ class EventService {
 
   static Future<Event> save(Event event) async {
     AppConfig config = await AppConfig.forEnvironment();
-    Map<String, dynamic> problemMap = event.toJson();
+    Map<String, dynamic> jsonMap = event.toJson();
     Response res = await http.post(config.apiUrl + "api/Events",
         headers: {"Content-type": "application/json"},
-        body: jsonEncode(problemMap));
+        body: jsonEncode(jsonMap));
     return Event.fromJson(jsonDecode(res.body));
   }
 }

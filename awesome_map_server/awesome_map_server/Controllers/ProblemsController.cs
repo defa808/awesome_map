@@ -80,7 +80,7 @@ namespace awesome_map_server.Controllers {
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Problem>> PostProblem(ProblemViewModel problem) {
+        public async Task<ActionResult<ProblemViewModel>> PostProblem(ProblemViewModel problem) {
             Problem newProblem = _mapper.Map<Problem>(problem);
             newProblem.CreateDate = DateTime.Now;
 
