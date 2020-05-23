@@ -88,51 +88,17 @@ class _ProblemMapState extends State<ProblemMap> {
   Widget build(BuildContext context) {
     return Consumer<ProblemForm>(builder: (context, problemFormModel, _) {
       return Scaffold(
-         resizeToAvoidBottomInset: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: getFloatingButton(problemFormModel, context),
         body: Container(
           child: Stack(children: <Widget>[
             BaseMap(filter: MarkerType.Problem),
-            // Text(path, style: TextStyle(color: Colors.red)),
-            // IconButton(
-            //   icon: Icon(Icons.description),
-            //   onPressed: () {
-            //     try {
-            //       FileService.getFile("5F6422D1-BCD0-405D-1CF7-08D7FB72B7AC")
-            //           .then((value) => setState(() {
-            //                 // path = value.path;
-            //               }));
-            //     } catch (e) {
-            //       print(e.toString());
-            //     }
-            //   },
-            // ),
-            // FutureBuilder<Widget>(
-            //   future: getImage(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasData) {
-            //       return snapshot.data;
-            //     } else {
-            //       return Text('LOADING...');
-            //     }
-            //   },
-            // ),
-
-            // NetworkImage(
-            //     "http://192.168.0.110:5000/api/FileBodies/5F6422D1-BCD0-405D-1CF7-08D7FB72B7AC"),
-            // Consumer<ProblemMarkers>(
-            //   builder:
-            //       (BuildContext context, ProblemMarkers value, Widget child) {
-            //     return BaseMap(filter: MarkerType.Problem);
-            //   },
-            // ),
-            SlidingUpPanelContainer(
-              isShow: problemFormModel.readyToFill,
+             if(problemFormModel.readyToFill) CreateProblemItem(),
+            // SlidingUpPanelContainer(
+            //   isShow: problemFormModel.readyToFill,
               
-              renderChild: (sc) => CreateProblemItem(scrollController: sc),
-            ),
-
+            //   renderChild: (sc) => CreateProblemItem(scrollController: sc),
+            // ),
             if (isPrepareAdd)
               Center(
                 child: Container(
