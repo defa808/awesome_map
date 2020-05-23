@@ -36,6 +36,7 @@ Event _$EventFromJson(Map<String, dynamic> json) {
         : Duration(microseconds: json['duration'] as int),
     json['peopleCount'] as int,
     json['isClosed'] as bool,
+    json['subscribersCount'] as int,
     (json['files'] as List)
         ?.map((e) =>
             e == null ? null : ServerFile.fromJson(e as Map<String, dynamic>))
@@ -55,6 +56,7 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'createdDate': instance.createdDate?.toIso8601String(),
       'duration': instance.duration?.inMicroseconds,
       'peopleCount': instance.peopleCount,
-      'files': instance.files,
       'isClosed': instance.isClosed,
+      'subscribersCount': instance.subscribersCount,
+      'files': instance.files,
     };

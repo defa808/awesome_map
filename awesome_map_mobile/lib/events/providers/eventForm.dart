@@ -24,7 +24,7 @@ class EventForm with ChangeNotifier {
     try {
       this.event = await EventService.save(this.event);
       ServerFile fileInfo = ServerFile.empty();
-      fileInfo.problemId = this.event.id;
+      fileInfo.eventId = this.event.id;
       for (File item in files) {
         fileInfo = await FileService.save(fileInfo, item);
         this.event.files.add(fileInfo);
@@ -36,20 +36,6 @@ class EventForm with ChangeNotifier {
       print(e.message.toString());
     }
     return false;
-    // this.latitude = form.latitude;
-    // this.longitude = form.longitude;
-    // this.title = form.title;
-    // this.typeEventId = form.typeEventId;
-    // this.description = form.description;
-    // this.placeDescription = form.placeDescription;
-    // this.startDate = form.startDate;
-    // this.createdDate = form.createdDate;
-    // this.duration = form.duration;
-    // this.peopleCount = form.peopleCount;
-    // this.isClosed = form.isClosed;
-    // this.files = form.files;
-    this.notifyListeners();
-    // this = form.toJson();
   }
 
   addCategory(Category item) {

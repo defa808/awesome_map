@@ -40,18 +40,9 @@ class _ProblemMapState extends State<ProblemMap> {
     });
   }
 
-  static List<Marker> problems = <Marker>[
-    Marker(
-      position: LatLng(50.449601, 30.457368),
-      infoWindow: InfoWindow(title: 'Test Title'),
-      markerId: null,
-    )
-  ];
-  String path = "asdasd";
   @override
   void initState() {
     super.initState();
-    path = "asdasdR";
     setState(() {
       isPrepareAdd = false;
     });

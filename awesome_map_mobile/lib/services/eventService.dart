@@ -39,7 +39,9 @@ class EventService {
       Response res = await http.post(config.apiUrl + "api/Events",
           headers: {"Content-type": "application/json"},
           body: jsonEncode(jsonMap));
-      return Event.fromJson(jsonDecode(res.body));
+      if (res.statusCode == 200 || res.statusCode == 201)
+        return Event.fromJson(jsonDecode(res.body));
+      throw Exception(res.body.toString());
     } catch (e) {
       print(e.message.toString());
     }

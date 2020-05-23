@@ -21,7 +21,7 @@ namespace awesome_map_server.ViewModels {
         public string OwnerId { get; set; }
         public virtual ApplicationUser Owner { get; set; }
 
-        public virtual List<EventType> EventTypes { get; set; }
+        public virtual List<EventTypeViewModel> EventTypes { get; set; }
 
         public virtual List<EventUser> Subscribers { get; set; }
         public int SubscribersCount { get; set; }
@@ -31,7 +31,7 @@ namespace awesome_map_server.ViewModels {
 
 
         public EventViewModel() {
-            EventTypes = new List<EventType>();
+            EventTypes = new List<EventTypeViewModel>();
             Subscribers = new List<EventUser>();
             Comments = new List<Comment>();
             Files = new List<ServerFile>();

@@ -35,7 +35,7 @@ namespace awesome_map_server.Controllers {
             List<EventViewModel> listViewModels = new List<EventViewModel>();
             foreach (var item in events) {
                 EventViewModel viewModel = _mapper.Map<EventViewModel>(item);
-                viewModel.EventTypes = item.EventTypeEvents.Select(x => x.Type).AsQueryable().ToList();
+                viewModel.EventTypes = _mapper.ProjectTo<EventTypeViewModel>(item.EventTypeEvents.Select(x => x.Type).AsQueryable()).ToList();
                 viewModel.SubscribersCount = item.Subscribers.Count;
                 listViewModels.Add(viewModel);
             }
@@ -97,7 +97,7 @@ namespace awesome_map_server.Controllers {
             loadedEntity.EventTypes = @event.EventTypes;
             loadedEntity.SubscribersCount = newEntity.Subscribers.Count;
 
-            return CreatedAtAction("GetEvent", new { id = @event.Id }, @event);
+            return CreatedAtAction("GetEvent", new { id = @event.Id }, loadedEntity);
         }
 
         // DELETE: api/Events/5

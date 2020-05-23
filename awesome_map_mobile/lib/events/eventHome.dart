@@ -106,7 +106,7 @@ class _ProblemHomeState extends State<EventHome> {
                               scrollController: sc,
                             ),
                         isShow: selectedItemLast != null),
-                  // FilterContainer(child: EventFilter())
+                  FilterContainer(child: EventFilter())
                 ])
         ]);
       });

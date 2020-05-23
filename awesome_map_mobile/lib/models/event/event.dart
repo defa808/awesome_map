@@ -21,8 +21,9 @@ class Event {
   DateTime createdDate;
   Duration duration = new Duration(minutes: 10);
   int peopleCount;
-  List<ServerFile> files;
   bool isClosed;
+  int subscribersCount;
+  List<ServerFile> files;
   Event(
       this.id,
       this.latitude,
@@ -36,6 +37,7 @@ class Event {
       this.duration,
       this.peopleCount,
       this.isClosed,
+      this.subscribersCount,
       this.files);
 
   factory Event.empty() {
@@ -52,6 +54,7 @@ class Event {
         Duration(minutes: 10),
         0,
         false,
+        0,
         new List<ServerFile>());
   }
 
