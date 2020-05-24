@@ -93,7 +93,7 @@ class _ProblemHomeState extends State<ProblemHome> {
                         Problem problem = problemMarkers
                             .getProblemDetails(model.selectedMarker.value);
 
-                        return SlidingUpPanelContainer(
+                        return problem != null ? SlidingUpPanelContainer(
                             renderChild: (sc) => MapDetails(
                                   title: Header(
                                     text: problem?.title,
@@ -101,7 +101,7 @@ class _ProblemHomeState extends State<ProblemHome> {
                                   child: ProblemDetailsContent(problem),
                                   scrollController: sc,
                                 ),
-                            isShow: model.selectedMarker != null);
+                            isShow: model.selectedMarker != null) : Container();
                       }),
                   ],
                 ),

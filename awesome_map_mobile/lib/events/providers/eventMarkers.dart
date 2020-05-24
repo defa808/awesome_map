@@ -19,15 +19,16 @@ class EventMarkers with ChangeNotifier {
           marker: new Marker(
             markerId: MarkerId(item.id),
             position: LatLng(item.latitude, item.longitude),
-            infoWindow:
-                InfoWindow(title: item.title),
+            infoWindow: InfoWindow(title: item.title),
           ),
           type: MarkerType.Event);
     }).toList();
   }
 
   Event getEventDetails(String id) {
-    return events.where((element) => element.id == id)?.first;
+    List<Event> selectedEvents = events.where((element) => element.id == id).toList();
+    if (selectedEvents.length == 0) return null;
+    return selectedEvents.first;
   }
 
   void add(Event event) {

@@ -57,9 +57,6 @@ class GoogleMapModel extends ChangeNotifier {
           onTap: () {
             onMarkerTapped(markerId);
           },
-          onDragEnd: (LatLng position) {
-            _onMarkerDragEnd(markerId, position);
-          },
         ),
         type: data.type);
 
@@ -90,39 +87,22 @@ class GoogleMapModel extends ChangeNotifier {
           ),
         );
         markers[markerId].marker = newMarker;
-      } else
+      } else {
+        final Marker resetOld = markers[selectedMarker]
+            .marker
+            .copyWith(iconParam: getIconMarker(markers[selectedMarker].type));
+        markers[selectedMarker].marker = resetOld;
         selectedMarker = null;
+      }
     } else {
+      final Marker resetOld = markers[selectedMarker]
+          .marker
+          .copyWith(iconParam: getIconMarker(markers[selectedMarker].type));
+      markers[selectedMarker].marker = resetOld;
       selectedMarker = null;
     }
 
     notifyListeners();
-  }
-
-  void _onMarkerDragEnd(MarkerId markerId, LatLng newPosition) async {
-    final Marker tappedMarker = markers[markerId].marker;
-    if (tappedMarker != null) {
-      // await showDialog<void>(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return AlertDialog(
-      //           actions: <Widget>[
-      //             FlatButton(
-      //               child: const Text('OK'),
-      //               onPressed: () => Navigator.of(context).pop(),
-      //             )
-      //           ],
-      //           content: Padding(
-      //               padding: const EdgeInsets.symmetric(vertical: 66),
-      //               child: Column(
-      //                 mainAxisSize: MainAxisSize.min,
-      //                 children: <Widget>[
-      //                   Text('Old position: ${tappedMarker.position}'),
-      //                   Text('New position: $newPosition'),
-      //                 ],
-      //               )));
-      //     });
-    }
   }
 
   GoogleMapController getController() {

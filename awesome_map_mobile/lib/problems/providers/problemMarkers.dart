@@ -24,15 +24,17 @@ class ProblemMarkers with ChangeNotifier {
           marker: new Marker(
             markerId: MarkerId(item.id),
             position: LatLng(item.latitude, item.longitude),
-            infoWindow:
-                InfoWindow(title: item.title),
+            infoWindow: InfoWindow(title: item.title),
           ),
           type: MarkerType.Problem);
     }).toList();
   }
 
   Problem getProblemDetails(String id) {
-    return problems.where((element) => element.id == id)?.first;
+    List<Problem> selectedEntities =
+        problems.where((element) => element.id == id).toList();
+    if (selectedEntities.length == 0) return null;
+    return selectedEntities.first;
   }
 
   void add(Problem problem) {

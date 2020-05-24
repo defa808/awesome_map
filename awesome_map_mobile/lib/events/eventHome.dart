@@ -93,16 +93,20 @@ class _ProblemHomeState extends State<EventHome> {
                   Consumer<EventMarkers>(
                     builder: (BuildContext context, EventMarkers eventMarkers,
                         Widget child) {
-                      Event event = eventMarkers.getEventDetails(model.selectedMarker.value);
-                      return SlidingUpPanelContainer(
-                          renderChild: (sc) => MapDetails(
-                                title: Header(
-                                  text: event?.title,
-                                ),
-                                child: EventMapDetails(event),
-                                scrollController: sc,
-                              ),
-                          isShow: selectedItemLast != null);
+                      Event event = eventMarkers
+                          .getEventDetails(model.selectedMarker.value);
+
+                      return event != null
+                          ? SlidingUpPanelContainer(
+                              renderChild: (sc) => MapDetails(
+                                    title: Header(
+                                      text: event?.title,
+                                    ),
+                                    child: EventMapDetails(event),
+                                    scrollController: sc,
+                                  ),
+                              isShow: selectedItemLast != null)
+                          : Container();
                     },
                   ),
                 FilterContainer(child: EventFilter())
