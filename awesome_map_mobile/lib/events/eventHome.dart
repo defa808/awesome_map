@@ -2,6 +2,7 @@ import 'package:awesome_map_mobile/base/filterContainer.dart';
 import 'package:awesome_map_mobile/base/slidingUpPanelContainer.dart';
 import 'package:awesome_map_mobile/base/title.dart';
 import 'package:awesome_map_mobile/events/eventDetailsContent.dart';
+import 'package:awesome_map_mobile/events/providers/eventFilterModel.dart';
 import 'package:awesome_map_mobile/events/providers/eventMarkers.dart';
 import 'package:awesome_map_mobile/home/mapDetails.dart';
 import 'package:awesome_map_mobile/home/mapListButton.dart';
@@ -33,9 +34,17 @@ class _ProblemHomeState extends State<EventHome> {
   }
 
   void loadData() async {
-    await context.read<EventMarkers>().getEvents();
-    context.read<GoogleMapModel>().updateMarkers(
-        context.read<EventMarkers>().createMarkers(),
+    GoogleMapModel googleMapProvider = context.read<GoogleMapModel>();
+    EventMarkers eventMarkersProvider = context.read<EventMarkers>();
+    EventFilterModel filterProvider = context.read<EventFilterModel>();
+
+    await eventMarkersProvider.getEvents();
+      filterProvider.addListener(() {
+      eventMarkersProvider.updateFilter(filterProvider);
+      googleMapProvider.updateMarkers(eventMarkersProvider.createMarkers(),
+          markerType: MarkerType.Event);
+    });
+    googleMapProvider.updateMarkers(eventMarkersProvider.createMarkers(),
         markerType: MarkerType.Event);
   }
 
@@ -109,8 +118,9 @@ class _ProblemHomeState extends State<EventHome> {
                           : Container();
                     },
                   ),
+              ]),
                 FilterContainer(child: EventFilter())
-              ])
+
       ]);
     });
   }

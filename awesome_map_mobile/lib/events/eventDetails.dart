@@ -36,45 +36,51 @@ class _EventDetailsState extends State<EventDetails> {
                     snap: true,
                     expandedHeight: 200.0,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Hero(
-                        tag: 'event-details-' + event.id,
-                        child: Material(
-                          child: event.files[0].path != null
-                              ? Ink.image(
-                                  image: FileImage(File(event.files[0].path)),
-                                  fit: BoxFit.cover,
-                                  child: Container(),
-                                )
-                              : FutureBuilder<File>(
-                                  future: FileService.getFile(event.files[0]),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<dynamic> snapshot) {
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.none:
-                                      case ConnectionState.waiting:
-                                        return CircularProgressIndicator();
-                                      case ConnectionState.done:
-                                        return Ink.image(
-                                          image: snapshot.data != null ? FileImage(snapshot.data) : Container(),
-                                          fit: BoxFit.cover,
-                                          child: Container(),
-                                        );
-                                      default:
-                                        if (snapshot.hasError) {
-                                          return Text(
-                                            'Pick image error: ${snapshot.error}}',
-                                            textAlign: TextAlign.center,
-                                          );
-                                        } else {
-                                          return const Text(
-                                            'You have not yet picked an image.',
-                                            textAlign: TextAlign.center,
-                                          );
-                                        }
-                                    }
-                                  }),
-                        ),
-                      ),
+                      background: event.files.length > 0
+                          ? Hero(
+                              tag: 'event-details-' + event.id,
+                              child: Material(
+                                child: event.files[0].path != null
+                                    ? Ink.image(
+                                        image: FileImage(
+                                            File(event.files[0].path)),
+                                        fit: BoxFit.cover,
+                                        child: Container(),
+                                      )
+                                    : FutureBuilder<File>(
+                                        future:
+                                            FileService.getFile(event.files[0]),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<dynamic> snapshot) {
+                                          switch (snapshot.connectionState) {
+                                            case ConnectionState.none:
+                                            case ConnectionState.waiting:
+                                              return CircularProgressIndicator();
+                                            case ConnectionState.done:
+                                              return Ink.image(
+                                                image: snapshot.data != null
+                                                    ? FileImage(snapshot.data)
+                                                    : Container(),
+                                                fit: BoxFit.cover,
+                                                child: Container(),
+                                              );
+                                            default:
+                                              if (snapshot.hasError) {
+                                                return Text(
+                                                  'Pick image error: ${snapshot.error}}',
+                                                  textAlign: TextAlign.center,
+                                                );
+                                              } else {
+                                                return const Text(
+                                                  'You have not yet picked an image.',
+                                                  textAlign: TextAlign.center,
+                                                );
+                                              }
+                                          }
+                                        }),
+                              ),
+                            )
+                          : null,
                       title: Text(event.title),
                     )),
               ];

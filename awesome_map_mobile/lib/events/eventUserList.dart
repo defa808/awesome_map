@@ -10,7 +10,7 @@ class EventUserList extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> events = context
         .watch<EventMarkers>()
-        .events
+        .filteredEvents
         .map<Widget>((x) => SelectableEventItem(event: x))
         .toList();
 
