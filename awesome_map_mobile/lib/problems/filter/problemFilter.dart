@@ -1,9 +1,9 @@
-import 'package:awesome_map_mobile/base/categoryAutoComplete.dart';
+import 'package:awesome_map_mobile/base/chooseCategoryAutoComplete.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
 import 'package:awesome_map_mobile/models/problem/problemStatus.dart';
 import 'package:awesome_map_mobile/problems/providers/problemFilterModel.dart';
-import 'package:awesome_map_mobile/problems/providers/problemTypes.dart';
+import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
@@ -116,12 +116,11 @@ class ProblemFilter extends StatelessWidget {
                       ),
                       Row(
                         children: <Widget>[
-                          Flexible(child: Consumer<ProblemTypes>(builder:
-                              (BuildContext context, ProblemTypes store,
-                                  Widget child) {
-                            return CategoryAutoComplete(
-                                model: model, store: store);
-                          })),
+                          Flexible(child: ChooseCategoryAutoComplete(
+                                  addCategory: model.addCategory,
+                                  getStore: ProblemService.getCategories,
+                                  selectedCategories: model.selectedCategories,
+                                  color: Colors.white)),
                         ],
                       ),
                       SizedBox(

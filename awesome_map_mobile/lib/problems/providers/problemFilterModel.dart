@@ -30,7 +30,7 @@ class ProblemFilterModel extends FilterModel {
     int res = 0;
     if (this.title.isNotEmpty) res++;
     if (this.createDate != null) res++;
-    if (this.status != null) res++;
+    if (this.status != -1) res++;
     return res;
   }
 

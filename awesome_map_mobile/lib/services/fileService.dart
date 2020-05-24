@@ -54,7 +54,9 @@ class FileService {
       AppConfig config = await AppConfig.forEnvironment();
 
       Response response = await http.get(config.apiUrl + "api/FileBodies/$id");
-      return response.bodyBytes;
+      if (response.statusCode == 200 || response.statusCode == 201)
+        return response.bodyBytes;
+      throw Exception(response.body.toString());
     } catch (e) {
       print(e.toString());
     }
@@ -74,11 +76,13 @@ class FileService {
       AppConfig config = await AppConfig.forEnvironment();
 
       Response response = await http.get(config.apiUrl + "api/FileBodies/$id");
-      // var bodyString = String.fromCharCodes(response.bodyBytes);
-      Uint8List result = base64.decode(response.body);
-      // Uint8List resString = decode(response.bodyBytes);
-      // var t = AsciiEncoder().convert(response.body);
-      return await saveFileToTempDirectory(id, name, result);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Uint8List result = base64.decode(response.body);
+        // Uint8List resString = decode(response.bodyBytes);
+        // var t = AsciiEncoder().convert(response.body);
+        return await saveFileToTempDirectory(id, name, result);
+      }
+      throw Exception(response.body.toString());
 
       // _saveFileLocal(id, file);
       // return await getExistFile(id);

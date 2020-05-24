@@ -1,8 +1,8 @@
-import 'package:awesome_map_mobile/base/categoryAutoComplete.dart';
+import 'package:awesome_map_mobile/base/chooseCategoryAutoComplete.dart';
 import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
 import 'package:awesome_map_mobile/events/providers/eventFilterModel.dart';
-import 'package:awesome_map_mobile/events/providers/eventTypes.dart';
+import 'package:awesome_map_mobile/services/eventService.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -105,12 +105,12 @@ class EventFilter extends StatelessWidget {
                       ),
                       Row(
                         children: <Widget>[
-                          Flexible(child: Consumer<EventTypes>(builder:
-                              (BuildContext context, EventTypes store,
-                                  Widget child) {
-                            return CategoryAutoComplete(
-                                model: model, store: store);
-                          }))
+                          Flexible(
+                              child: ChooseCategoryAutoComplete(
+                                  addCategory: model.addCategory,
+                                  getStore: EventService.getCategories,
+                                  selectedCategories: model.selectedCategories,
+                                  color: Colors.white))
                         ],
                       ),
                       SizedBox(

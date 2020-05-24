@@ -16,9 +16,13 @@ class Categories with ChangeNotifier {
     AppConfig config = await AppConfig.forEnvironment();
     Response res = await http.get(config.apiUrl + requestApiUrl,
         headers: {"Content-type": "application/json"});
-    List<dynamic> categoriesJson = json.decode(res.body);
-    this.categories =
-        categoriesJson.map<Category>((x) => Category.fromJson(x)).toList();
-    this.notifyListeners();
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      List<dynamic> categoriesJson = json.decode(res.body);
+      this.categories =
+          categoriesJson.map<Category>((x) => Category.fromJson(x)).toList();
+      this.notifyListeners();
+      return;
+    }
+    throw Exception(res.body.toString());
   }
 }

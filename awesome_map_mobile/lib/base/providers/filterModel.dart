@@ -29,6 +29,7 @@ abstract class FilterModel extends ChangeNotifier {
     filtersCount = 0;
     filtersCount = checkChangedCounter();
     filtersCount += this.selectedCategories.length;
+    notifyListeners();
   }
 
   void resetAllFields();

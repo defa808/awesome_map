@@ -4,15 +4,17 @@ import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:flutter/material.dart';
 
 class ChooseCategoryAutoComplete extends StatefulWidget {
-  const ChooseCategoryAutoComplete({
-    Key key,
-    this.getStore,
-    this.selectedCategories,
-    this.addCategory,
-  }) : super(key: key);
+  const ChooseCategoryAutoComplete(
+      {Key key,
+      this.getStore,
+      this.selectedCategories,
+      this.addCategory,
+      this.color})
+      : super(key: key);
   final List<Category> selectedCategories;
   final Future<List<Category>> Function() getStore;
   final void Function(Category) addCategory;
+  final Color color;
 
   @override
   _ChooseCategoryAutoCompleteState createState() =>
@@ -22,7 +24,6 @@ class ChooseCategoryAutoComplete extends StatefulWidget {
 class _ChooseCategoryAutoCompleteState
     extends State<ChooseCategoryAutoComplete> {
   Future<List<Category>> storeInFuture;
-
   @override
   void initState() {
     super.initState();
@@ -36,14 +37,14 @@ class _ChooseCategoryAutoCompleteState
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Category>>(
-        future: storeInFuture,
+        future: widget.getStore(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               return Text("Connection lost");
             case ConnectionState.active:
             case ConnectionState.waiting:
-              return LinearProgressIndicator();
+              return LinearProgressIndicator(backgroundColor: widget.color, );
             case ConnectionState.done:
               {
                 if (snapshot.hasError)
@@ -62,14 +63,21 @@ class _ChooseCategoryAutoCompleteState
                 else
                   return AutoCompleteTextField<Category>(
                     clearOnSubmit: true,
+                    style: TextStyle(color: widget.color),
                     controller: TextEditingController(text: ""),
-                    decoration: InputDecoration(labelText: "Категорії"),
-                    suggestions: snapshot.data != null
-                        ? snapshot.data
-                            .where((item) => widget.selectedCategories
-                                .every((item2) => item2.id != item.id))
-                            .toList()
-                        : List(),
+
+                    decoration: InputDecoration(
+                        labelText: "Категорії",
+                        fillColor: widget.color,
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: widget.color)),
+                        hintStyle: TextStyle(color: widget.color),
+                        labelStyle: TextStyle(color: widget.color)),
+
+                    suggestions: snapshot.data
+                        .where((item) => widget.selectedCategories
+                            .every((item2) => item2.id != item.id))
+                        .toList(),
                     itemBuilder: (BuildContext context, Category suggestion) =>
                         ListTile(
                       leading: suggestion.icon != null

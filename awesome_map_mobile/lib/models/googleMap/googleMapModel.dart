@@ -88,17 +88,21 @@ class GoogleMapModel extends ChangeNotifier {
         );
         markers[markerId].marker = newMarker;
       } else {
+        if (markers.containsKey(selectedMarker)) {
+          final Marker resetOld = markers[selectedMarker]
+              .marker
+              .copyWith(iconParam: getIconMarker(markers[selectedMarker].type));
+          markers[selectedMarker].marker = resetOld;
+        }
+        selectedMarker = null;
+      }
+    } else {
+      if (markers.containsKey(selectedMarker)) {
         final Marker resetOld = markers[selectedMarker]
             .marker
             .copyWith(iconParam: getIconMarker(markers[selectedMarker].type));
         markers[selectedMarker].marker = resetOld;
-        selectedMarker = null;
       }
-    } else {
-      final Marker resetOld = markers[selectedMarker]
-          .marker
-          .copyWith(iconParam: getIconMarker(markers[selectedMarker].type));
-      markers[selectedMarker].marker = resetOld;
       selectedMarker = null;
     }
 
