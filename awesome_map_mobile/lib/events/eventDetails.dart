@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:awesome_map_mobile/comments/commentsList.dart';
 import 'package:awesome_map_mobile/comments/commentsMain.dart';
 import 'package:awesome_map_mobile/models/event/event.dart';
+import 'package:awesome_map_mobile/services/fileService.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +24,8 @@ class _EventDetailsState extends State<EventDetails> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          resizeToAvoidBottomPadding: true,
+          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: false,
           body: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
@@ -35,14 +39,43 @@ class _EventDetailsState extends State<EventDetails> {
                       background: Hero(
                         tag: 'event-details-' + event.id,
                         child: Material(
-                          child: Ink.image(
-                            image: AssetImage('images/gitar.jpg'),
-                            fit: BoxFit.cover,
-                            child: Container(),
-                          ),
+                          child: event.files[0].path != null
+                              ? Ink.image(
+                                  image: FileImage(File(event.files[0].path)),
+                                  fit: BoxFit.cover,
+                                  child: Container(),
+                                )
+                              : FutureBuilder<File>(
+                                  future: FileService.getFile(event.files[0]),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<dynamic> snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.none:
+                                      case ConnectionState.waiting:
+                                        return CircularProgressIndicator();
+                                      case ConnectionState.done:
+                                        return Ink.image(
+                                          image: snapshot.data != null ? FileImage(snapshot.data) : Container(),
+                                          fit: BoxFit.cover,
+                                          child: Container(),
+                                        );
+                                      default:
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                            'Pick image error: ${snapshot.error}}',
+                                            textAlign: TextAlign.center,
+                                          );
+                                        } else {
+                                          return const Text(
+                                            'You have not yet picked an image.',
+                                            textAlign: TextAlign.center,
+                                          );
+                                        }
+                                    }
+                                  }),
                         ),
                       ),
-                      title: Text("Гітарний вечір"),
+                      title: Text(event.title),
                     )),
               ];
             },

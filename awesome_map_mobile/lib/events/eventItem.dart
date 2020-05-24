@@ -2,12 +2,14 @@ import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 
-import 'eventContent.dart';
+import 'eventItemContent.dart';
+
 
 class SelectableEventItem extends StatefulWidget {
-  SelectableEventItem({Key key, @required this.event}) : super(key: key);
+  SelectableEventItem({Key key, @required this.event, this.isSelectable = true})
+      : super(key: key);
   final Event event;
-
+  final bool isSelectable;
   @override
   _SelectableEventItemState createState() => _SelectableEventItemState();
 }
@@ -21,10 +23,10 @@ class _SelectableEventItemState extends State<SelectableEventItem> {
     return Card(
       child: InkWell(
         onLongPress: () {
-          print('Selectable card state changed');
-          setState(() {
-            _isSelected = !_isSelected;
-          });
+          if (this.widget.isSelectable)
+            setState(() {
+              _isSelected = !_isSelected;
+            });
         },
         onTap: () {
           Navigator.pushNamed(context, '/event', arguments: widget.event);
@@ -37,7 +39,7 @@ class _SelectableEventItemState extends State<SelectableEventItem> {
                 color: _isSelected
                     ? colorScheme.primary.withOpacity(0.08)
                     : Colors.transparent),
-            EventContent(event: widget.event),
+            EventItemContent(event: widget.event),
             Align(
               alignment: Alignment.topRight,
               child: Padding(

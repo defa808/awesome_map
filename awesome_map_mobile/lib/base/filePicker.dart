@@ -71,7 +71,7 @@ class _FilePickerState extends State<FilePicker> {
               height: 100,
             ),
             SizedBox(
-              width: 5,
+              height: 5,
             ),
             Row(
               mainAxisSize: MainAxisSize.min,

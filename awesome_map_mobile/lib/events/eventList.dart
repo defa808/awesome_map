@@ -17,7 +17,10 @@ class _EventList extends State<EventList> {
     List<Widget> events = context
         .watch<EventMarkers>()
         .events
-        .map<Widget>((x) => SelectableEventItem(event: x))
+        .map<Widget>((x) => SelectableEventItem(
+              event: x,
+              isSelectable: false,
+            ))
         .toList();
 
     return Padding(

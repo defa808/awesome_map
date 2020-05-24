@@ -16,7 +16,7 @@ ServerFile _$ServerFileFromJson(Map<String, dynamic> json) {
         : FileBody.fromJson(json['fileBody'] as Map<String, dynamic>),
     json['problemId'] as String,
     json['eventId'] as String,
-  );
+  )..path = json['path'] as String;
 }
 
 Map<String, dynamic> _$ServerFileToJson(ServerFile instance) =>
@@ -27,4 +27,5 @@ Map<String, dynamic> _$ServerFileToJson(ServerFile instance) =>
       'fileBody': instance.fileBody,
       'problemId': instance.problemId,
       'eventId': instance.eventId,
+      'path': instance.path,
     };

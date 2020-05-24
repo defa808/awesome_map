@@ -40,8 +40,10 @@ class FileService {
     return null;
   }
 
-  static Future<File> getFile(String id, String name) async {
-    return await loadFile(id, name);
+  static Future<File> getFile(ServerFile serverFile) async {
+    File file = await loadFile(serverFile.id, serverFile.name);
+    if (file != null) serverFile.path = file.path;
+    return file;
     // File file = await getExistFile(id);
     // if (file == null) file = await loadFile(id);
     // return file;
@@ -76,7 +78,8 @@ class FileService {
       Uint8List result = base64.decode(response.body);
       // Uint8List resString = decode(response.bodyBytes);
       // var t = AsciiEncoder().convert(response.body);
-      return saveFileToTempDirectory(id, name, result);
+      return await saveFileToTempDirectory(id, name, result);
+
       // _saveFileLocal(id, file);
       // return await getExistFile(id);
     } catch (e) {

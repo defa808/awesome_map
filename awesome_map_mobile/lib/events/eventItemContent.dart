@@ -1,0 +1,126 @@
+import 'dart:io';
+
+import 'package:awesome_map_mobile/models/event/event.dart';
+import 'package:awesome_map_mobile/services/fileService.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+class EventItemContent extends StatefulWidget {
+  EventItemContent({Key key, this.event}) : super(key: key);
+  @override
+  _EventItemContentState createState() => _EventItemContentState();
+  final Event event;
+}
+
+class _EventItemContentState extends State<EventItemContent> {
+  @override
+  Widget build(BuildContext context) {
+    String id = widget.event.id;
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (widget.event.files.length > 0)
+            FutureBuilder<File>(
+                future: FileService.getFile(widget.event.files[0]),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return CircularProgressIndicator();
+                    case ConnectionState.done:
+                      return SizedBox(
+                        height: 180,
+                        child: Stack(
+                          children: <Widget>[
+                            Positioned.fill(
+                              child: Hero(
+                                tag: 'event-details-$id',
+                                child: Material(
+                                  child: Ink.image(
+                                    image: FileImage(snapshot.data),
+                                    fit: BoxFit.cover,
+                                    child: Container(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+
+                    default:
+                      if (snapshot.hasError) {
+                        return Text(
+                          'Pick image error: ${snapshot.error}}',
+                          textAlign: TextAlign.center,
+                        );
+                      } else {
+                        return const Text(
+                          'You have not yet picked an image.',
+                          textAlign: TextAlign.center,
+                        );
+                      }
+                  }
+                }),
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              widget.event.title,
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 25),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Icon(Icons.location_on),
+                        Text("Бібліотека НТУУ 'КПІ'")
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          DateFormat.yMd()
+                              .format(widget.event.startDate)
+                              .toString(),
+                          style: TextStyle(color: Colors.black, fontSize: 13),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          DateFormat.Hm()
+                              .format(widget.event.startDate)
+                              .toString(),
+                          style: TextStyle(color: Colors.black, fontSize: 13),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

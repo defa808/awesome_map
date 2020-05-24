@@ -25,7 +25,7 @@ class _FileItemThumbnailState extends State<FileItemThumbnail> {
   }
 
   Future<File> executeFile() async {
-    return await FileService.getFile(widget.file.id, widget.file.name);
+    return await FileService.getFile(widget.file);
   }
 
   @override
@@ -49,10 +49,12 @@ class _FileItemThumbnailState extends State<FileItemThumbnail> {
                 return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: GestureDetector(
-                        onTap: () {
-                          widget.onTap(snapshot.data.parent.parent.path);
-                        },
-                        child: Image.file(snapshot.data, height: 100.0)));
+                        onTap: () =>
+                          snapshot.data != null ?
+                          widget.onTap(snapshot.data.parent.parent.path) : null,
+                        child: 
+                        snapshot.data != null ?
+                        Image.file(snapshot.data, height: 100.0):Image.asset("images/noavatar.png")));
               }
           }
         },

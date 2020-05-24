@@ -10,6 +10,7 @@ class ServerFile {
   FileBody fileBody;
   String problemId;
   String eventId;
+  String path;
 
   ServerFile(this.id, this.name, this.size, this.fileBody, this.problemId, this.eventId);
 

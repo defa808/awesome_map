@@ -102,7 +102,7 @@ class _ProblemHomeState extends State<EventHome> {
                                     title: Header(
                                       text: event?.title,
                                     ),
-                                    child: EventMapDetails(event),
+                                    child: EventDetailsContent(event),
                                     scrollController: sc,
                                   ),
                               isShow: selectedItemLast != null)
