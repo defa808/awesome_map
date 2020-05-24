@@ -3,6 +3,7 @@ import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ProblemItem extends StatefulWidget {
@@ -16,7 +17,6 @@ class _ProblemItemState extends State<ProblemItem> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    String id = widget.problem.id;
 
     return Card(
       child: Padding(
@@ -26,13 +26,14 @@ class _ProblemItemState extends State<ProblemItem> {
             ListTileTheme(
               contentPadding: EdgeInsets.all(0),
               child: ExpansionTile(
-                key: Key(id),
+                key: Key(widget.problem.id),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Flexible(
-                      child: Text(widget.problem.title,
+                      child: Text(
+                        widget.problem.title,
                         maxLines: 3,
                         style: TextStyle(fontSize: 20),
                       ),
@@ -55,7 +56,8 @@ class _ProblemItemState extends State<ProblemItem> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(widget.problem.subscribersCount.toString(), style: TextStyle(fontSize: 18)),
+                      Text(widget.problem.subscribersCount.toString(),
+                          style: TextStyle(fontSize: 18)),
                       Text("Слідкують"),
                     ],
                   ),
@@ -69,7 +71,8 @@ class _ProblemItemState extends State<ProblemItem> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("5", style: TextStyle(fontSize: 18)),
+                      Text(widget.problem.files.length.toString(),
+                          style: TextStyle(fontSize: 18)),
                       Text("Світлин"),
                     ],
                   ),
@@ -86,7 +89,9 @@ class _ProblemItemState extends State<ProblemItem> {
                       color: CustomTheme.of(context).accentColor,
                       textColor: CustomTheme.of(context).bottomAppBarColor,
                       onPressed: () {
-                       context.read<GoogleMapModel>().selectItem(MarkerId("marker_id_1"));
+                        context
+                            .read<GoogleMapModel>()
+                            .selectItem(MarkerId(widget.problem.id));
                       },
                       child: Text("На карті"),
                     ),
@@ -104,11 +109,15 @@ class _ProblemItemState extends State<ProblemItem> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Text(
-                          "12.10.19",
+                          DateFormat.yMd()
+                              .format(widget.problem.createDate)
+                              .toString(),
                           style: TextStyle(fontSize: 13),
                         ),
                         Text(
-                          "12:10",
+                            DateFormat.Hm()
+                                  .format(widget.problem.createDate)
+                                  .toString(),
                           style: TextStyle(fontSize: 13),
                         )
                       ],
