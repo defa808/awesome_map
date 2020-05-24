@@ -10,6 +10,7 @@ import 'package:awesome_map_mobile/problems/filter/problemFilter.dart';
 import 'package:awesome_map_mobile/problems/problemDetailsContent.dart';
 import 'package:awesome_map_mobile/problems/problemList.dart';
 import 'package:awesome_map_mobile/problems/problemMap.dart';
+import 'package:awesome_map_mobile/problems/providers/problemFilterModel.dart';
 import 'package:awesome_map_mobile/problems/providers/problemMarkers.dart';
 import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:flutter/material.dart';
@@ -93,15 +94,17 @@ class _ProblemHomeState extends State<ProblemHome> {
                         Problem problem = problemMarkers
                             .getProblemDetails(model.selectedMarker.value);
 
-                        return problem != null ? SlidingUpPanelContainer(
-                            renderChild: (sc) => MapDetails(
-                                  title: Header(
-                                    text: problem?.title,
-                                  ),
-                                  child: ProblemDetailsContent(problem),
-                                  scrollController: sc,
-                                ),
-                            isShow: model.selectedMarker != null) : Container();
+                        return problem != null
+                            ? SlidingUpPanelContainer(
+                                renderChild: (sc) => MapDetails(
+                                      title: Header(
+                                        text: problem?.title,
+                                      ),
+                                      child: ProblemDetailsContent(problem),
+                                      scrollController: sc,
+                                    ),
+                                isShow: model.selectedMarker != null)
+                            : Container();
                       }),
                   ],
                 ),
@@ -112,9 +115,16 @@ class _ProblemHomeState extends State<ProblemHome> {
   }
 
   void loadData() async {
-    await context.read<ProblemMarkers>().getProblems();
-    context.read<GoogleMapModel>().updateMarkers(
-        context.read<ProblemMarkers>().createMarkers(),
+    ProblemMarkers problemMarkersProvider = context.read<ProblemMarkers>();
+    GoogleMapModel googleMapProvider = context.read<GoogleMapModel>();
+    ProblemFilterModel filterProvider = context.read<ProblemFilterModel>();
+    await problemMarkersProvider.getProblems();
+    filterProvider.addListener(() {
+      problemMarkersProvider.updateFilter(filterProvider);
+      googleMapProvider.updateMarkers(problemMarkersProvider.createMarkers(),
+          markerType: MarkerType.Problem);
+    });
+    googleMapProvider.updateMarkers(problemMarkersProvider.createMarkers(),
         markerType: MarkerType.Problem);
   }
 }

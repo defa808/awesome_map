@@ -16,7 +16,7 @@ class _ProblemListState extends State<ProblemList> {
   Widget build(BuildContext context) {
     List<Widget> problems = context
         .watch<ProblemMarkers>()
-        .problems
+        .filteredProblems
         .map<Widget>((x) => ProblemItem(problem: x))
         .toList();
 

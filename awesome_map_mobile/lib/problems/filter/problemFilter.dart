@@ -59,7 +59,7 @@ class ProblemFilter extends StatelessWidget {
                           Flexible(
                             child: DatePicker(
                               labelText: "Дата створення",
-                              initDate: model.startDate,
+                              initDate: model.createDate,
                               endDate: DateTime(2100),
                               onChange: (value) {
                                 model.setStartDate(value);
@@ -71,31 +71,46 @@ class ProblemFilter extends StatelessWidget {
                             width: 8,
                           ),
                           Flexible(
-                            child: DropdownButtonFormField<ProblemStatus>(
-                                iconEnabledColor: mainColor,
-                                decoration: InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: mainColor)),
-                                  hintStyle: TextStyle(color: mainColor),
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: mainColor)),
+                            child: Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 28,
                                 ),
-                                hint: Text("Статус",
-                                    style: TextStyle(color: mainColor)),
-                                value: model.status,
-                                style: TextStyle(color: mainColor),
-                                onChanged: (ProblemStatus newValue) {
-                                  model.setStatus(newValue);
-                                },
-                                items: ProblemStatus.values
-                                    .map((ProblemStatus classType) {
-                                  return DropdownMenuItem<ProblemStatus>(
-                                      value: classType,
-                                      child: Text(
-                                        EnumToString.parseCamelCase(classType),
-                                        style: TextStyle(color: Colors.black),
-                                      ));
-                                }).toList()),
+                                DropdownButton<ProblemStatus>(
+                                    isExpanded: true,
+                                    underline: Container(height:1.0,color:mainColor),
+                                    iconEnabledColor: mainColor,
+                                    selectedItemBuilder:
+                                        (BuildContext context) {
+                                      return ProblemStatus.values
+                                          .map<Widget>((ProblemStatus item) {
+                                        return Text(
+                                          EnumToString.parseCamelCase(item),
+                                        );
+                                      }).toList();
+                                    },
+                                    hint: Text("Статус",
+                                        style: TextStyle(color: mainColor)),
+                                    style: TextStyle(color: mainColor),
+                                    onChanged: (ProblemStatus newValue) {
+                                      model.setStatus(newValue);
+                                    },
+                                    value: model.status >= 0
+                                        ? ProblemStatus.values[model.status]
+                                        : null,
+                                    items: ProblemStatus.values
+                                        .map((ProblemStatus classType) {
+                                      return DropdownMenuItem<ProblemStatus>(
+                                          value: classType,
+                                          child: Text(
+                                            EnumToString.parseCamelCase(
+                                                classType),
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ));
+                                    }).toList()),
+                              ],
+                            ),
                           ),
                         ],
                       ),
