@@ -66,14 +66,14 @@ class EventMapDetails extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              DateFormat.yMEd()
+                              DateFormat.yMd()
                                   .format(event.startDate)
                                   .toString(),
                               style: TextStyle(color: Colors.lightBlue),
                             ),
                             SizedBox(height: 2),
                             Text(
-                              DateFormat.Hms()
+                              DateFormat.Hm()
                                   .format(event.startDate)
                                   .toString(),
                               style: TextStyle(color: Colors.lightBlue),

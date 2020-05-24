@@ -45,7 +45,7 @@ class GoogleMapModel extends ChangeNotifier {
     return selectedMarker;
   }
 
-  void add(AwesomeMarker data) {
+  void add(AwesomeMarker data, {bool lazyLoading = false}) {
     final MarkerId markerId = data.marker.markerId;
     final awesomeMarker = AwesomeMarker(
         marker: Marker(
@@ -64,7 +64,7 @@ class GoogleMapModel extends ChangeNotifier {
         type: data.type);
 
     markers[markerId] = awesomeMarker;
-    notifyListeners();
+    if (!lazyLoading) notifyListeners();
   }
 
   getIconMarker(MarkerType type) {
@@ -75,7 +75,7 @@ class GoogleMapModel extends ChangeNotifier {
 
   void onMarkerTapped(MarkerId markerId) {
     final Marker tappedMarker = markers[markerId]?.marker;
-    if (tappedMarker != null ) {
+    if (tappedMarker != null) {
       if (markers.containsKey(selectedMarker)) {
         final Marker resetOld = markers[selectedMarker]
             .marker
@@ -168,7 +168,8 @@ class GoogleMapModel extends ChangeNotifier {
       markers.clear();
 
     createMarkers.forEach((item) {
-      add(item);
+      add(item, lazyLoading: true);
     });
+    notifyListeners();
   }
 }

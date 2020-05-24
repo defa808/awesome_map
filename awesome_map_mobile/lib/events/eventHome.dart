@@ -33,7 +33,10 @@ class _ProblemHomeState extends State<EventHome> {
   }
 
   void loadData() async {
-    context.read<EventMarkers>().getEvents();
+    await context.read<EventMarkers>().getEvents();
+    context.read<GoogleMapModel>().updateMarkers(
+        context.read<EventMarkers>().createMarkers(),
+        markerType: MarkerType.Event);
   }
 
   void showMap() {
@@ -52,64 +55,59 @@ class _ProblemHomeState extends State<EventHome> {
     // });
     return Consumer<GoogleMapModel>(
         builder: (BuildContext context, GoogleMapModel model, Widget child) {
-      return Consumer<EventMarkers>(builder:
-          (BuildContext context, EventMarkers eventMarkers, Widget child) {
-        context.watch<GoogleMapModel>().updateMarkers(
-            eventMarkers.createMarkers(),
-            markerType: MarkerType.Event);
+      MarkerId selectedItem = model.selectedMarker;
+      if (selectedItemLast != selectedItem) isShowList = false;
+      selectedItemLast = selectedItem;
 
-        MarkerId selectedItem = model.selectedMarker;
-        if (selectedItemLast != selectedItem) isShowList = false;
-        selectedItemLast = selectedItem;
+      mapListButton = MapListButton(
+        initialValue: isShowList ? 1 : 0,
+        onListChange: () => setState(
+          () {
+            isShowList = true;
+          },
+        ),
+        onMapChange: () => setState(() {
+          isShowList = false;
+        }),
+      );
 
-        mapListButton = MapListButton(
-          initialValue: isShowList ? 1 : 0,
-          onListChange: () => setState(
-            () {
-              isShowList = true;
-            },
-          ),
-          onMapChange: () => setState(() {
-            isShowList = false;
-          }),
-        );
-
-        Event event;
-        if (selectedItemLast != null)
-          event = eventMarkers.getEventDetails(selectedItemLast.value);
-
-        return Stack(children: <Widget>[
-          isShowList
-              ? Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: mapListButton,
-                    ),
-                    Divider(),
-                    Expanded(child: EventList()),
-                  ],
-                )
-              : Stack(children: <Widget>[
-                  EventMap(),
+      return Stack(children: <Widget>[
+        isShowList
+            ? Column(
+                children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: mapListButton,
                   ),
-                  if (selectedItemLast != null)
-                    SlidingUpPanelContainer(
-                        renderChild: (sc) => MapDetails(
-                              title: Header(
-                                text: event?.title,
+                  Divider(),
+                  Expanded(child: EventList()),
+                ],
+              )
+            : Stack(children: <Widget>[
+                EventMap(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: mapListButton,
+                ),
+                if (model.selectedMarker != null)
+                  Consumer<EventMarkers>(
+                    builder: (BuildContext context, EventMarkers eventMarkers,
+                        Widget child) {
+                      Event event = eventMarkers.getEventDetails(model.selectedMarker.value);
+                      return SlidingUpPanelContainer(
+                          renderChild: (sc) => MapDetails(
+                                title: Header(
+                                  text: event?.title,
+                                ),
+                                child: EventMapDetails(event),
+                                scrollController: sc,
                               ),
-                              child: EventMapDetails(event),
-                              scrollController: sc,
-                            ),
-                        isShow: selectedItemLast != null),
-                  FilterContainer(child: EventFilter())
-                ])
-        ]);
-      });
+                          isShow: selectedItemLast != null);
+                    },
+                  ),
+                FilterContainer(child: EventFilter())
+              ])
+      ]);
     });
   }
 }
