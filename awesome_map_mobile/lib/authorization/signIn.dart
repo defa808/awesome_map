@@ -1,4 +1,11 @@
+import 'dart:convert';
+import 'package:awesome_map_mobile/env/config.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import 'authorizationProvider.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key key}) : super(key: key);
@@ -8,6 +15,54 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  String _contactText;
+  @override
+  void initState() {
+    super.initState();
+
+    googleInitAuth();
+
+    // _googleSignIn.signInSilently();
+  }
+
+  void googleInitAuth() async {
+    context.read<AuthorizationProvider>().googleInitAuth();
+  }
+
+  // Widget _buildBody() {
+  //   if (_currentUser != null) {
+  //     return Column(
+  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //       children: <Widget>[
+  //         ListTile(
+  //           leading: GoogleUserCircleAvatar(
+  //             identity: _currentUser,
+  //           ),
+  //           title: Text(_currentUser.displayName ?? ''),
+  //           subtitle: Text(_currentUser.email ?? ''),
+  //         ),
+  //         const Text("Signed in successfully."),
+  //         Text(_contactText ?? ''),
+  //         RaisedButton(
+  //           child: const Text('SIGN OUT'),
+  //           onPressed: _handleSignOut,
+  //         ),
+  //       ],
+  //     );
+  //   } else {
+  //     return Column(
+  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //       children: <Widget>[
+  //         const Text("You are not currently signed in."),
+  //         RaisedButton(
+  //           child: const Text('SIGN IN'),
+  //           onPressed: _handleSignIn,
+  //         ),
+  //       ],
+  //     );
+  //   }
+  // }
+
   bool _keyboardIsVisible() {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
   }
@@ -33,94 +88,102 @@ class _SignInState extends State<SignIn> {
               centerTitle: true,
             ),
           ),
-          body: SingleChildScrollView(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Container(
-                height: _keyboardIsVisible() ? 0 : 150,
-                color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("AMKPI",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline
-                            .copyWith(fontSize: 60, color:Colors.white, fontFamily: "Adventure")),
-                    SizedBox(height: 60)
-                  ],
+          body: Consumer<AuthorizationProvider>(builder: (BuildContext context,
+              AuthorizationProvider authorizationProvider, Widget child) {
+            return SingleChildScrollView(
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Container(
+                  height: _keyboardIsVisible() ? 0 : 150,
+                  color: Colors.blue,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("AMKPI",
+                          style: Theme.of(context).textTheme.headline.copyWith(
+                              fontSize: 60,
+                              color: Colors.white,
+                              fontFamily: "Adventure")),
+                      SizedBox(height: 60)
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          "Вхід",
-                          style: Theme.of(context)
-                              .textTheme
-                              .body1
-                              .copyWith(color: Colors.blue,fontFamily: 'Lato',  fontSize: 40),
-                        ),
-                        SizedBox(height: 10),
-                        TextField(
-                          decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              labelText: "Ел. пошта",
-                              hintText: "Ел. пошта"),
-                        ),
-                        TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              labelText: "Пароль",
-                              hintText: "Пароль"),
-                        ),
-                        SizedBox(height: 20),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              side: BorderSide(color: Colors.blue)),
-                          minWidth: double.infinity,
-                          height: 45,
-                          child: Text('Вхід'),
-                          textColor: Colors.blue,
-                          onPressed: () async {
-                            final result =
-                                await Navigator.pushNamedAndRemoveUntil(
-                                    context, '/home', (_) => false);
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        MaterialButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              side: BorderSide(color: Colors.blue)),
-                          minWidth: double.infinity,
-                          color: Colors.blue,
-                          height: 45,
-                          child: Text('Gmail'),
-                          textColor: Colors.white,
-                          onPressed: () {},
-                        )
-                      ],
-                    )
-                  ],
+                Container(
+                  padding: EdgeInsets.all(25),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            "Вхід",
+                            style: Theme.of(context).textTheme.body1.copyWith(
+                                color: Colors.blue,
+                                fontFamily: 'Lato',
+                                fontSize: 40),
+                          ),
+                          SizedBox(height: 10),
+                          TextField(
+                            decoration: InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: "Ел. пошта",
+                                hintText: "Ел. пошта"),
+                          ),
+                          TextField(
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: "Пароль",
+                                hintText: "Пароль"),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                side: BorderSide(color: Colors.blue)),
+                            minWidth: double.infinity,
+                            height: 45,
+                            child: Text('Вхід'),
+                            textColor: Colors.blue,
+                            onPressed: () async {
+                              final result =
+                                  await Navigator.pushNamedAndRemoveUntil(
+                                      context, '/home', (_) => false);
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  side: BorderSide(color: Colors.blue)),
+                              minWidth: double.infinity,
+                              color: Colors.blue,
+                              height: 45,
+                              child: Text('Gmail'),
+                              textColor: Colors.white,
+                              onPressed: () async {
+                                bool res =
+                                    await authorizationProvider.handleSignIn();
+                                if (res)
+                                  await Navigator.pushNamedAndRemoveUntil(
+                                      context, '/home', (_) => false);
+                              }),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ]),
-          ),
+              ]),
+            );
+          }),
         ),
         tag: "SignIn");
   }

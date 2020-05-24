@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/authorization/authorizationProvider.dart';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
@@ -43,6 +44,7 @@ void main() {
       ChangeNotifierProvider<EventTypes>(create: (context) => EventTypes()),
       ChangeNotifierProvider<ProblemMarkers>(create: (context) => ProblemMarkers()),
       ChangeNotifierProvider<EventMarkers>(create: (context) => EventMarkers()),
+      ChangeNotifierProvider<AuthorizationProvider>(create: (context) => AuthorizationProvider()),
       // ProxyProvider<GoogleMapModel, ProblemMarkers>(
       //   update: (context, googleMapModel, problemMarkersModel) =>
       //       ProblemMarkers(googleMapModel: googleMapModel),

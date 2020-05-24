@@ -1,14 +1,13 @@
-
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
 class AppConfig {
   final String apiUrl;
+  final String clientId;
+  AppConfig({this.apiUrl, this.clientId});
 
-  AppConfig({this.apiUrl});
-
- static Future<AppConfig> forEnvironment() async {
+  static Future<AppConfig> forEnvironment() async {
     // set default to dev if nothing was passed
     String env = 'dev';
 
@@ -21,7 +20,6 @@ class AppConfig {
     final json = jsonDecode(contents);
 
     // convert our JSON into an instance of our AppConfig class
-    return AppConfig(apiUrl: json['apiUrl']);
+    return AppConfig(apiUrl: json['apiUrl'], clientId: json['clientId']);
   }
-
 }
