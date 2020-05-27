@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'userLight.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-User _$UserFromJson(Map<String, dynamic> json) {
+UserLight _$UserLightFromJson(Map<String, dynamic> json) {
   $checkKeys(json, requiredKeys: const ['id']);
-  return User(
+  return UserLight(
     json['id'] as String,
     json['email'] as String,
     json['userName'] as String,
@@ -18,7 +18,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+Map<String, dynamic> _$UserLightToJson(UserLight instance) => <String, dynamic>{
       'id': instance.id,
       'userName': instance.userName,
       'email': instance.email,

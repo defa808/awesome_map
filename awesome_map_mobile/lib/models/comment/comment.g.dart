@@ -19,7 +19,7 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
         : DateTime.parse(json['timeSend'] as String),
     json['userSender'] == null
         ? null
-        : User.fromJson(json['userSender'] as Map<String, dynamic>),
+        : UserLight.fromJson(json['userSender'] as Map<String, dynamic>),
   );
 }
 

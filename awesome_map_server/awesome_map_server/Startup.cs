@@ -71,6 +71,9 @@ namespace awesome_map_server {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTTokenSecret"]))
                 };
             }).AddIdentityServerJwt().AddGoogle(options => {
+                options.SignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.SaveTokens = true;
+                options.CallbackPath = new PathString("/signin-google");
                 IConfigurationSection googleAuthNSection =
             Configuration.GetSection("Authentication:Google");
                 options.ClientId = googleAuthNSection["ClientId"];

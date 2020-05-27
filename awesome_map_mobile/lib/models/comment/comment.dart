@@ -1,4 +1,4 @@
-import 'package:awesome_map_mobile/models/user/user.dart';
+import 'package:awesome_map_mobile/models/user/userLight.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'comment.g.dart';
 
@@ -11,7 +11,7 @@ class Comment {
   String text;
   DateTime timeSend;
   String userId;
-  User userSender;
+  UserLight userSender;
 
   Comment(this.id, this.problemId, this.eventId, this.userId, this.text,
       this.timeSend, this.userSender);

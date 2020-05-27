@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:awesome_map_mobile/env/config.dart';
-import 'package:awesome_map_mobile/models/user/user.dart';
+import 'package:awesome_map_mobile/models/user/userFull.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,7 +23,7 @@ class AuthorizationService {
     return null;
   }
 
-  static Future<User> getInfo(String email) async {
+  static Future<UserFull> getInfo(String email) async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
       Map<String, dynamic> jsonMap = {"email": email};
@@ -32,7 +32,7 @@ class AuthorizationService {
       Response res = await http.post(config.apiUrl + "api/Users/Info",
           headers: headers, body: json.encode(jsonMap));
       if (res.statusCode == 200 || res.statusCode == 201)
-        return User.fromJson(jsonDecode(res.body));
+        return UserFull.fromJson(jsonDecode(res.body));
       throw Exception(res.body.toString());
     } catch (e) {
       print(e.toString());
@@ -71,5 +71,16 @@ class AuthorizationService {
       print(e.toString());
     }
     return null;
+  }
+
+  getHeaders(Map<String, String> headers) async {
+    String jwt = await storage.read(key: 'jwt');
+    if (jwt != null) {
+      headers["Authorization"] = "Bearer " + jwt;
+      return headers;
+    }
+    String oauth = await storage.read(key: 'oauth');
+    if (oauth != null) headers["Authorization"] = "Bearer " + oauth;
+    return headers;
   }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/main.dart';
-import 'package:awesome_map_mobile/models/user/user.dart';
+import 'package:awesome_map_mobile/models/user/userFull.dart';
 import 'package:awesome_map_mobile/services/authorizationService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,29 +10,37 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthorizationProvider extends ChangeNotifier {
   GoogleSignIn _googleSignIn;
   GoogleSignInAccount googleAccount;
-  User userInfo;
+  UserFull userInfo;
 
-  Future<bool> handleSignIn({String email, String password}) async {
+  Future<bool> handleCustomSignIn(String email, String password) async {
     try {
       if (email != null && password != null) {
         String token = await AuthorizationService.login(email, password);
         if (token == null) return false;
         var result = parseJwt(token);
-        storage.write(key: "jwt", value: token);
+        await storage.write(key: "jwt", value: token);
         this.userInfo = await AuthorizationService.getInfo(email);
         return true;
-      } else {
-        AppConfig config = await AppConfig.forEnvironment();
-
-        _googleSignIn = GoogleSignIn(
-            scopes: <String>['email', 'profile', 'openid'],
-            clientId: config.clientId);
-
-        googleAccount = await _googleSignIn.signIn();
-        var identityHeader = (await googleAccount.authentication).accessToken;
-        storage.write(key: "oauth", value: identityHeader);
-        return googleAccount != null;
       }
+    } catch (error) {
+      print(error);
+    }
+    return false;
+  }
+
+  Future<bool> handleGoogleSignIn() async {
+    try {
+      AppConfig config = await AppConfig.forEnvironment();
+
+      _googleSignIn = GoogleSignIn(
+          signInOption: SignInOption.standard,
+          scopes: <String>['email', 'profile', 'openid'],
+          clientId: config.clientId);
+
+      googleAccount = await _googleSignIn.signIn();
+      var identityHeader = (await googleAccount.authentication).accessToken;
+      await storage.write(key: "oauth", value: identityHeader);
+      return googleAccount != null;
     } catch (error) {
       print(error);
     }
@@ -63,12 +71,10 @@ class AuthorizationProvider extends ChangeNotifier {
   Future<bool> handleSignOut() async {
     if (_googleSignIn != null) {
       await _googleSignIn.disconnect();
-      storage.delete(key: "oauth");
-    }
-
-    if (userInfo != null) {
+      await storage.delete(key: "oauth");
+    } else {
       if (await AuthorizationService.logOut()) {
-        storage.delete(key: "jwt");
+        await storage.delete(key: "jwt");
       } else
         return false;
     }

@@ -11,6 +11,6 @@ namespace awesome_map_server.ViewModels.Comment {
         public Guid? EventId { get; set; }
         public string Text { get; set; }
         public DateTime TimeSend { get; set; }
-        public UserViewModel UserSender { get; set; }
+        public UserLightViewModel UserSender { get; set; }
     }
 }

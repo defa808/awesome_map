@@ -58,10 +58,12 @@ class _SignInState extends State<SignIn> {
                   onPressed: () {
                     Navigator.pop(context);
                   }),
-              title: _keyboardIsVisible() ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Awesome Map"),
-              ) : Text(""),
+              title: _keyboardIsVisible()
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Awesome Map"),
+                    )
+                  : Text(""),
               centerTitle: true,
             ),
           ),
@@ -157,10 +159,9 @@ class _SignInState extends State<SignIn> {
                                 return;
                               }
 
-                              bool result =
-                                  await authorizationProvider.handleSignIn(
-                                      email: emailController.text,
-                                      password: passwordController.text);
+                              bool result = await authorizationProvider
+                                  .handleCustomSignIn(emailController.text,
+                                      passwordController.text);
                               if (result)
                                 await Navigator.pushNamedAndRemoveUntil(
                                     context, '/home', (_) => false);
@@ -183,7 +184,7 @@ class _SignInState extends State<SignIn> {
                               textColor: Colors.white,
                               onPressed: () async {
                                 bool res =
-                                    await authorizationProvider.handleSignIn();
+                                    await authorizationProvider.handleGoogleSignIn();
                                 if (res)
                                   await Navigator.pushNamedAndRemoveUntil(
                                       context, '/home', (_) => false);

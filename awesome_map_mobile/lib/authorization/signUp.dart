@@ -196,7 +196,7 @@ class _SignUpState extends State<SignUp> {
                           onPressed: () async {
                             bool res = await context
                                 .read<AuthorizationProvider>()
-                                .handleSignIn();
+                                .handleGoogleSignIn();
                             if (res)
                               await Navigator.pushNamedAndRemoveUntil(
                                   context, '/home', (_) => false);

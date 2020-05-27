@@ -55,7 +55,7 @@ namespace awesome_map_server.Controllers {
             ApplicationUser user = await _userService.GetInfo(userId);
             if (user == null)
                 return BadRequest(new { message = "Register is failed. Please try it again later." });
-            UserViewModel userViewModel = _mapper.Map<UserViewModel>(user);
+            UserFullViewModel userViewModel = _mapper.Map<UserFullViewModel>(user);
             return Ok(userViewModel);
         }
 

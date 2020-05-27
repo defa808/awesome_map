@@ -4,16 +4,19 @@ import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/main.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/problem/problem.dart';
+import 'package:awesome_map_mobile/services/authorizationService.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
 class ProblemService {
-  // final AsyncMemoizer _memoizer = AsyncMemoizer();
-// _memoizer.runOnce(() =>);
   Future<List<Category>> getCategories() async {
     AppConfig config = await AppConfig.forEnvironment();
-    Map<String, String> headers = {"Content-type": "application/json"};
-    headers["Authorization"] = "Bearer " + await storage.read(key: 'jwt');
+
+    Map<String, String> headers = await GetIt.I
+        .get<AuthorizationService>()
+        .getHeaders({"Content-type": "application/json"});
+
     Response res =
         await http.get(config.apiUrl + "api/ProblemTypes", headers: headers);
 
@@ -27,9 +30,9 @@ class ProblemService {
   Future<List<Problem>> getProblems() async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
-      Map<String, String> headers = Map<String, String>();
-      headers["Authorization"] = "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyI0ZjA0YTRmNy1kOGU4LTQ2NGQtYjU2ZS0xM2EyMTcwYzRkZjMiLCJhZG1pbiJdLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTU5MDQzNDUxMSwiZXhwIjoxNTkwNTIwOTExLCJpYXQiOjE1OTA0MzQ1MTF9.iGAEgWBlGT9bbiPhbm7LVvW0v7aJCAxahrFZtyjOZ-xOEwDS6Gal7Ik7fGrprdUKhIHN1YcW6zno_DMm6bgWCg"; //+ await storage.read(key: 'jwt');
-      headers["Content-type"] = "application/json";
+      Map<String, String> headers = await GetIt.I
+          .get<AuthorizationService>()
+          .getHeaders({"Content-type": "application/json"});
 
       Response res =
           await http.get(config.apiUrl + "api/Problems", headers: headers);

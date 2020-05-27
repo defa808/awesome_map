@@ -23,9 +23,9 @@ namespace awesome_map_server.Mapper {
             CreateMap<EventType, EventTypeViewModel>();
             CreateMap<Comment, CommentViewModel>();
             CreateMap<CommentViewModel, Comment>();
-            CreateMap<UserViewModel, ApplicationUser>();
-            CreateMap<ApplicationUser, UserViewModel>();
-
+            CreateMap<UserLightViewModel, ApplicationUser>();
+            CreateMap<ApplicationUser, UserLightViewModel>();
+            CreateMap<ApplicationUser, UserFullViewModel>();
         }
     }
 }
