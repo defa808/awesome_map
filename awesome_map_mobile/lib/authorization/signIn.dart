@@ -18,21 +18,24 @@ class _SignInState extends State<SignIn> {
   String _contactText;
   TextEditingController emailController;
   TextEditingController passwordController;
+  bool _validate = true;
   @override
   void initState() {
     super.initState();
     googleInitAuth();
-  emailController = new TextEditingController();
-passwordController= new TextEditingController();
+    emailController = new TextEditingController();
+    passwordController = new TextEditingController();
+
     // _googleSignIn.signInSilently();
   }
-  
- @override
+
+  @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
+
   void googleInitAuth() async {
     context.read<AuthorizationProvider>().googleInitAuth();
   }
@@ -103,7 +106,13 @@ passwordController= new TextEditingController();
                             decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: "Ел. пошта",
-                                hintText: "Ел. пошта"),
+                                hintText: "Ел. пошта",
+                                errorText: emailController.value.text.isEmpty
+                                    ? "Введіть email."
+                                    : _validate ? null : ""),
+                            onChanged: (val) => setState(() {
+                              _validate = true;
+                            }),
                           ),
                           TextField(
                             controller: passwordController,
@@ -111,7 +120,15 @@ passwordController= new TextEditingController();
                             decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: "Пароль",
-                                hintText: "Пароль"),
+                                hintText: "Пароль",
+                                errorText: passwordController.value.text.isEmpty
+                                    ? "Введіть пароль."
+                                    : _validate
+                                        ? null
+                                        : "Невірний логін або пароль."),
+                            onChanged: (val) => setState(() {
+                              _validate = true;
+                            }),
                           ),
                           SizedBox(height: 20),
                         ],
@@ -129,10 +146,17 @@ passwordController= new TextEditingController();
                             child: Text('Вхід'),
                             textColor: Colors.blue,
                             onPressed: () async {
-                              bool result = await authorizationProvider.handleSignIn(email:emailController.value.text, password:passwordController.value.text);
-                              if(result)
-                                  await Navigator.pushNamedAndRemoveUntil(
-                                      context, '/home', (_) => false);
+                              bool result =
+                                  await authorizationProvider.handleSignIn(
+                                      email: emailController.value.text,
+                                      password: passwordController.value.text);
+                              if (result)
+                                await Navigator.pushNamedAndRemoveUntil(
+                                    context, '/home', (_) => false);
+                              else
+                                setState(() {
+                                  _validate = false;
+                                });
                             },
                           ),
                           SizedBox(height: 10),
