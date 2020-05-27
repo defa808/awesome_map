@@ -14,7 +14,8 @@ namespace Contracts {
         Task<string> Authenticate(string email, string password);
         Task<string> Register(string email, string password);
         IEnumerable<ApplicationUser> GetAll();
-        Task<ApplicationUser> GetInfo(string email);
+        Task<ApplicationUser> GetInfo(string userId);
+        Task<bool> LogOut();
     }
 
     

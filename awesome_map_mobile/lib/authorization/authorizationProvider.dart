@@ -10,27 +10,39 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthorizationProvider extends ChangeNotifier {
   GoogleSignIn _googleSignIn;
   GoogleSignInAccount googleAccount;
-  String email;
-  String name;
   User userInfo;
-
-  void googleInitAuth() async {
-    AppConfig config = await AppConfig.forEnvironment();
-
-    _googleSignIn = GoogleSignIn(
-        scopes: <String>['email', 'profile', 'openid'],
-        clientId: config.clientId);
-
-    // _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-    //   currentUser = account;
-    //   notifyListeners();
-    // });
-  }
 
   Future<bool> handleSignIn({String email, String password}) async {
     try {
       if (email != null && password != null) {
         String token = await AuthorizationService.login(email, password);
+        if (token == null) return false;
+        var result = parseJwt(token);
+        storage.write(key: "jwt", value: token);
+        this.userInfo = await AuthorizationService.getInfo(email);
+        return true;
+      } else {
+        AppConfig config = await AppConfig.forEnvironment();
+
+        _googleSignIn = GoogleSignIn(
+            scopes: <String>['email', 'profile', 'openid'],
+            clientId: config.clientId);
+
+        googleAccount = await _googleSignIn.signIn();
+        var identityHeader = (await googleAccount.authentication).accessToken;
+        storage.write(key: "oauth", value: identityHeader);
+        return googleAccount != null;
+      }
+    } catch (error) {
+      print(error);
+    }
+    return false;
+  }
+
+  handleSignUp({String email, String password}) async {
+    try {
+      if (email != null && password != null) {
+        String token = await AuthorizationService.register(email, password);
         if (token == null) return false;
         var result = parseJwt(token);
         storage.write(key: "jwt", value: token);
@@ -48,9 +60,20 @@ class AuthorizationProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<void> handleSignOut() async {
-    if (_googleSignIn != null) await _googleSignIn.disconnect();
+  Future<bool> handleSignOut() async {
+    if (_googleSignIn != null) {
+      await _googleSignIn.disconnect();
+      storage.delete(key: "oauth");
+    }
+
+    if (userInfo != null) {
+      if (await AuthorizationService.logOut()) {
+        storage.delete(key: "jwt");
+      } else
+        return false;
+    }
     notifyListeners();
+    return true;
   }
 
   Map<String, dynamic> parseJwt(String token) {

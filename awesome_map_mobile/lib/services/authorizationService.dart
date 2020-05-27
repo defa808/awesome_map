@@ -30,10 +30,42 @@ class AuthorizationService {
       Map<String, String> headers = {"Content-type": "application/json"};
       headers["Authorization"] = "Bearer " + await storage.read(key: 'jwt');
       Response res = await http.post(config.apiUrl + "api/Users/Info",
-          headers: headers,
-          body: json.encode(jsonMap));
+          headers: headers, body: json.encode(jsonMap));
       if (res.statusCode == 200 || res.statusCode == 201)
         return User.fromJson(jsonDecode(res.body));
+      throw Exception(res.body.toString());
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  static register(String email, String password) async {
+    try {
+      AppConfig config = await AppConfig.forEnvironment();
+      Map<String, dynamic> jsonMap = {"email": email, "password": password};
+      Response res = await http.post(config.apiUrl + "api/Users/Register",
+          headers: {"Content-type": "application/json"},
+          body: json.encode(jsonMap));
+      if (res.statusCode == 200 || res.statusCode == 201) return res.body;
+      throw Exception(res.body.toString());
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  static Future<bool> logOut() async {
+    try {
+      AppConfig config = await AppConfig.forEnvironment();
+      Map<String, String> headers = {"Content-type": "application/json"};
+      headers["Authorization"] = "Bearer " + await storage.read(key: 'jwt');
+      Response res = await http.post(
+        config.apiUrl + "api/Users/LogOut",
+        headers: headers,
+      );
+      if (res.statusCode == 200 || res.statusCode == 201)
+        return res.body == "true";
       throw Exception(res.body.toString());
     } catch (e) {
       print(e.toString());

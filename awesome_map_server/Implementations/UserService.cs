@@ -89,9 +89,18 @@ namespace Implementations {
 
         }
 
-        public async Task<ApplicationUser> GetInfo(string email) {
-            ApplicationUser user = await signInManager.UserManager.FindByEmailAsync(email);
+        public async Task<ApplicationUser> GetInfo(string userId) {
+            ApplicationUser user = await signInManager.UserManager.FindByIdAsync(userId);
             return user;
+        }
+
+        public async Task<bool> LogOut() {
+            try {
+                await signInManager.SignOutAsync();
+                return true;
+            }catch(Exception e) {
+                return false;
+            }
         }
     }
 }

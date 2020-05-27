@@ -19,12 +19,13 @@ class _SignInState extends State<SignIn> {
   TextEditingController emailController;
   TextEditingController passwordController;
   bool _validate = true;
+  bool _first = false;
+
   @override
   void initState() {
     super.initState();
-    googleInitAuth();
-    emailController = new TextEditingController();
-    passwordController = new TextEditingController();
+    emailController = new TextEditingController(text: "admin@gmail.com");
+    passwordController = new TextEditingController(text: "password");
 
     // _googleSignIn.signInSilently();
   }
@@ -34,10 +35,6 @@ class _SignInState extends State<SignIn> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  void googleInitAuth() async {
-    context.read<AuthorizationProvider>().googleInitAuth();
   }
 
   bool _keyboardIsVisible() {
@@ -61,7 +58,10 @@ class _SignInState extends State<SignIn> {
                   onPressed: () {
                     Navigator.pop(context);
                   }),
-              title: _keyboardIsVisible() ? Text("AMKPI") : Text(""),
+              title: _keyboardIsVisible() ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Awesome Map"),
+              ) : Text(""),
               centerTitle: true,
             ),
           ),
@@ -76,9 +76,9 @@ class _SignInState extends State<SignIn> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text("AMKPI",
+                      Text("Awesome Map",
                           style: Theme.of(context).textTheme.headline.copyWith(
-                              fontSize: 60,
+                              fontSize: 50,
                               color: Colors.white,
                               fontFamily: "Adventure")),
                       SizedBox(height: 60)
@@ -107,9 +107,10 @@ class _SignInState extends State<SignIn> {
                                 border: UnderlineInputBorder(),
                                 labelText: "Ел. пошта",
                                 hintText: "Ел. пошта",
-                                errorText: emailController.value.text.isEmpty
-                                    ? "Введіть email."
-                                    : _validate ? null : ""),
+                                errorText:
+                                    _first && emailController.value.text.isEmpty
+                                        ? "Введіть email."
+                                        : _validate ? null : ""),
                             onChanged: (val) => setState(() {
                               _validate = true;
                             }),
@@ -121,7 +122,8 @@ class _SignInState extends State<SignIn> {
                                 border: UnderlineInputBorder(),
                                 labelText: "Пароль",
                                 hintText: "Пароль",
-                                errorText: passwordController.value.text.isEmpty
+                                errorText: _first &&
+                                        passwordController.value.text.isEmpty
                                     ? "Введіть пароль."
                                     : _validate
                                         ? null
@@ -146,10 +148,19 @@ class _SignInState extends State<SignIn> {
                             child: Text('Вхід'),
                             textColor: Colors.blue,
                             onPressed: () async {
+                              if (emailController.text.isEmpty ||
+                                  passwordController.text.isEmpty) {
+                                setState(() {
+                                  _validate = false;
+                                  _first = true;
+                                });
+                                return;
+                              }
+
                               bool result =
                                   await authorizationProvider.handleSignIn(
-                                      email: emailController.value.text,
-                                      password: passwordController.value.text);
+                                      email: emailController.text,
+                                      password: passwordController.text);
                               if (result)
                                 await Navigator.pushNamedAndRemoveUntil(
                                     context, '/home', (_) => false);
@@ -186,6 +197,6 @@ class _SignInState extends State<SignIn> {
             );
           }),
         ),
-        tag: "SignIn");
+        tag: "welcomeHeader");
   }
 }

@@ -208,11 +208,11 @@ class _HomeState extends State<Home> {
                     leading: Icon(Icons.exit_to_app),
                     title: Text("Вийти"),
                     onTap: () async {
-                      await authorizationProvider.handleSignOut();
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/welcome', (_) => false);
-                      });
+                      if (await authorizationProvider.handleSignOut())
+                        SchedulerBinding.instance.addPostFrameCallback((_) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/welcome', (_) => false);
+                        });
                     },
                   ),
                 )

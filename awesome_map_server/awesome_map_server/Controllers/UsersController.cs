@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace awesome_map_server.Controllers {
@@ -49,12 +50,22 @@ namespace awesome_map_server.Controllers {
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Info([FromBody]AuthenticateModel model) {
-            ApplicationUser user = await _userService.GetInfo(model.Email);
+        public async Task<IActionResult> Info() {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ApplicationUser user = await _userService.GetInfo(userId);
             if (user == null)
                 return BadRequest(new { message = "Register is failed. Please try it again later." });
             UserViewModel userViewModel = _mapper.Map<UserViewModel>(user);
             return Ok(userViewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> LogOut() {
+            if (await _userService.LogOut())
+                return Ok(true);
+            else return Ok(false);
+
         }
     }
 }
