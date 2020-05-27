@@ -8,6 +8,7 @@ import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/problems/providers/problemForm.dart';
 import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -159,7 +160,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                         )
                                     ]),
                                 ChooseCategoryAutoComplete(
-                                    getStore: ProblemService.getCategories,
+                                    getStore: GetIt.I.get<ProblemService>().getCategories,
                                     selectedCategories:
                                         model.problem.problemTypes,
                                     addCategory: model.addCategory),

@@ -48,7 +48,7 @@ class _ProblemDetailsState extends State<ProblemDetails> {
                   padding: const EdgeInsets.all(16.0),
                   child: ProblemDetailsContent(problem),
                 ),
-                CommentsMain(),
+                CommentsMain(problem:problem),
               ])),
             ],
           )),

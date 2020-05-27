@@ -17,6 +17,10 @@ namespace awesome_map_server {
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureAppConfiguration((hostContext,builder) => {
+                    if (hostContext.HostingEnvironment.IsDevelopment()) {
+                        builder.AddUserSecrets<Program>();
+                    }
                 });
     }
 }

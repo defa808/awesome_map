@@ -7,6 +7,7 @@ import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/services/fileService.dart';
 import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -24,11 +25,11 @@ class ProblemForm with ChangeNotifier {
 
   Future<bool> save() async {
     try {
-      this.problem = await ProblemService.save(this.problem);
+      this.problem = await GetIt.I.get<ProblemService>().save(this.problem);
       ServerFile fileInfo = ServerFile.empty();
       fileInfo.problemId = this.problem.id;
       for (File item in files) {
-        fileInfo = await FileService.save(fileInfo, item);
+        fileInfo = await GetIt.I.get<FileService>().save(fileInfo, item);
         this.problem.files.add(fileInfo);
       }
 

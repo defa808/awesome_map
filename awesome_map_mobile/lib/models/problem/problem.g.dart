@@ -37,6 +37,10 @@ Problem _$ProblemFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : ServerFile.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    (json['comments'] as List)
+        ?.map((e) =>
+            e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     json['subscribersCount'] as int,
   );
 }
@@ -50,6 +54,7 @@ Map<String, dynamic> _$ProblemToJson(Problem instance) => <String, dynamic>{
       'status': instance.status,
       'createDate': instance.createDate?.toIso8601String(),
       'updateDate': instance.updateDate?.toIso8601String(),
+      'comments': instance.comments,
       'description': instance.description,
       'files': instance.files,
       'subscribersCount': instance.subscribersCount,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:awesome_map_mobile/services/fileService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class FileItemThumbnail extends StatefulWidget {
   const FileItemThumbnail({Key key, this.file, this.onTap}) : super(key: key);
@@ -25,7 +26,7 @@ class _FileItemThumbnailState extends State<FileItemThumbnail> {
   }
 
   Future<File> executeFile() async {
-    return await FileService.getFile(widget.file);
+    return await GetIt.I.get<FileService>().getFile(widget.file);
   }
 
   @override

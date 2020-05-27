@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using awesome_map_server.ViewModels;
+using awesome_map_server.ViewModels.User;
+using Contracts;
+using DataBaseModels.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,18 +13,48 @@ using System.Threading.Tasks;
 namespace awesome_map_server.Controllers {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]/[action]")]
+
     public class UsersController : ControllerBase {
+        private IUserService _userService;
+        private IMapper _mapper;
 
-        //[AllowAnonymous]
-        //[HttpPost("authenticate")]
-        //public IActionResult Authenticate([FromBody]AuthenticateModel userParam) {
-        //    //if (user == null)
-        //    //    return BadRequest(new { message = "Username or password is incorrect" });
+        public UsersController(IUserService userService, IMapper mapper) {
+            _userService = userService;
+            _mapper = mapper;
+        }
 
-        //    //return Ok(user);
-        //}
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody]AuthenticateModel model) {
+            string token = await _userService.Authenticate(model.Email, model.Password);
 
-       
+            if (token == null)
+                return BadRequest(new { message = "Email or password is incorrect" });
+
+            return Ok(token);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody]AuthenticateModel model) {
+            string token = await _userService.Register(model.Email, model.Password);
+
+            if (token == null)
+                return BadRequest(new { message = "Register is failed. Please try it again later." });
+
+            return Ok(token);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Info([FromBody]AuthenticateModel model) {
+            ApplicationUser user = await _userService.GetInfo(model.Email);
+            if (user == null)
+                return BadRequest(new { message = "Register is failed. Please try it again later." });
+            UserViewModel userViewModel = _mapper.Map<UserViewModel>(user);
+            return Ok(userViewModel);
+        }
     }
 }

@@ -77,15 +77,15 @@ class _HomeState extends State<Home> {
     super.initState();
     _selectedDrawerIndex = -1;
 
-    checkAuthorization();
+    // checkAuthorization();
   }
 
-  checkAuthorization() async {
-    if (context.read<AuthorizationProvider>().currentUser == null)
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushNamedAndRemoveUntil(context, '/welcome', (_) => false);
-      });
-  }
+  // checkAuthorization() async {
+  //   if (context.read<AuthorizationProvider>().googleAccount == null)
+  //     SchedulerBinding.instance.addPostFrameCallback((_) {
+  //       Navigator.pushNamedAndRemoveUntil(context, '/welcome', (_) => false);
+  //     });
+  // }
 
   int _selectedDrawerIndex = -1;
 
@@ -157,10 +157,14 @@ class _HomeState extends State<Home> {
                 UserAccountsDrawerHeader(
                   decoration:
                       BoxDecoration(color: Theme.of(context).primaryColor),
-                  accountEmail:
-                      Text(authorizationProvider.currentUser?.email ?? ''),
+                  accountEmail: Text(
+                      authorizationProvider.googleAccount?.email ??
+                          authorizationProvider.userInfo?.email ??
+                          ''),
                   accountName: Text(
-                      authorizationProvider.currentUser?.displayName ?? ''),
+                      authorizationProvider.googleAccount?.displayName ??
+                          authorizationProvider.userInfo?.userName ??
+                          ''),
                   otherAccountsPictures: <Widget>[
                     CustomTheme.instanceOf(context).themeKey ==
                             MyThemeKeys.LIGHT
@@ -185,9 +189,14 @@ class _HomeState extends State<Home> {
                             angle: 30 * pi / 180,
                           )
                   ],
-                  currentAccountPicture: GoogleUserCircleAvatar(
-                    identity: authorizationProvider.currentUser,
-                  ),
+                  currentAccountPicture:
+                      authorizationProvider.googleAccount != null
+                          ? GoogleUserCircleAvatar(
+                              identity: authorizationProvider.googleAccount,
+                            )
+                          : CircleAvatar(
+                              child: Text("A"),
+                            ),
                 ),
                 Column(children: drawerOptions),
                 Expanded(

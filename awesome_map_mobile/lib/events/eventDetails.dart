@@ -6,6 +6,7 @@ import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/services/fileService.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import 'eventDetailsContent.dart';
 
@@ -48,8 +49,9 @@ class _EventDetailsState extends State<EventDetails> {
                                         child: Container(),
                                       )
                                     : FutureBuilder<File>(
-                                        future:
-                                            FileService.getFile(event.files[0]),
+                                        future: GetIt.I
+                                            .get<FileService>()
+                                            .getFile(event.files[0]),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<dynamic> snapshot) {
                                           switch (snapshot.connectionState) {
@@ -107,7 +109,9 @@ class _EventDetailsState extends State<EventDetails> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: EventDetailsContent(event),
                     ),
-                    CommentsMain()
+                    CommentsMain(
+                      event: event
+                    )
                   ]),
                 ),
               ],

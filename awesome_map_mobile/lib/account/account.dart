@@ -35,6 +35,8 @@ class _AccountState extends State<Account> {
   @override
   void dispose() {
     _timer.cancel();
+    emailController.dispose();
+    loginConroller.dispose();
     super.dispose();
   }
 

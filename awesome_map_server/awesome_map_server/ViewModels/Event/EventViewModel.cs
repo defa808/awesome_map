@@ -1,4 +1,5 @@
-﻿using DataBaseModels.Event;
+﻿using awesome_map_server.ViewModels.Comment;
+using DataBaseModels.Event;
 using DataBaseModels.Models;
 using System;
 using System.Collections.Generic;
@@ -26,14 +27,14 @@ namespace awesome_map_server.ViewModels {
         public virtual List<EventUser> Subscribers { get; set; }
         public int SubscribersCount { get; set; }
         public bool IsClosed { get; set; }
-        public virtual List<Comment> Comments { get; set; }
+        public virtual List<CommentViewModel> Comments { get; set; }
         public virtual List<ServerFile> Files { get; set; }
 
 
         public EventViewModel() {
             EventTypes = new List<EventTypeViewModel>();
             Subscribers = new List<EventUser>();
-            Comments = new List<Comment>();
+            Comments = new List<CommentViewModel>();
             Files = new List<ServerFile>();
         }
     }

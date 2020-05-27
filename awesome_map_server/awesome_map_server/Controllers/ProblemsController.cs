@@ -6,6 +6,8 @@ using AutoMapper;
 using awesome_map_server.ViewModels;
 using DataBaseContext;
 using DataBaseModels.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +25,7 @@ namespace awesome_map_server.Controllers {
         }
 
         // GET: api/Problems
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProblemViewModel>>> GetProblems() {
             List<Problem> problems = await _context.Problems

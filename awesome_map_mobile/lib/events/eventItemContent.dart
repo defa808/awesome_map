@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/services/fileService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 class EventItemContent extends StatefulWidget {
@@ -22,7 +23,7 @@ class _EventItemContentState extends State<EventItemContent> {
         children: <Widget>[
           if (widget.event.files.length > 0)
             FutureBuilder<File>(
-                future: FileService.getFile(widget.event.files[0]),
+                future: GetIt.I.get<FileService>().getFile(widget.event.files[0]),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   switch (snapshot.connectionState) {

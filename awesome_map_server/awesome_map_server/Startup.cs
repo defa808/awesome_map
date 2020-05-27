@@ -13,29 +13,72 @@ using DataBaseContext;
 using DataBaseModels.Models;
 using AutoMapper;
 using awesome_map_server.Mapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Google;
+using Contracts;
+using Implementations;
+using System;
+using System.Threading.Tasks;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace awesome_map_server {
     public class Startup {
+
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
+
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireLowercase = false;
+            }
+            ).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>().AddJwtBearerClientAuthentication();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            services.AddAuthentication(o => {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => {
+                options.TokenValidationParameters = new TokenValidationParameters() {
+
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTTokenSecret"]))
+                };
+            }).AddIdentityServerJwt().AddGoogle(options => {
+                IConfigurationSection googleAuthNSection =
+            Configuration.GetSection("Authentication:Google");
+                options.ClientId = googleAuthNSection["ClientId"];
+                options.ClientSecret = googleAuthNSection["ClientSecret"];
+            });
+
+
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
@@ -43,6 +86,46 @@ namespace awesome_map_server {
                 configuration.RootPath = "ClientApp/dist";
             });
             services.AddAutoMapper(typeof(MapperProfile));
+
+
+            // configure DI for application services
+            services.AddScoped<IUserService, UserService>();
+        }
+
+        private async Task CreateRolesAndUser(IApplicationBuilder app, IServiceProvider serviceProvider) {
+            //initializing custom roles 
+            using (var scope = app.ApplicationServices.CreateScope()) {
+                var RoleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var UserManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                string[] roleNames = { "Admin", "User" };
+                IdentityResult roleResult;
+
+                foreach (var roleName in roleNames) {
+                    var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                    if (!roleExist) {
+                        //create the roles and seed them to the database: Question 1
+                        roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                    }
+                }
+
+                //Here you could create a super user who will maintain the web app
+                var poweruser = new ApplicationUser {
+                    UserName = Configuration["AppSettings:UserName"],
+                    Email = Configuration["AppSettings:UserEmail"],
+                };
+                //Ensure you have these values in your appsettings.json file
+                string userPWD = Configuration["AppSettings:UserPassword"];
+                var _user = await UserManager.FindByEmailAsync(Configuration["AppSettings:UserEmail"]);
+
+                if (_user == null) {
+                    var createPowerUser = await UserManager.CreateAsync(poweruser, userPWD);
+                    if (createPowerUser.Succeeded) {
+                        //here we tie the new user to the role
+                        await UserManager.AddToRoleAsync(poweruser, "Admin");
+
+                    }
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,6 +167,9 @@ namespace awesome_map_server {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            var serviceProvider = app.ApplicationServices.GetService<IServiceProvider>();
+            CreateRolesAndUser(app, serviceProvider).Wait();
         }
     }
 }

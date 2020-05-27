@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/authorization/authorizationProvider.dart';
 import 'package:awesome_map_mobile/base/filterContainer.dart';
 import 'package:awesome_map_mobile/base/slidingUpPanelContainer.dart';
 import 'package:awesome_map_mobile/base/title.dart';
@@ -118,7 +119,9 @@ class _ProblemHomeState extends State<ProblemHome> {
     ProblemMarkers problemMarkersProvider = context.read<ProblemMarkers>();
     GoogleMapModel googleMapProvider = context.read<GoogleMapModel>();
     ProblemFilterModel filterProvider = context.read<ProblemFilterModel>();
-    await problemMarkersProvider.getProblems();
+    AuthorizationProvider authorizationProvider = context.read<AuthorizationProvider>();
+    await problemMarkersProvider
+        .getProblems();
     filterProvider.addListener(() {
       problemMarkersProvider.updateFilter(filterProvider);
       googleMapProvider.updateMarkers(problemMarkersProvider.createMarkers(),

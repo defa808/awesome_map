@@ -16,52 +16,26 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   String _contactText;
+  TextEditingController emailController;
+  TextEditingController passwordController;
   @override
   void initState() {
     super.initState();
-
     googleInitAuth();
-
+  emailController = new TextEditingController();
+passwordController= new TextEditingController();
     // _googleSignIn.signInSilently();
   }
-
+  
+ @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
   void googleInitAuth() async {
     context.read<AuthorizationProvider>().googleInitAuth();
   }
-
-  // Widget _buildBody() {
-  //   if (_currentUser != null) {
-  //     return Column(
-  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //       children: <Widget>[
-  //         ListTile(
-  //           leading: GoogleUserCircleAvatar(
-  //             identity: _currentUser,
-  //           ),
-  //           title: Text(_currentUser.displayName ?? ''),
-  //           subtitle: Text(_currentUser.email ?? ''),
-  //         ),
-  //         const Text("Signed in successfully."),
-  //         Text(_contactText ?? ''),
-  //         RaisedButton(
-  //           child: const Text('SIGN OUT'),
-  //           onPressed: _handleSignOut,
-  //         ),
-  //       ],
-  //     );
-  //   } else {
-  //     return Column(
-  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //       children: <Widget>[
-  //         const Text("You are not currently signed in."),
-  //         RaisedButton(
-  //           child: const Text('SIGN IN'),
-  //           onPressed: _handleSignIn,
-  //         ),
-  //       ],
-  //     );
-  //   }
-  // }
 
   bool _keyboardIsVisible() {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
@@ -125,12 +99,14 @@ class _SignInState extends State<SignIn> {
                           ),
                           SizedBox(height: 10),
                           TextField(
+                            controller: emailController,
                             decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 labelText: "Ел. пошта",
                                 hintText: "Ел. пошта"),
                           ),
                           TextField(
+                            controller: passwordController,
                             obscureText: true,
                             decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
@@ -153,7 +129,8 @@ class _SignInState extends State<SignIn> {
                             child: Text('Вхід'),
                             textColor: Colors.blue,
                             onPressed: () async {
-                              final result =
+                              bool result = await authorizationProvider.handleSignIn(email:emailController.value.text, password:passwordController.value.text);
+                              if(result)
                                   await Navigator.pushNamedAndRemoveUntil(
                                       context, '/home', (_) => false);
                             },

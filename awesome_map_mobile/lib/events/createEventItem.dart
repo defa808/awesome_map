@@ -13,6 +13,7 @@ import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/services/eventService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -153,7 +154,7 @@ class _CreateEventItemState extends State<CreateEventItem> {
                                 )
                             ]),
                         ChooseCategoryAutoComplete(
-                            getStore: EventService.getCategories,
+                            getStore: GetIt.I.get<EventService>().getCategories,
                             selectedCategories: model.event.eventTypes,
                             addCategory: model.addCategory),
                         SizedBox(height: 10),

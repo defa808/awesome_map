@@ -5,6 +5,7 @@ import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/problems/providers/problemFilterModel.dart';
 import 'package:awesome_map_mobile/services/problemService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ProblemMarkers with ChangeNotifier {
@@ -13,7 +14,7 @@ class ProblemMarkers with ChangeNotifier {
   ProblemMarkers();
   ProblemFilterModel filter;
   Future<List<Problem>> getProblems() async {
-    problems = await ProblemService.getProblems();
+    problems = await GetIt.I.get<ProblemService>().getProblems();
     filteredProblems = problems;
     if (filter != null) updateProblems(filter);
 

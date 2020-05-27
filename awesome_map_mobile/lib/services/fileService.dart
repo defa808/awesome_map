@@ -4,16 +4,14 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:awesome_map_mobile/env/config.dart';
-import 'package:awesome_map_mobile/models/files/fileBody.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileService {
-  static Future<ServerFile> save(ServerFile fileInfo, io.File file) async {
+  Future<ServerFile> save(ServerFile fileInfo, io.File file) async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
       var request = http.MultipartRequest(
@@ -40,7 +38,7 @@ class FileService {
     return null;
   }
 
-  static Future<File> getFile(ServerFile serverFile) async {
+  Future<File> getFile(ServerFile serverFile) async {
     File file = await loadFile(serverFile.id, serverFile.name);
     if (file != null) serverFile.path = file.path;
     return file;
@@ -49,7 +47,7 @@ class FileService {
     // return file;
   }
 
-  static Future<Uint8List> getFileBytes(String id) async {
+  Future<Uint8List> getFileBytes(String id) async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
 
@@ -63,7 +61,7 @@ class FileService {
     return null;
   }
 
-  static Future<File> getExistFile(String id) async {
+  Future<File> getExistFile(String id) async {
     Directory dir = await _getLocalDir();
     List<FileSystemEntity> elements = dir.listSync();
     List<FileSystemEntity> files =
@@ -71,7 +69,7 @@ class FileService {
     return files.length > 0 ? File(files[0].path) : null;
   }
 
-  static Future<File> loadFile(String id, String name) async {
+  Future<File> loadFile(String id, String name) async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
 
@@ -92,7 +90,7 @@ class FileService {
     return null;
   }
 
-  static Future<io.File> saveFileToTempDirectory(
+  Future<io.File> saveFileToTempDirectory(
       String id, String name, Uint8List result) async {
     Directory dir = await _getLocalDir();
     Directory fileDirectory = Directory(dir.path + "/" + id);
@@ -104,7 +102,7 @@ class FileService {
     return item;
   }
 
-  static Future<io.Directory> _getLocalDir() async {
+  Future<io.Directory> _getLocalDir() async {
     final directory = await getApplicationDocumentsDirectory();
     String path = directory.path;
     final dirPath = '${path}/AwesomeMapImages';
@@ -113,7 +111,7 @@ class FileService {
     return dir;
   }
 
-  static String getType(String contentType) {
+  String getType(String contentType) {
     switch (contentType) {
       case "image/jpeg":
         return "jpg";

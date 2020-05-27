@@ -6,6 +6,7 @@ import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:awesome_map_mobile/services/eventService.dart';
 import 'package:awesome_map_mobile/services/fileService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EventForm with ChangeNotifier {
@@ -22,11 +23,11 @@ class EventForm with ChangeNotifier {
 
   Future<bool> save() async {
     try {
-      this.event = await EventService.save(this.event);
+      this.event = await GetIt.I.get<EventService>().save(this.event);
       ServerFile fileInfo = ServerFile.empty();
       fileInfo.eventId = this.event.id;
       for (File item in files) {
-        fileInfo = await FileService.save(fileInfo, item);
+        fileInfo = await GetIt.I.get<FileService>().save(fileInfo, item);
         this.event.files.add(fileInfo);
       }
 

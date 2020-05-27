@@ -4,6 +4,7 @@ import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/services/eventService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EventMarkers with ChangeNotifier {
@@ -13,7 +14,7 @@ class EventMarkers with ChangeNotifier {
   EventFilterModel filter;
 
   Future<List<Event>> getEvents() async {
-    events = await EventService.getEvents();
+    events = await GetIt.I.get<EventService>().getEvents();
     filteredEvents = events;
     if (filter != null) updateProblems(filter);
 

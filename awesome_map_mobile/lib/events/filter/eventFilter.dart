@@ -5,6 +5,7 @@ import 'package:awesome_map_mobile/events/providers/eventFilterModel.dart';
 import 'package:awesome_map_mobile/services/eventService.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class EventFilter extends StatelessWidget {
@@ -108,7 +109,7 @@ class EventFilter extends StatelessWidget {
                           Flexible(
                               child: ChooseCategoryAutoComplete(
                                   addCategory: model.addCategory,
-                                  getStore: EventService.getCategories,
+                                  getStore: GetIt.I.get<EventService>().getCategories,
                                   selectedCategories: model.selectedCategories,
                                   color: Colors.white))
                         ],

@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class EventService {
   // final AsyncMemoizer _memoizer = AsyncMemoizer();
 // _memoizer.runOnce(() =>);
-  static Future<List<Category>> getCategories() async {
+  Future<List<Category>> getCategories() async {
     AppConfig config = await AppConfig.forEnvironment();
     Response res = await http.get(config.apiUrl + "api/EventTypes",
         headers: {"Content-type": "application/json"});
@@ -19,7 +19,7 @@ class EventService {
     throw Exception(res.body.toString());
   }
 
-  static Future<List<Event>> getEvents() async {
+  Future<List<Event>> getEvents() async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
       Response res = await http.get(config.apiUrl + "api/Events",
@@ -34,7 +34,7 @@ class EventService {
     return new List<Event>();
   }
 
-  static Future<Event> save(Event event) async {
+  Future<Event> save(Event event) async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
       Map<String, dynamic> jsonMap = event.toJson();

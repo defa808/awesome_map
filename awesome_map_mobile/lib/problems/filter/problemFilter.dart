@@ -8,6 +8,7 @@ import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class ProblemFilter extends StatelessWidget {
@@ -118,7 +119,7 @@ class ProblemFilter extends StatelessWidget {
                         children: <Widget>[
                           Flexible(child: ChooseCategoryAutoComplete(
                                   addCategory: model.addCategory,
-                                  getStore: ProblemService.getCategories,
+                                  getStore: GetIt.I.get<ProblemService>().getCategories,
                                   selectedCategories: model.selectedCategories,
                                   color: Colors.white)),
                         ],

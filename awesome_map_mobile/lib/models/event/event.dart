@@ -1,4 +1,5 @@
 import 'package:awesome_map_mobile/models/base/category.dart';
+import 'package:awesome_map_mobile/models/comment/comment.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'event.g.dart';
@@ -24,6 +25,8 @@ class Event {
   bool isClosed;
   int subscribersCount;
   List<ServerFile> files;
+  List<Comment> comments;
+
   Event(
       this.id,
       this.latitude,
@@ -38,7 +41,8 @@ class Event {
       this.peopleCount,
       this.isClosed,
       this.subscribersCount,
-      this.files);
+      this.files,
+      this.comments);
 
   factory Event.empty() {
     return Event(
@@ -55,7 +59,7 @@ class Event {
         0,
         false,
         0,
-        new List<ServerFile>());
+        new List<ServerFile>(),new List<Comment>());
   }
 
   factory Event.fromJson(Map<String, dynamic> json) =>

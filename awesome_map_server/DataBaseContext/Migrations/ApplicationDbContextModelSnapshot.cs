@@ -27,6 +27,9 @@ namespace DataBaseContext.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("AvatarId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -72,6 +75,8 @@ namespace DataBaseContext.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AvatarId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -380,6 +385,9 @@ namespace DataBaseContext.Migrations
                     b.Property<double>("Size")
                         .HasColumnType("float");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
@@ -604,6 +612,13 @@ namespace DataBaseContext.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("DataBaseModels.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("DataBaseModels.Models.ServerFile", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
                 });
 
             modelBuilder.Entity("DataBaseModels.Models.Comment", b =>

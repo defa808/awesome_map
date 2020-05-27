@@ -41,6 +41,10 @@ Event _$EventFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : ServerFile.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    (json['comments'] as List)
+        ?.map((e) =>
+            e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -59,4 +63,5 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'isClosed': instance.isClosed,
       'subscribersCount': instance.subscribersCount,
       'files': instance.files,
+      'comments': instance.comments,
     };

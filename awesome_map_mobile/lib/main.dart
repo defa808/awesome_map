@@ -1,5 +1,6 @@
 import 'package:awesome_map_mobile/authorization/authorizationProvider.dart';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
+import 'package:awesome_map_mobile/comments/provider/commentProvider.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
@@ -8,6 +9,8 @@ import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +23,7 @@ import 'events/providers/eventForm.dart';
 import 'events/providers/eventMarkers.dart';
 import 'events/providers/eventTypes.dart';
 import 'home/home.dart';
+import 'injector.dart';
 import 'models/googleMap/googleMapModel.dart';
 
 import 'problems/providers/problemFilterModel.dart';
@@ -27,8 +31,13 @@ import 'problems/providers/problemForm.dart';
 import 'problems/providers/problemTypes.dart';
 import 'problems/providers/problemMarkers.dart';
 
+final storage = FlutterSecureStorage();
+
+
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  setupInjector();
   runApp(MultiProvider(
     child: CustomTheme(initialThemeKey: MyThemeKeys.LIGHT, child: MyApp()),
     providers: <SingleChildWidget>[
@@ -45,6 +54,7 @@ void main() {
       ChangeNotifierProvider<ProblemMarkers>(create: (context) => ProblemMarkers()),
       ChangeNotifierProvider<EventMarkers>(create: (context) => EventMarkers()),
       ChangeNotifierProvider<AuthorizationProvider>(create: (context) => AuthorizationProvider()),
+      ChangeNotifierProvider<CommentProvider>(create: (context) => CommentProvider()),
       // ProxyProvider<GoogleMapModel, ProblemMarkers>(
       //   update: (context, googleMapModel, problemMarkersModel) =>
       //       ProblemMarkers(googleMapModel: googleMapModel),

@@ -16,6 +16,8 @@ namespace DataBaseModels.Models {
         public virtual List<Comment> Inbox { get; set; }
         [InverseProperty("UserSender")]
         public virtual List<Comment> Sent { get; set; }
+        public Guid? AvatarId { get; set; }
+        public ServerFile Avatar { get; set; }
 
         public ApplicationUser() {
             ObservedProblems = new List<ProblemUser>();

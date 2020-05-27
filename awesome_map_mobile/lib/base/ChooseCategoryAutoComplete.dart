@@ -9,7 +9,7 @@ class ChooseCategoryAutoComplete extends StatefulWidget {
       this.getStore,
       this.selectedCategories,
       this.addCategory,
-      this.color})
+      this.color = Colors.grey})
       : super(key: key);
   final List<Category> selectedCategories;
   final Future<List<Category>> Function() getStore;
@@ -37,14 +37,14 @@ class _ChooseCategoryAutoCompleteState
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Category>>(
-        future: widget.getStore(),
+        future: storeInFuture,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
               return Text("Connection lost");
             case ConnectionState.active:
             case ConnectionState.waiting:
-              return LinearProgressIndicator(backgroundColor: widget.color, );
+              return LinearProgressIndicator(backgroundColor: widget.color ?? Colors.lightBlue, );
             case ConnectionState.done:
               {
                 if (snapshot.hasError)
@@ -63,14 +63,14 @@ class _ChooseCategoryAutoCompleteState
                 else
                   return AutoCompleteTextField<Category>(
                     clearOnSubmit: true,
-                    style: TextStyle(color: widget.color),
+                    style: TextStyle(color: widget.color?? Colors.grey),
                     controller: TextEditingController(text: ""),
 
                     decoration: InputDecoration(
                         labelText: "Категорії",
                         fillColor: widget.color,
                         enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: widget.color)),
+                            borderSide: BorderSide(color: widget.color?? Colors.grey)),
                         hintStyle: TextStyle(color: widget.color),
                         labelStyle: TextStyle(color: widget.color)),
 

@@ -1,4 +1,5 @@
 import 'package:awesome_map_mobile/models/base/category.dart';
+import 'package:awesome_map_mobile/models/comment/comment.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:awesome_map_mobile/models/problem/problemStatus.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -21,6 +22,7 @@ class Problem {
   @JsonKey(required: true)
   DateTime createDate;
   DateTime updateDate;
+  List<Comment> comments;
 
   String description;
   List<ServerFile> files;
@@ -36,6 +38,7 @@ class Problem {
       this.description,
       this.problemTypes,
       this.files,
+      this.comments,
       this.subscribersCount);
 
   factory Problem.empty() {
@@ -50,6 +53,7 @@ class Problem {
         "",
         new List<Category>(),
         new List<ServerFile>(),
+        new List<Comment>(),
         0);
   }
 
