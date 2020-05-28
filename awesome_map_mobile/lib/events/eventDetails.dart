@@ -25,8 +25,6 @@ class _EventDetailsState extends State<EventDetails> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          resizeToAvoidBottomInset: false,
           body: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
