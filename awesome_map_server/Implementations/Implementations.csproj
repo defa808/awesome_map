@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\DataBaseContext\DataBaseContext.csproj" />
     <ProjectReference Include="..\DataBaseModels\DataBaseModels.csproj" />
   </ItemGroup>
 

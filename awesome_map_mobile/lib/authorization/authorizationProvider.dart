@@ -1,16 +1,16 @@
 import 'dart:convert';
 
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
 import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/main.dart';
 import 'package:awesome_map_mobile/models/user/userFull.dart';
 import 'package:awesome_map_mobile/services/authorizationService.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthorizationProvider extends ChangeNotifier {
   GoogleSignIn _googleSignIn;
-  GoogleSignInAccount googleAccount;
-  UserFull userInfo;
 
   Future<bool> handleCustomSignIn(String email, String password) async {
     try {
@@ -19,7 +19,8 @@ class AuthorizationProvider extends ChangeNotifier {
         if (token == null) return false;
         var result = parseJwt(token);
         await storage.write(key: "jwt", value: token);
-        this.userInfo = await AuthorizationService.getInfo(email);
+        UserFull userInfo = await AuthorizationService.getInfo();
+        await GetIt.I.get<AccountProvider>().updateUserInfo(userInfo);
         return true;
       }
     } catch (error) {
@@ -36,8 +37,9 @@ class AuthorizationProvider extends ChangeNotifier {
           signInOption: SignInOption.standard,
           scopes: <String>['email', 'profile', 'openid'],
           clientId: config.clientId);
+      GoogleSignInAccount googleAccount = await _googleSignIn.signIn();
+      await GetIt.I.get<AccountProvider>().updateGoogleAccount(googleAccount);
 
-      googleAccount = await _googleSignIn.signIn();
       var identityHeader = (await googleAccount.authentication).accessToken;
       await storage.write(key: "oauth", value: identityHeader);
       return googleAccount != null;
@@ -47,21 +49,16 @@ class AuthorizationProvider extends ChangeNotifier {
     return false;
   }
 
-  handleSignUp({String email, String password}) async {
+  handleCustomSignUp({String email, String password}) async {
     try {
-      if (email != null && password != null) {
-        String token = await AuthorizationService.register(email, password);
-        if (token == null) return false;
-        var result = parseJwt(token);
-        storage.write(key: "jwt", value: token);
-        this.userInfo = await AuthorizationService.getInfo(email);
-        return true;
-      } else {
-        googleAccount = await _googleSignIn.signIn();
-        var identityHeader = (await googleAccount.authentication).accessToken;
-        storage.write(key: "oauth", value: identityHeader);
-        return googleAccount != null;
-      }
+      String token = await AuthorizationService.register(email, password);
+      if (token == null) return false;
+      var result = parseJwt(token);
+      storage.write(key: "jwt", value: token);
+      await GetIt.I
+          .get<AccountProvider>()
+          .updateUserInfo(await AuthorizationService.getInfo());
+      return true;
     } catch (error) {
       print(error);
     }

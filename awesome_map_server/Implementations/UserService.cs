@@ -1,7 +1,9 @@
 ﻿using Contracts;
+using DataBaseContext;
 using DataBaseModels.Models;
 using DataBaseModels.User;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -23,14 +25,17 @@ namespace Implementations {
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ApplicationDbContext context;
 
         public UserService(IConfiguration configuration,
             RoleManager<IdentityRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager) {
             this.configuration = configuration;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
+            this.context = context;
         }
 
         public async Task<string> Authenticate(string email, string password) {
@@ -90,15 +95,20 @@ namespace Implementations {
         }
 
         public async Task<ApplicationUser> GetInfo(string userId) {
-            ApplicationUser user = await signInManager.UserManager.FindByIdAsync(userId);
-            return user;
+            return context.Users.Where(x => x.Id == userId)
+                .Include(x => x.MyProblems)
+                .Include(x => x.MyEvents)
+                .Include(x => x.Inbox)
+                .Include(x => x.ObservedProblems).ThenInclude(x=> x.Problem)
+                .Include(x => x.ObservedEvents).ThenInclude(x=> x.Event)
+                .FirstOrDefault();
         }
 
         public async Task<bool> LogOut() {
             try {
                 await signInManager.SignOutAsync();
                 return true;
-            }catch(Exception e) {
+            } catch (Exception e) {
                 return false;
             }
         }

@@ -19,7 +19,15 @@ UserFull _$UserFullFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : Problem.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    (json['observedProblems'] as List)
+        ?.map((e) =>
+            e == null ? null : Problem.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     (json['myEvents'] as List)
+        ?.map(
+            (e) => e == null ? null : Event.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    (json['observedEvents'] as List)
         ?.map(
             (e) => e == null ? null : Event.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -36,6 +44,8 @@ Map<String, dynamic> _$UserFullToJson(UserFull instance) => <String, dynamic>{
       'email': instance.email,
       'avatar': instance.avatar,
       'myProblems': instance.myProblems,
+      'observedProblems': instance.observedProblems,
       'myEvents': instance.myEvents,
+      'observedEvents': instance.observedEvents,
       'inbox': instance.inbox,
     };

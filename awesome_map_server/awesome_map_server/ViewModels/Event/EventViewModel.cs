@@ -16,7 +16,7 @@ namespace awesome_map_server.ViewModels {
         public string PlaceDescription { get; set; }
         public EventStatus Status { get; set; }
         public DateTime StartDate { get; set; }
-        public long Duration { get; set; }
+        public double Duration { get; set; }
         public int? PeopleCount { get; set; }
 
         public string OwnerId { get; set; }

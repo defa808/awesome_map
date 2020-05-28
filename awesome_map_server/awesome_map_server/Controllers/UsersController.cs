@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using awesome_map_server.ViewModels;
+using awesome_map_server.ViewModels.Comment;
 using awesome_map_server.ViewModels.User;
 using Contracts;
 using DataBaseModels.Models;
@@ -56,6 +57,8 @@ namespace awesome_map_server.Controllers {
             if (user == null)
                 return BadRequest(new { message = "Register is failed. Please try it again later." });
             UserFullViewModel userViewModel = _mapper.Map<UserFullViewModel>(user);
+            userViewModel.ObservedProblems = _mapper.ProjectTo<ProblemViewModel>(user.ObservedProblems.Select(x=> x.Problem).AsQueryable()).ToList();
+            userViewModel.ObservedEvents = _mapper.ProjectTo<EventViewModel>(user.ObservedEvents.Select(x=> x.Event).AsQueryable()).ToList();
             return Ok(userViewModel);
         }
 

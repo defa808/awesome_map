@@ -1,9 +1,11 @@
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
 import 'package:awesome_map_mobile/base/photo/photoVIewer.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class EventDetailsContent extends StatelessWidget {
   const EventDetailsContent(this.event, {Key key}) : super(key: key);
@@ -18,7 +20,7 @@ class EventDetailsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-          child: Column(
+      child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -119,7 +121,8 @@ class EventDetailsContent extends StatelessWidget {
                                   ),
                                 Flexible(
                                   child: Text(type.name,
-                                      style: TextStyle(color: Colors.lightBlue)),
+                                      style:
+                                          TextStyle(color: Colors.lightBlue)),
                                 )
                               ],
                             ),
@@ -131,7 +134,8 @@ class EventDetailsContent extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
+                    padding:
+                        const EdgeInsets.only(top: 8.0, right: 8, bottom: 8),
                     child: Center(
                         child: Text(
                             "${event.duration.inHours} ${getLabel(event.duration.inHours, 'годин')} \n" +
@@ -156,25 +160,35 @@ class EventDetailsContent extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text("Учасників:", style: TextStyle(fontSize: 16)),
-              SizedBox(
-                width: 10,
-              ),
-              Text(event.subscribersCount.toString()),
-              Icon(Icons.people_outline),
-              Expanded(
-                child: Container(),
-              ),
-              RaisedButton(
-                color: CustomTheme.of(context).accentColor,
-                textColor: CustomTheme.of(context).bottomAppBarColor,
-                child: Text("Приєднатися"),
-                onPressed: () {},
-              ),
-            ],
+          Consumer<AccountProvider>(
+            builder:
+                (BuildContext context, AccountProvider account, Widget child) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("Учасників:", style: TextStyle(fontSize: 16)),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(event.subscribersCount.toString()),
+                  Icon(Icons.people_outline),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  account.userInfo.observedEvents.any((x) => x.id == event.id)
+                      ? RaisedButton(
+                          color: CustomTheme.of(context).accentColor,
+                          textColor: CustomTheme.of(context).bottomAppBarColor,
+                          child: Text("Відписатись"),
+                          onPressed: () => account.unsubsribeOnEvent(event))
+                      : RaisedButton(
+                          color: CustomTheme.of(context).accentColor,
+                          textColor: CustomTheme.of(context).bottomAppBarColor,
+                          child: Text("Приєднатися"),
+                          onPressed: () => account.subsribeOnEvent(event))
+                ],
+              );
+            },
           ),
           // Expanded(child: CommentsList()),
           ListTileTheme(

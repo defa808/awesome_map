@@ -1,3 +1,5 @@
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
+import 'package:awesome_map_mobile/services/accountService.dart';
 import 'package:awesome_map_mobile/services/authorizationService.dart';
 import 'package:awesome_map_mobile/services/commentService.dart';
 import 'package:awesome_map_mobile/services/eventService.dart';
@@ -11,4 +13,6 @@ setupInjector(){
   GetIt.I.registerSingleton<FileService>(FileService());
   GetIt.I.registerSingleton<AuthorizationService>(AuthorizationService());
   GetIt.I.registerSingleton<CommentService>(CommentService());
+  GetIt.I.registerSingleton<AccountProvider>(AccountProvider());
+  GetIt.I.registerSingleton<AccountService>(AccountService());
 }

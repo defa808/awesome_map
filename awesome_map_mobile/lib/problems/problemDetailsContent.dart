@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
 import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
 import 'package:awesome_map_mobile/base/photo/fileItemThumbnail.dart';
 import 'package:awesome_map_mobile/base/photo/photoVIewer.dart';
@@ -7,6 +8,7 @@ import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ProblemDetailsContent extends StatelessWidget {
   const ProblemDetailsContent(this.problem, {Key key}) : super(key: key);
@@ -35,7 +37,7 @@ class ProblemDetailsContent extends StatelessWidget {
                     )),
             ],
           ),
-           SizedBox(
+          SizedBox(
             height: 10,
           ),
           Text(problem.description, style: TextStyle(fontSize: 16)),
@@ -43,7 +45,7 @@ class ProblemDetailsContent extends StatelessWidget {
             height: 10,
           ),
           Divider(),
-           SizedBox(
+          SizedBox(
             height: 10,
           ),
           Row(
@@ -84,8 +86,9 @@ class ProblemDetailsContent extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Row(
-            children: <Widget>[
+          Consumer<AccountProvider>(builder:
+              (BuildContext context, AccountProvider account, Widget child) {
+            return Row(children: <Widget>[
               Text("Слідкують:", style: TextStyle(fontSize: 16)),
               SizedBox(
                 width: 10,
@@ -95,14 +98,19 @@ class ProblemDetailsContent extends StatelessWidget {
               Expanded(
                 child: Container(),
               ),
-              RaisedButton(
-                color: CustomTheme.of(context).accentColor,
-                textColor: CustomTheme.of(context).bottomAppBarColor,
-                child: Text("Слідкувати"),
-                onPressed: () {},
-              )
-            ],
-          ),
+              account.userInfo.observedProblems.any((x) => x.id == problem.id)
+                  ? RaisedButton(
+                      color: CustomTheme.of(context).accentColor,
+                      textColor: CustomTheme.of(context).bottomAppBarColor,
+                      child: Text("Відписатись"),
+                      onPressed: () => account.unsubsribeOnProblem(problem))
+                  : RaisedButton(
+                      color: CustomTheme.of(context).accentColor,
+                      textColor: CustomTheme.of(context).bottomAppBarColor,
+                      child: Text("Слідкувати"),
+                      onPressed: () => account.subsribeOnProblem(problem))
+            ]);
+          }),
           SizedBox(
             height: 20,
           ),

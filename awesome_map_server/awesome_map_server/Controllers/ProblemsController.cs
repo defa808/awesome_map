@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using awesome_map_server.ViewModels;
 using DataBaseContext;
 using DataBaseModels.Models;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +32,7 @@ namespace awesome_map_server.Controllers {
         public async Task<ActionResult<IEnumerable<ProblemViewModel>>> GetProblems() {
             List<Problem> problems = await _context.Problems
                 .Include(x=> x.Files)
+                .Include(x=> x.Subscribers)
                 .Include(x=> x.ProblemTypeProblems).ThenInclude(x=> x.ProblemType)
                 .ThenInclude(x=> x.Icon)
                 .ToListAsync();
@@ -115,6 +118,34 @@ namespace awesome_map_server.Controllers {
 
         private bool ProblemExists(Guid id) {
             return _context.Problems.Any(e => e.Id == id);
+        }
+
+        [HttpPost("Subscribe")]
+        public IActionResult Subscribe([FromBody] Guid problemId) {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Problem problem = _context.Problems.FirstOrDefault(x => x.Id == problemId);
+            if (problem == null)
+                return NotFound();
+            try {
+                problem.Subscribers.Add(new ProblemUser() { ProblemId = problem.Id, UserId = userId });
+                _context.SaveChanges();
+            }catch(Exception e) {
+                return BadRequest();
+            }
+            return Ok(true);
+        }
+
+        [HttpPost("Unsubscribe")]
+        public IActionResult Unubscribe([FromBody] Guid problemId) {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try {
+                _context.ProblemUsers.RemoveRange(_context.ProblemUsers.Where(x => x.ProblemId == problemId && x.UserId == userId).ToList());
+                _context.SaveChanges();
+            } catch (Exception e) {
+                return BadRequest();
+            }
+            return Ok(true);
         }
     }
 }

@@ -12,6 +12,8 @@ namespace DataBaseModels.Models {
         public virtual List<ProblemUser> ObservedProblems { get; set; }
 
         public virtual List<Event> MyEvents { get; set; }
+        public virtual List<EventUser> ObservedEvents { get; set; }
+
         [InverseProperty("UserRecipient")]
         public virtual List<Comment> Inbox { get; set; }
         [InverseProperty("UserSender")]

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/models/user/userFull.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,14 +24,16 @@ class AuthorizationService {
     return null;
   }
 
-  static Future<UserFull> getInfo(String email) async {
+  static Future<UserFull> getInfo() async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
-      Map<String, dynamic> jsonMap = {"email": email};
-      Map<String, String> headers = {"Content-type": "application/json"};
-      headers["Authorization"] = "Bearer " + await storage.read(key: 'jwt');
-      Response res = await http.post(config.apiUrl + "api/Users/Info",
-          headers: headers, body: json.encode(jsonMap));
+      Map<String, String> headers = await GetIt.I
+          .get<AuthorizationService>()
+          .getHeaders({"Content-type": "application/json"});
+      Response res = await http.post(
+        config.apiUrl + "api/Users/Info",
+        headers: headers,
+      );
       if (res.statusCode == 200 || res.statusCode == 201)
         return UserFull.fromJson(jsonDecode(res.body));
       throw Exception(res.body.toString());
@@ -58,8 +61,9 @@ class AuthorizationService {
   static Future<bool> logOut() async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
-      Map<String, String> headers = {"Content-type": "application/json"};
-      headers["Authorization"] = "Bearer " + await storage.read(key: 'jwt');
+      Map<String, String> headers = await GetIt.I
+          .get<AuthorizationService>()
+          .getHeaders({"Content-type": "application/json"});
       Response res = await http.post(
         config.apiUrl + "api/Users/LogOut",
         headers: headers,

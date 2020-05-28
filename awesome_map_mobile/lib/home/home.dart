@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
 import 'package:awesome_map_mobile/authorization/authorizationProvider.dart';
 import 'package:awesome_map_mobile/base/baseMap.dart';
 import 'package:awesome_map_mobile/events/eventHome.dart';
@@ -145,8 +146,8 @@ class _HomeState extends State<Home> {
         onTap: _onItemTapped,
       ),
       drawer: SizedBox(
-        child: Consumer<AuthorizationProvider>(builder: (BuildContext context,
-            AuthorizationProvider authorizationProvider, Widget child) {
+        child: Consumer<AccountProvider>(builder: (BuildContext context,
+            AccountProvider accountProvider, Widget child) {
           return Drawer(
             // Add a ListView to the drawer. This ensures the user can scroll
             // through the options in the drawer if there isn't enough vertical
@@ -157,13 +158,12 @@ class _HomeState extends State<Home> {
                 UserAccountsDrawerHeader(
                   decoration:
                       BoxDecoration(color: Theme.of(context).primaryColor),
-                  accountEmail: Text(
-                      authorizationProvider.googleAccount?.email ??
-                          authorizationProvider.userInfo?.email ??
-                          ''),
+                  accountEmail: Text(accountProvider.googleAccount?.email ??
+                      accountProvider.userInfo?.email ??
+                      ''),
                   accountName: Text(
-                      authorizationProvider.googleAccount?.displayName ??
-                          authorizationProvider.userInfo?.userName ??
+                      accountProvider.googleAccount?.displayName ??
+                          accountProvider.userInfo?.userName ??
                           ''),
                   otherAccountsPictures: <Widget>[
                     CustomTheme.instanceOf(context).themeKey ==
@@ -189,14 +189,13 @@ class _HomeState extends State<Home> {
                             angle: 30 * pi / 180,
                           )
                   ],
-                  currentAccountPicture:
-                      authorizationProvider.googleAccount != null
-                          ? GoogleUserCircleAvatar(
-                              identity: authorizationProvider.googleAccount,
-                            )
-                          : CircleAvatar(
-                              child: Text("A"),
-                            ),
+                  currentAccountPicture: accountProvider.googleAccount != null
+                      ? GoogleUserCircleAvatar(
+                          identity: accountProvider.googleAccount,
+                        )
+                      : CircleAvatar(
+                          child: Text("A"),
+                        ),
                 ),
                 Column(children: drawerOptions),
                 Expanded(
@@ -208,7 +207,9 @@ class _HomeState extends State<Home> {
                     leading: Icon(Icons.exit_to_app),
                     title: Text("Вийти"),
                     onTap: () async {
-                      if (await authorizationProvider.handleSignOut())
+                      if (await context
+                          .read<AuthorizationProvider>()
+                          .handleSignOut())
                         SchedulerBinding.instance.addPostFrameCallback((_) {
                           Navigator.pushNamedAndRemoveUntil(
                               context, '/welcome', (_) => false);

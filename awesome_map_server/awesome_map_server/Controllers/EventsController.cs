@@ -9,6 +9,7 @@ using DataBaseModels.Models;
 using DataBaseContext;
 using awesome_map_server.ViewModels;
 using AutoMapper;
+using System.Security.Claims;
 
 namespace awesome_map_server.Controllers {
     [Route("api/[controller]")]
@@ -84,10 +85,10 @@ namespace awesome_map_server.Controllers {
         [HttpPost]
         public async Task<ActionResult<EventViewModel>> PostEvent(EventViewModel @event) {
             Event newEntity = _mapper.Map<Event>(@event);
-            
+
             foreach (var item in @event.EventTypes)
                 newEntity.EventTypeEvents.Add(new EventTypeEvent() { Event = newEntity, TypeId = item.Id });
-            
+
             newEntity.CreateDate = DateTime.Now;
 
             _context.Events.Add(newEntity);
@@ -116,6 +117,34 @@ namespace awesome_map_server.Controllers {
 
         private bool EventExists(Guid id) {
             return _context.Events.Any(e => e.Id == id);
+        }
+
+        [HttpPost("Subscribe")]
+        public IActionResult Subscribe([FromBody] Guid eventId) {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            Event entity = _context.Events.FirstOrDefault(x => x.Id == eventId);
+            if (entity == null)
+                return NotFound();
+            try {
+                entity.Subscribers.Add(new EventUser() { EventId = entity.Id, UserId = userId });
+                _context.SaveChanges();
+            } catch (Exception e) {
+                return BadRequest();
+            }
+            return Ok(true);
+        }
+
+        [HttpPost("Unsubscribe")]
+        public IActionResult Unubscribe([FromBody] Guid eventId) {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try {
+                _context.EventUser.RemoveRange(_context.EventUser.Where(x => x.EventId == eventId && x.UserId == userId).ToList());
+                _context.SaveChanges();
+            } catch (Exception e) {
+                return BadRequest();
+            }
+            return Ok(true);
         }
     }
 }

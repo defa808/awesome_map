@@ -173,7 +173,7 @@ class _SignUpState extends State<SignUp> {
                             });
                             bool result = await context
                                 .read<AuthorizationProvider>()
-                                .handleSignUp(
+                                .handleCustomSignUp(
                                     email: emailController.text,
                                     password: passwordController.text);
                             if (result)

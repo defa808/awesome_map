@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/models/comment/comment.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:awesome_map_mobile/main.dart';
+
+import 'authorizationService.dart';
 
 class CommentService {
   Future<List<Comment>> getCommentsForProblem(String id) async {
@@ -28,8 +31,9 @@ class CommentService {
 
   Future<Comment> sendComment(Comment comment) async {
     AppConfig config = await AppConfig.forEnvironment();
-    Map<String, String> headers = {"Content-type": "application/json"};
-    headers["Authorization"] = "Bearer " + await storage.read(key: 'jwt');
+    Map<String, String> headers = await GetIt.I
+        .get<AuthorizationService>()
+        .getHeaders({"Content-type": "application/json"});
     Map<String, dynamic> jsonEntity = comment.toJson();
     Response res = await http.post(config.apiUrl + "api/Comments",
         headers: headers, body: jsonEncode(jsonEntity));

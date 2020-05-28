@@ -67,7 +67,7 @@ namespace awesome_map_server {
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime = false,
+                    ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTTokenSecret"]))
                 };
             }).AddIdentityServerJwt().AddGoogle(options => {
