@@ -57,8 +57,10 @@ namespace awesome_map_server.Controllers {
             if (user == null)
                 return BadRequest(new { message = "Register is failed. Please try it again later." });
             UserFullViewModel userViewModel = _mapper.Map<UserFullViewModel>(user);
-            userViewModel.ObservedProblems = _mapper.ProjectTo<ProblemViewModel>(user.ObservedProblems.Select(x=> x.Problem).AsQueryable()).ToList();
-            userViewModel.ObservedEvents = _mapper.ProjectTo<EventViewModel>(user.ObservedEvents.Select(x=> x.Event).AsQueryable()).ToList();
+            userViewModel.MyEventIds = user.MyEvents.Select(x => x.Id).ToList();
+            userViewModel.MyProblemIds = user.MyProblems.Select(x => x.Id).ToList();
+            userViewModel.ObservedProblemIds = user.ObservedProblems.Select(x => x.ProblemId).ToList();
+            userViewModel.ObservedEventIds = user.ObservedEvents.Select(x => x.EventId).ToList();
             return Ok(userViewModel);
         }
 

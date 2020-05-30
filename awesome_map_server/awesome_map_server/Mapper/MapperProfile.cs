@@ -25,9 +25,7 @@ namespace awesome_map_server.Mapper {
             CreateMap<CommentViewModel, Comment>();
             CreateMap<UserLightViewModel, ApplicationUser>();
             CreateMap<ApplicationUser, UserLightViewModel>();
-            CreateMap<ApplicationUser, UserFullViewModel>()
-                .ForMember(x => x.ObservedProblems, opt => opt.Ignore())
-                .ForMember(x => x.ObservedEvents, opt => opt.Ignore()); ;
+            CreateMap<ApplicationUser, UserFullViewModel>();
         }
     }
 }

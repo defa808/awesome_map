@@ -32,7 +32,7 @@ class AccountProvider extends ChangeNotifier {
       bool result =
           await GetIt.I.get<AccountService>().subscribeOnProblem(problem.id);
       if (result) {
-        this.userInfo.observedProblems.add(problem);
+        this.userInfo.observedProblemIds.add(problem.id);
         problem.subscribersCount += 1;
         notifyListeners();
       }
@@ -47,7 +47,7 @@ class AccountProvider extends ChangeNotifier {
           await GetIt.I.get<AccountService>().unSubscribeOnProblem(problem.id);
 
       if (result) {
-        this.userInfo.observedProblems.removeWhere((x) => x.id == problem.id);
+        this.userInfo.observedProblemIds.removeWhere((x) => x == problem.id);
         problem.subscribersCount -= 1;
         notifyListeners();
       }
@@ -61,7 +61,7 @@ class AccountProvider extends ChangeNotifier {
       bool result =
           await GetIt.I.get<AccountService>().subsribeOnEvent(event.id);
       if (result) {
-        this.userInfo.observedEvents.add(event);
+        this.userInfo.observedEventIds.add(event.id);
         event.subscribersCount += 1;
         notifyListeners();
       }
@@ -76,7 +76,7 @@ class AccountProvider extends ChangeNotifier {
           await GetIt.I.get<AccountService>().unSubscribeOnEvent(event.id);
 
       if (result) {
-        this.userInfo.observedEvents.removeWhere((x) => x.id == event.id);
+        this.userInfo.observedEventIds.removeWhere((x) => x == event.id);
         event.subscribersCount -= 1;
         notifyListeners();
       }

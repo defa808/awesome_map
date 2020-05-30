@@ -175,7 +175,7 @@ class EventDetailsContent extends StatelessWidget {
                   Expanded(
                     child: Container(),
                   ),
-                  account.userInfo.observedEvents.any((x) => x.id == event.id)
+                  account.userInfo.observedEventIds.any((x) => x == event.id)
                       ? RaisedButton(
                           color: CustomTheme.of(context).accentColor,
                           textColor: CustomTheme.of(context).bottomAppBarColor,

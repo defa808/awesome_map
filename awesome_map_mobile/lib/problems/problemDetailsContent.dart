@@ -98,7 +98,7 @@ class ProblemDetailsContent extends StatelessWidget {
               Expanded(
                 child: Container(),
               ),
-              account.userInfo.observedProblems.any((x) => x.id == problem.id)
+              account.userInfo.observedProblemIds.any((x) => x == problem.id)
                   ? RaisedButton(
                       color: CustomTheme.of(context).accentColor,
                       textColor: CustomTheme.of(context).bottomAppBarColor,

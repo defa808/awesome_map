@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
 import 'package:awesome_map_mobile/events/eventItem.dart';
 import 'package:awesome_map_mobile/events/providers/eventMarkers.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,6 @@ class EventUserList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> events = context
-        .watch<EventMarkers>()
-        .filteredEvents
-        .map<Widget>((x) => SelectableEventItem(event: x))
-        .toList();
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Заходи'),
@@ -21,8 +16,31 @@ class EventUserList extends StatelessWidget {
         ),
         body: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: ListView(
-              children: events,
+            child: Consumer<AccountProvider>(
+              builder: (BuildContext context, AccountProvider account,
+                  Widget child) {
+                return account.userInfo.observedEventIds.length > 0
+                    ? ListView(
+                        children: account.userInfo.observedEventIds
+                            .map((e) => SelectableEventItem(event: context.watch<EventMarkers>().getEventDetails(e)))
+                            .toList(),
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("Список ваших заходів пустий.",
+                                style: TextStyle(fontSize: 20)),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                                "Приєднайтесь до будь-якого запису з мапи або створіть свій.",
+                                style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      );
+              },
             )));
   }
 }

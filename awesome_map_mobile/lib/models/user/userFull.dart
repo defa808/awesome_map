@@ -12,14 +12,14 @@ class UserFull {
   String userName;
   String email;
   ServerFile avatar;
-  List<Problem> myProblems;
-  List<Problem> observedProblems;
-  List<Event> myEvents;
-  List<Event> observedEvents;
+  List<String> myProblemIds;
+  List<String> observedProblemIds;
+  List<String> myEventIds;
+  List<String> observedEventIds;
   List<Comment> inbox;
 
-  UserFull(this.id, this.email, this.userName, this.avatar, this.myProblems,
-      this.observedProblems, this.myEvents, this.observedEvents, this.inbox);
+  UserFull(this.id, this.email, this.userName, this.avatar, this.myProblemIds,
+      this.observedProblemIds, this.myEventIds, this.observedEventIds, this.inbox);
 
   factory UserFull.empty() {
     return UserFull(
@@ -27,10 +27,10 @@ class UserFull {
         null,
         null,
         null,
-        new List<Problem>(),
-        new List<Problem>(),
-        new List<Event>(),
-        new List<Event>(),
+        new List<String>(),
+        new List<String>(),
+        new List<String>(),
+        new List<String>(),
         new List<Comment>());
   }
 

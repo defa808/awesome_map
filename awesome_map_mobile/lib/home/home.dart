@@ -44,8 +44,9 @@ class Home extends StatefulWidget {
     DrawerItem(
         icon: Icon(Icons.error_outline),
         title: Text("Проблеми"),
-        path: '/problems'),
-    DrawerItem(icon: Icon(Icons.event), title: Text("Заходи"), path: '/events'),
+        path: '/userProblems'),
+    DrawerItem(
+        icon: Icon(Icons.event), title: Text("Заходи"), path: '/userEvents'),
     DrawerItem(
         icon: Icon(Icons.settings),
         title: Text("Налаштування"),
@@ -71,13 +72,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
+  int _selectedIndex;
 
   @override
   void initState() {
     super.initState();
+    _selectedIndex = 0;
+    Future.microtask(() {
+      var arguments = ModalRoute.of(context).settings.arguments;
+      if (arguments != null)
+        setState(() {
+          _selectedIndex = arguments ?? 0;
+        });
+    });
     _selectedDrawerIndex = -1;
-
     // checkAuthorization();
   }
 

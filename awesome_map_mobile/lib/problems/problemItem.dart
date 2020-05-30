@@ -7,8 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ProblemItem extends StatefulWidget {
-  ProblemItem({Key key, @required this.problem}) : super(key: key);
+  ProblemItem({Key key, @required this.problem, this.beforeShowMap})
+      : super(key: key);
   final Problem problem;
+  final Function beforeShowMap;
   @override
   _ProblemItemState createState() => _ProblemItemState();
 }
@@ -89,9 +91,12 @@ class _ProblemItemState extends State<ProblemItem> {
                       color: CustomTheme.of(context).accentColor,
                       textColor: CustomTheme.of(context).bottomAppBarColor,
                       onPressed: () {
+                       
                         context
                             .read<GoogleMapModel>()
                             .selectItem(MarkerId(widget.problem.id));
+                             if (widget.beforeShowMap != null)
+                          widget.beforeShowMap();
                       },
                       child: Text("На карті"),
                     ),
@@ -115,9 +120,9 @@ class _ProblemItemState extends State<ProblemItem> {
                           style: TextStyle(fontSize: 13),
                         ),
                         Text(
-                            DateFormat.Hm()
-                                  .format(widget.problem.createDate)
-                                  .toString(),
+                          DateFormat.Hm()
+                              .format(widget.problem.createDate)
+                              .toString(),
                           style: TextStyle(fontSize: 13),
                         )
                       ],

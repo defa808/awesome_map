@@ -12,10 +12,10 @@ namespace awesome_map_server.ViewModels.User {
         public string Email { get; set; }
 
         public ServerFile Avatar { get; set; }
-        public  List<ProblemViewModel> MyProblems { get; set; }
-        public  List<EventViewModel> MyEvents { get; set; }
+        public  List<Guid> MyProblemIds { get; set; }
+        public  List<Guid> MyEventIds { get; set; }
         public  List<CommentViewModel> Inbox { get; set; }
-        public  List<ProblemViewModel> ObservedProblems { get; set; }
-        public  List<EventViewModel> ObservedEvents { get; set; }
+        public  List<Guid> ObservedProblemIds { get; set; }
+        public  List<Guid> ObservedEventIds { get; set; }
     }
 }

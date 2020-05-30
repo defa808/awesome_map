@@ -15,22 +15,10 @@ UserFull _$UserFullFromJson(Map<String, dynamic> json) {
     json['avatar'] == null
         ? null
         : ServerFile.fromJson(json['avatar'] as Map<String, dynamic>),
-    (json['myProblems'] as List)
-        ?.map((e) =>
-            e == null ? null : Problem.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    (json['observedProblems'] as List)
-        ?.map((e) =>
-            e == null ? null : Problem.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    (json['myEvents'] as List)
-        ?.map(
-            (e) => e == null ? null : Event.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    (json['observedEvents'] as List)
-        ?.map(
-            (e) => e == null ? null : Event.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    (json['myProblemIds'] as List)?.map((e) => e as String)?.toList(),
+    (json['observedProblemIds'] as List)?.map((e) => e as String)?.toList(),
+    (json['myEventIds'] as List)?.map((e) => e as String)?.toList(),
+    (json['observedEventIds'] as List)?.map((e) => e as String)?.toList(),
     (json['inbox'] as List)
         ?.map((e) =>
             e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
@@ -43,9 +31,9 @@ Map<String, dynamic> _$UserFullToJson(UserFull instance) => <String, dynamic>{
       'userName': instance.userName,
       'email': instance.email,
       'avatar': instance.avatar,
-      'myProblems': instance.myProblems,
-      'observedProblems': instance.observedProblems,
-      'myEvents': instance.myEvents,
-      'observedEvents': instance.observedEvents,
+      'myProblemIds': instance.myProblemIds,
+      'observedProblemIds': instance.observedProblemIds,
+      'myEventIds': instance.myEventIds,
+      'observedEventIds': instance.observedEventIds,
       'inbox': instance.inbox,
     };
