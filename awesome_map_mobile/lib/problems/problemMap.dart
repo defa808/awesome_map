@@ -7,6 +7,7 @@ import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/problems/createProblemItem.dart';
 import 'package:awesome_map_mobile/services/fileService.dart';
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -84,10 +85,11 @@ class _ProblemMapState extends State<ProblemMap> {
         body: Container(
           child: Stack(children: <Widget>[
             BaseMap(filter: MarkerType.Problem),
-             if(problemFormModel.readyToFill) CreateProblemItem(),
+            if (problemFormModel.readyToFill)
+              CreateProblemItem(),
             // SlidingUpPanelContainer(
             //   isShow: problemFormModel.readyToFill,
-              
+
             //   renderChild: (sc) => CreateProblemItem(scrollController: sc),
             // ),
             if (isPrepareAdd)

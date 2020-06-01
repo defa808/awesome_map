@@ -12,6 +12,7 @@ import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/services/eventService.dart';
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -76,7 +77,7 @@ class _CreateEventItemState extends State<CreateEventItem> {
                   BoxShadow(
                       color: Colors.grey[400], spreadRadius: 1, blurRadius: 7)
                 ],
-                color: Colors.white,
+                color: CustomTheme.of(context).bottomAppBarColor,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40))),

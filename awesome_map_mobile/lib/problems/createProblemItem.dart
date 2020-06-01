@@ -7,6 +7,7 @@ import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/problems/providers/problemForm.dart';
 import 'package:awesome_map_mobile/services/problemService.dart';
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -69,7 +70,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                             spreadRadius: 1,
                             blurRadius: 7)
                       ],
-                      color: Colors.white,
+                      color: CustomTheme.of(context).bottomAppBarColor,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(40),
                           topRight: Radius.circular(40))),
@@ -83,7 +84,8 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                           return Form(
                             key: _formKey,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Center(
                                   child: Container(
@@ -104,8 +106,8 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                               labelText: "Широта",
                                               hintText: "Широта"),
                                           keyboardType: TextInputType.number,
-                                          initialValue:
-                                              model.problem.latitude.toString(),
+                                          initialValue: model.problem.latitude
+                                              .toString(),
                                           onSaved: (String value) {
                                             model.problem.latitude =
                                                 double.parse(value);
@@ -119,7 +121,8 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                               labelText: "Довгота",
                                               hintText: "Довгота"),
                                           keyboardType: TextInputType.number,
-                                          initialValue: model.problem.longitude
+                                          initialValue: model
+                                              .problem.longitude
                                               .toString(),
                                           onSaved: (String value) {
                                             model.problem.longitude =
@@ -142,15 +145,15 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                       for (Category item
                                           in model.problem.problemTypes)
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 5.0),
+                                          padding: const EdgeInsets.only(
+                                              right: 5.0),
                                           child: CategoryItem(
                                               label: Text(item.name),
                                               icon: item.icon != null
                                                   ? Icon(IconData(
                                                       item.icon.iconCode,
-                                                      fontFamily:
-                                                          item.icon.fontFamily,
+                                                      fontFamily: item
+                                                          .icon.fontFamily,
                                                       fontPackage: item
                                                           .icon.fontPackage))
                                                   : null,
@@ -160,7 +163,9 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                         )
                                     ]),
                                 ChooseCategoryAutoComplete(
-                                    getStore: GetIt.I.get<ProblemService>().getCategories,
+                                    getStore: GetIt.I
+                                        .get<ProblemService>()
+                                        .getCategories,
                                     selectedCategories:
                                         model.problem.problemTypes,
                                     addCategory: model.addCategory),
@@ -197,8 +202,8 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                                   children: <Widget>[
                                     FlatButton.icon(
                                       textColor: Colors.blue,
-                                      icon:
-                                          Icon(Icons.send, color: Colors.blue),
+                                      icon: Icon(Icons.send,
+                                          color: Colors.blue),
                                       label: Text("Відправити"),
                                       onPressed: () {
                                         completeTicket();
