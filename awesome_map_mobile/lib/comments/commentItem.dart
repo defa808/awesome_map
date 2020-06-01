@@ -25,9 +25,12 @@ class _CommentItemState extends State<CommentItem> {
   }
 
   Future<File> executeFile() async {
-    return await GetIt.I
-        .get<FileService>()
-        .getFile(widget.comment.userSender.avatar);
+    if (widget.comment.userSender.avatar != null) {
+      return await GetIt.I
+          .get<FileService>()
+          .getFile(widget.comment.userSender.avatar);
+    } else
+      return null;
   }
 
   @override

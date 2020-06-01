@@ -66,7 +66,7 @@ class _ProblemItemState extends State<ProblemItem> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text("25", style: TextStyle(fontSize: 18)),
+                      Text(widget.problem.commentsLength.toString(), style: TextStyle(fontSize: 18)),
                       Text("Коментарів"),
                     ],
                   ),

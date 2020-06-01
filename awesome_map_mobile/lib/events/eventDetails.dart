@@ -89,9 +89,9 @@ class _EventDetailsState extends State<EventDetails> {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 TabBar(
-                  labelColor: CustomTheme.of(context).primaryColor,
+                  labelColor: CustomTheme.of(context).accentColor,
                   unselectedLabelColor:
-                      CustomTheme.of(context).primaryColor.withOpacity(0.3),
+                      CustomTheme.of(context).accentColor.withOpacity(0.3),
                   tabs: <Widget>[
                     Tab(
                       text: "Детальніше",

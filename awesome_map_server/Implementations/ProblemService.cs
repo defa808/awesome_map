@@ -37,6 +37,7 @@ namespace Implementations {
             return await _context.Problems
              .Include(x => x.Files)
              .Include(x => x.Subscribers)
+             .Include(x => x.Comments)
              .Include(x => x.ProblemTypeProblems).ThenInclude(x => x.ProblemType)
              .ThenInclude(x => x.Icon)
              .ToListAsync();

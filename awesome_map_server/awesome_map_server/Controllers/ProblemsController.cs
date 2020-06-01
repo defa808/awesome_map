@@ -39,6 +39,7 @@ namespace awesome_map_server.Controllers {
                 ProblemViewModel viewModel = _mapper.Map<ProblemViewModel>(item);
                 viewModel.ProblemTypes = _mapper.ProjectTo<ProblemTypeViewModel>(item.ProblemTypeProblems.Select(x => x.ProblemType).AsQueryable()).ToList();
                 viewModel.SubscribersCount = item.Subscribers.Count;
+                viewModel.CommentsLength = item.Comments.Count;
                 problemsViewModel.Add(viewModel);
             }
             return problemsViewModel;

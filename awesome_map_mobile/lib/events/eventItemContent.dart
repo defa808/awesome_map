@@ -23,7 +23,8 @@ class _EventItemContentState extends State<EventItemContent> {
         children: <Widget>[
           if (widget.event.files.length > 0)
             FutureBuilder<File>(
-                future: GetIt.I.get<FileService>().getFile(widget.event.files[0]),
+                future:
+                    GetIt.I.get<FileService>().getFile(widget.event.files[0]),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   switch (snapshot.connectionState) {
@@ -79,8 +80,7 @@ class _EventItemContentState extends State<EventItemContent> {
                           children: <Widget>[
                             Text(
                               widget.event.title,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 25),
+                              style: TextStyle(fontSize: 25),
                             ),
                           ],
                         ),
@@ -104,14 +104,14 @@ class _EventItemContentState extends State<EventItemContent> {
                           DateFormat.yMd()
                               .format(widget.event.startDate)
                               .toString(),
-                          style: TextStyle(color: Colors.black, fontSize: 13),
+                          style: TextStyle(fontSize: 13),
                         ),
                         SizedBox(height: 2),
                         Text(
                           DateFormat.Hm()
                               .format(widget.event.startDate)
                               .toString(),
-                          style: TextStyle(color: Colors.black, fontSize: 13),
+                          style: TextStyle(fontSize: 13),
                         )
                       ],
                     ),

@@ -23,6 +23,7 @@ class Problem {
   DateTime createDate;
   DateTime updateDate;
   List<Comment> comments;
+  int commentsLength;
 
   String description;
   List<ServerFile> files;
@@ -39,6 +40,7 @@ class Problem {
       this.problemTypes,
       this.files,
       this.comments,
+      this.commentsLength,
       this.subscribersCount);
 
   factory Problem.empty() {
@@ -54,6 +56,7 @@ class Problem {
         new List<Category>(),
         new List<ServerFile>(),
         new List<Comment>(),
+        0,
         0);
   }
 

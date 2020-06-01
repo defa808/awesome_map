@@ -20,11 +20,10 @@ namespace awesome_map_server.ViewModels {
         public int SubscribersCount { get; set; }
         public ProblemStatus Status { get; set; } = ProblemStatus.Open;
         public virtual List<ServerFile> Files { get; set; }
-        public virtual List<CommentViewModel> Comments { get; set; }
+        public int CommentsLength { get; set; }
 
         ProblemViewModel() {
             ProblemTypes = new List<ProblemTypeViewModel>();
-            Comments = new List<CommentViewModel>();
         }
     }
 }
