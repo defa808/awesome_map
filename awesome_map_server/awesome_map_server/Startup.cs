@@ -93,6 +93,8 @@ namespace awesome_map_server {
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProblemService, ProblemService>();
+            services.AddScoped<IEventService, EventService>();
         }
 
         private async Task CreateRolesAndUser(IApplicationBuilder app, IServiceProvider serviceProvider) {
