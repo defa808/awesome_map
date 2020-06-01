@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using awesome_map_server.ViewModels;
+using Contracts;
 using DataBaseContext;
 using DataBaseModels.Models;
 using IdentityServer4.Extensions;
@@ -21,21 +22,18 @@ namespace awesome_map_server.Controllers {
     public class ProblemsController : ControllerBase {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
-        public ProblemsController(ApplicationDbContext context, IMapper autoMapper) {
+        private IProblemService _problemService;
+        public ProblemsController(ApplicationDbContext context, IMapper autoMapper, IProblemService problemService) {
             _context = context;
             _mapper = autoMapper;
+            _problemService = problemService;
         }
 
         // GET: api/Problems
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProblemViewModel>>> GetProblems() {
-            List<Problem> problems = await _context.Problems
-                .Include(x=> x.Files)
-                .Include(x=> x.Subscribers)
-                .Include(x=> x.ProblemTypeProblems).ThenInclude(x=> x.ProblemType)
-                .ThenInclude(x=> x.Icon)
-                .ToListAsync();
+            List<Problem> problems = await _problemService.GetProblems();
             List<ProblemViewModel> problemsViewModel = new List<ProblemViewModel>();
             foreach (var item in problems) {
                 ProblemViewModel viewModel = _mapper.Map<ProblemViewModel>(item);
@@ -49,7 +47,7 @@ namespace awesome_map_server.Controllers {
         // GET: api/Problems/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProblemViewModel>> GetProblem(Guid id) {
-            var problem = await _context.Problems.FindAsync(id);
+            Problem problem = await _problemService.GetProblem(id);
 
             if (problem == null) {
                 return NotFound();
@@ -67,12 +65,10 @@ namespace awesome_map_server.Controllers {
                 return BadRequest();
             }
 
-            _context.Entry(problem).State = EntityState.Modified;
-
             try {
-                await _context.SaveChangesAsync();
+                _problemService.Change(problem);
             } catch (DbUpdateConcurrencyException) {
-                if (!ProblemExists(id)) {
+                if (!_problemService.Exist(id)) {
                     return NotFound();
                 } else {
                     throw;
@@ -87,61 +83,53 @@ namespace awesome_map_server.Controllers {
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<ProblemViewModel>> PostProblem(ProblemViewModel problem) {
-            Problem newProblem = _mapper.Map<Problem>(problem);
-            newProblem.CreateDate = DateTime.Now;
 
+            Problem newProblem = _mapper.Map<Problem>(problem);
             foreach (var item in problem.ProblemTypes)
                 newProblem.ProblemTypeProblems.Add(new ProblemTypeProblem() { Problem = newProblem, ProblemTypeId = item.Id });
 
-            _context.Problems.Add(newProblem);
-            await _context.SaveChangesAsync();
+            _problemService.Save(newProblem);
 
             ProblemViewModel loadedProblem = _mapper.Map<ProblemViewModel>(newProblem);
             loadedProblem.ProblemTypes = problem.ProblemTypes;
             loadedProblem.SubscribersCount = newProblem.Subscribers.Count;
-            return CreatedAtAction("GetProblem", new { id = newProblem.Id },loadedProblem);
+            return CreatedAtAction("GetProblem", new { id = newProblem.Id }, loadedProblem);
         }
 
         // DELETE: api/Problems/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Problem>> DeleteProblem(Guid id) {
-            var problem = await _context.Problems.FindAsync(id);
+            var problem = await _problemService.GetProblem(id);
             if (problem == null) {
                 return NotFound();
             }
-
-            _context.Problems.Remove(problem);
-            await _context.SaveChangesAsync();
-
+            _problemService.Delete(problem);
             return problem;
         }
 
-        private bool ProblemExists(Guid id) {
-            return _context.Problems.Any(e => e.Id == id);
-        }
-
         [HttpPost("Subscribe")]
-        public IActionResult Subscribe([FromBody] Guid problemId) {
+        public async Task<IActionResult> Subscribe([FromBody] Guid problemId) {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            Problem problem = _context.Problems.FirstOrDefault(x => x.Id == problemId);
+            Problem problem = await _problemService.GetProblem(problemId);
             if (problem == null)
                 return NotFound();
             try {
-                problem.Subscribers.Add(new ProblemUser() { ProblemId = problem.Id, UserId = userId });
-                _context.SaveChanges();
-            }catch(Exception e) {
+                _problemService.Subscribe(problem, userId);
+             
+            } catch (Exception e) {
                 return BadRequest();
             }
             return Ok(true);
         }
 
         [HttpPost("Unsubscribe")]
-        public IActionResult Unubscribe([FromBody] Guid problemId) {
+        public IActionResult Unsubscribe([FromBody] Guid problemId) {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!_problemService.Exist(problemId))
+                return NotFound();
             try {
-                _context.ProblemUsers.RemoveRange(_context.ProblemUsers.Where(x => x.ProblemId == problemId && x.UserId == userId).ToList());
-                _context.SaveChanges();
+                _problemService.Unsubscribe(problemId, userId);
             } catch (Exception e) {
                 return BadRequest();
             }

@@ -10,6 +10,7 @@ using DataBaseContext;
 using awesome_map_server.ViewModels;
 using AutoMapper;
 using System.Security.Claims;
+using Contracts;
 
 namespace awesome_map_server.Controllers {
     [Route("api/[controller]")]
@@ -17,22 +18,19 @@ namespace awesome_map_server.Controllers {
     public class EventsController : ControllerBase {
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
+        private IEventService _eventService;
 
-        public EventsController(ApplicationDbContext context, IMapper autoMapper) {
+        public EventsController(ApplicationDbContext context, IMapper autoMapper, IEventService eventService) {
             _context = context;
             _mapper = autoMapper;
-
+            _eventService = eventService;
         }
 
         // GET: api/Events
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EventViewModel>>> GetEvents() {
 
-            List<Event> events = await _context.Events
-             .Include(x => x.Files)
-             .Include(x => x.EventTypeEvents).ThenInclude(x => x.Type)
-             .ThenInclude(x => x.Icon)
-             .ToListAsync();
+            List<Event> events = await _eventService.GetEvents();
             List<EventViewModel> listViewModels = new List<EventViewModel>();
             foreach (var item in events) {
                 EventViewModel viewModel = _mapper.Map<EventViewModel>(item);
@@ -46,7 +44,7 @@ namespace awesome_map_server.Controllers {
         // GET: api/Events/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Event>> GetEvent(Guid id) {
-            var @event = await _context.Events.FindAsync(id);
+            var @event = await _eventService.GetEvent(id);
 
             if (@event == null) {
                 return NotFound();
@@ -63,13 +61,10 @@ namespace awesome_map_server.Controllers {
             if (id != @event.Id) {
                 return BadRequest();
             }
-
-            _context.Entry(@event).State = EntityState.Modified;
-
             try {
-                await _context.SaveChangesAsync();
+                _eventService.Change(@event);
             } catch (DbUpdateConcurrencyException) {
-                if (!EventExists(id)) {
+                if (!_eventService.Exist(id)) {
                     return NotFound();
                 } else {
                     throw;
@@ -89,11 +84,8 @@ namespace awesome_map_server.Controllers {
             foreach (var item in @event.EventTypes)
                 newEntity.EventTypeEvents.Add(new EventTypeEvent() { Event = newEntity, TypeId = item.Id });
 
-            newEntity.CreateDate = DateTime.Now;
-
-            _context.Events.Add(newEntity);
-            await _context.SaveChangesAsync();
-
+            _eventService.Save(newEntity);
+            
             EventViewModel loadedEntity = _mapper.Map<EventViewModel>(newEntity);
             loadedEntity.EventTypes = @event.EventTypes;
             loadedEntity.SubscribersCount = newEntity.Subscribers.Count;
@@ -104,7 +96,7 @@ namespace awesome_map_server.Controllers {
         // DELETE: api/Events/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Event>> DeleteEvent(Guid id) {
-            var @event = await _context.Events.FindAsync(id);
+            var @event = await _eventService.GetEvent(id);
             if (@event == null) {
                 return NotFound();
             }
@@ -115,10 +107,6 @@ namespace awesome_map_server.Controllers {
             return @event;
         }
 
-        private bool EventExists(Guid id) {
-            return _context.Events.Any(e => e.Id == id);
-        }
-
         [HttpPost("Subscribe")]
         public IActionResult Subscribe([FromBody] Guid eventId) {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -127,8 +115,7 @@ namespace awesome_map_server.Controllers {
             if (entity == null)
                 return NotFound();
             try {
-                entity.Subscribers.Add(new EventUser() { EventId = entity.Id, UserId = userId });
-                _context.SaveChanges();
+                _eventService.Subscribe(entity, userId);
             } catch (Exception e) {
                 return BadRequest();
             }
@@ -139,8 +126,7 @@ namespace awesome_map_server.Controllers {
         public IActionResult Unubscribe([FromBody] Guid eventId) {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try {
-                _context.EventUser.RemoveRange(_context.EventUser.Where(x => x.EventId == eventId && x.UserId == userId).ToList());
-                _context.SaveChanges();
+                _eventService.Unsubscribe(eventId,userId);
             } catch (Exception e) {
                 return BadRequest();
             }

@@ -35,9 +35,6 @@
     <ProjectReference Include="..\DataBaseContext\DataBaseContext.csproj" />
     <ProjectReference Include="..\Implementations\Implementations.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

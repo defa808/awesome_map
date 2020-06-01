@@ -45,7 +45,7 @@ namespace awesome_map_server.Controllers {
         [HttpGet]
         public IActionResult GetComments(Guid problemId, Guid eventId) {
             if (problemId != Guid.Empty)
-                return Ok(_mapper.ProjectTo<CommentViewModel>(_context.Comments.Where(x => x.ProblemId == problemId).OrderBy(x=> x.TimeSend).AsQueryable()).ToList());
+                return Ok(_mapper.ProjectTo<CommentViewModel>(_context.Comments.Where(x => x.ProblemId == problemId).Include(x=> x.UserSender).OrderBy(x=> x.TimeSend).AsQueryable()).ToList());
 
             if (eventId != Guid.Empty)
                 return Ok(_mapper.ProjectTo<CommentViewModel>(_context.Comments.Where(x => x.EventId == eventId).OrderBy(x => x.TimeSend).AsQueryable()).ToList());
