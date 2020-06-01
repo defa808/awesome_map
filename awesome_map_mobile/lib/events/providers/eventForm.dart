@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/event/event.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
@@ -30,6 +31,7 @@ class EventForm with ChangeNotifier {
         fileInfo = await GetIt.I.get<FileService>().save(fileInfo, item);
         this.event.files.add(fileInfo);
       }
+      await GetIt.I.get<AccountProvider>().addEvent(event.id);
 
       readyToFill = false;
       return true;

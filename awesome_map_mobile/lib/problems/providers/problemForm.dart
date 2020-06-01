@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
 import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
@@ -25,16 +26,19 @@ class ProblemForm with ChangeNotifier {
 
   Future<bool> save() async {
     try {
-      this.problem = await GetIt.I.get<ProblemService>().save(this.problem);
-      ServerFile fileInfo = ServerFile.empty();
-      fileInfo.problemId = this.problem.id;
-      for (File item in files) {
-        fileInfo = await GetIt.I.get<FileService>().save(fileInfo, item);
-        this.problem.files.add(fileInfo);
+      this.problem =
+          await GetIt.I.get<ProblemService>().save(this.problem);
+      if (this.problem != null) {
+        ServerFile fileInfo = ServerFile.empty();
+        fileInfo.problemId = this.problem.id;
+        for (File item in files) {
+          fileInfo = await GetIt.I.get<FileService>().save(fileInfo, item);
+          this.problem.files.add(fileInfo);
+        }
+        await GetIt.I.get<AccountProvider>().addProblem(problem.id);
+        readyToFill = false;
+        return true;
       }
-
-      readyToFill = false;
-      return true;
     } catch (e) {
       var exception = e;
     }

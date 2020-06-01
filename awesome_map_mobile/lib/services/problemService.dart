@@ -52,8 +52,11 @@ class ProblemService {
     try {
       AppConfig config = await AppConfig.forEnvironment();
       Map<String, dynamic> problemMap = problem.toJson();
+       Map<String, String> headers = await GetIt.I
+          .get<AuthorizationService>()
+          .getHeaders({"Content-type": "application/json"});
       Response res = await http.post(config.apiUrl + "api/Problems",
-          headers: {"Content-type": "application/json"},
+          headers: headers,
           body: jsonEncode(problemMap));
       if (res.statusCode == 200 || res.statusCode == 201)
         return Problem.fromJson(jsonDecode(res.body));

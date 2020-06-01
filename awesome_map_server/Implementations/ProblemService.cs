@@ -15,12 +15,12 @@ namespace Implementations {
             _context = context;
         }
 
-        public async void Change(Problem problem) {
+        public async Task Change(Problem problem) {
             _context.Entry(problem).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
-        public async void Delete(Problem problem) {
+        public async Task Delete(Problem problem) {
             _context.Problems.Remove(problem);
             await _context.SaveChangesAsync();
         }
@@ -42,7 +42,7 @@ namespace Implementations {
              .ToListAsync();
         }
 
-        public async void Save(Problem newProblem) {
+        public async Task Save(Problem newProblem) {
             newProblem.CreateDate = DateTime.Now;
            
             _context.Problems.Add(newProblem);
@@ -54,9 +54,13 @@ namespace Implementations {
             _context.SaveChanges();
         }
 
-        public void Unsubscribe(Guid problemId, string userId) {
+        public async Task<bool> Unsubscribe(Guid problemId, string userId) {
+            Problem problem = await GetProblem(problemId);
+            if (problem.OwnerId == userId)
+                return false;
             _context.ProblemUsers.RemoveRange(_context.ProblemUsers.Where(x => x.ProblemId == problemId && x.UserId == userId).ToList());
             _context.SaveChanges();
+            return true;
         }
     }
 }

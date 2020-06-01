@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -33,6 +34,7 @@ class _SlidingUpPanelContainerState extends State<SlidingUpPanelContainer> {
       minHeight: widget.isShow ? _panelHeightClosed : 0,
       parallaxEnabled: true,
       parallaxOffset: .5,
+      color: CustomTheme.of(context).bottomAppBarColor,
       body: Container(),
       panelBuilder: (sc) => widget.isShow
           ? MediaQuery.removePadding(

@@ -103,7 +103,13 @@ class ProblemDetailsContent extends StatelessWidget {
                       color: CustomTheme.of(context).accentColor,
                       textColor: CustomTheme.of(context).bottomAppBarColor,
                       child: Text("Відписатись"),
-                      onPressed: () => account.unsubsribeOnProblem(problem))
+                      onPressed: context
+                              .watch<AccountProvider>()
+                              .userInfo
+                              .myProblemIds
+                              .any((element) => element == problem.id)
+                          ? null
+                          : () => account.unsubsribeOnProblem(problem))
                   : RaisedButton(
                       color: CustomTheme.of(context).accentColor,
                       textColor: CustomTheme.of(context).bottomAppBarColor,

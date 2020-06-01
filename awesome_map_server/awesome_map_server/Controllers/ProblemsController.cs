@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace awesome_map_server.Controllers {
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProblemsController : ControllerBase {
@@ -30,7 +31,6 @@ namespace awesome_map_server.Controllers {
         }
 
         // GET: api/Problems
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProblemViewModel>>> GetProblems() {
             List<Problem> problems = await _problemService.GetProblems();
@@ -46,6 +46,7 @@ namespace awesome_map_server.Controllers {
 
         // GET: api/Problems/5
         [HttpGet("{id}")]
+        [Authorize(Roles ="Administrator")]
         public async Task<ActionResult<ProblemViewModel>> GetProblem(Guid id) {
             Problem problem = await _problemService.GetProblem(id);
 
@@ -83,12 +84,14 @@ namespace awesome_map_server.Controllers {
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<ProblemViewModel>> PostProblem(ProblemViewModel problem) {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             Problem newProblem = _mapper.Map<Problem>(problem);
             foreach (var item in problem.ProblemTypes)
                 newProblem.ProblemTypeProblems.Add(new ProblemTypeProblem() { Problem = newProblem, ProblemTypeId = item.Id });
-
-            _problemService.Save(newProblem);
+            newProblem.OwnerId = userId;
+            await _problemService.Save(newProblem);
+            _problemService.Subscribe(newProblem, userId);
 
             ProblemViewModel loadedProblem = _mapper.Map<ProblemViewModel>(newProblem);
             loadedProblem.ProblemTypes = problem.ProblemTypes;
@@ -124,16 +127,19 @@ namespace awesome_map_server.Controllers {
         }
 
         [HttpPost("Unsubscribe")]
-        public IActionResult Unsubscribe([FromBody] Guid problemId) {
+        public async Task<IActionResult> Unsubscribe([FromBody] Guid problemId) {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!_problemService.Exist(problemId))
                 return NotFound();
             try {
-                _problemService.Unsubscribe(problemId, userId);
+                if (await _problemService.Unsubscribe(problemId, userId))
+                    return Ok(true);
+                else
+                    return BadRequest();
             } catch (Exception e) {
                 return BadRequest();
             }
-            return Ok(true);
+
         }
     }
 }

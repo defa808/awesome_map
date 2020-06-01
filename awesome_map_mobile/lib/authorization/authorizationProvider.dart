@@ -18,6 +18,10 @@ class AuthorizationProvider extends ChangeNotifier {
         String token = await AuthorizationService.login(email, password);
         if (token == null) return false;
         var result = parseJwt(token);
+        if(result.containsKey("role"))
+            GetIt.I
+          .get<AccountProvider>()
+          .setRoles(result["role"].split(','));
         await storage.write(key: "jwt", value: token);
         UserFull userInfo = await AuthorizationService.getInfo();
         await GetIt.I.get<AccountProvider>().updateUserInfo(userInfo);
@@ -58,6 +62,7 @@ class AuthorizationProvider extends ChangeNotifier {
       await GetIt.I
           .get<AccountProvider>()
           .updateUserInfo(await AuthorizationService.getInfo());
+          
       return true;
     } catch (error) {
       print(error);

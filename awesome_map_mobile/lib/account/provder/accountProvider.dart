@@ -16,7 +16,7 @@ import 'package:http/http.dart';
 class AccountProvider extends ChangeNotifier {
   UserFull userInfo;
   GoogleSignInAccount googleAccount;
-
+  List<String> roles;
   updateUserInfo(UserFull userFull) {
     this.userInfo = userFull;
     notifyListeners();
@@ -56,7 +56,7 @@ class AccountProvider extends ChangeNotifier {
     }
   }
 
-    subsribeOnEvent(Event event) async {
+  subsribeOnEvent(Event event) async {
     try {
       bool result =
           await GetIt.I.get<AccountService>().subsribeOnEvent(event.id);
@@ -83,5 +83,21 @@ class AccountProvider extends ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void setRoles(List<String> roles) {
+    this.roles = roles;
+    this.notifyListeners();
+  }
+
+  addProblem(String problemId) {
+    this.userInfo.myProblemIds.add(problemId);
+    this.userInfo.observedProblemIds.add(problemId);
+    notifyListeners();
+  }
+   addEvent(String eventId) {
+    this.userInfo.myEventIds.add(eventId);
+    this.userInfo.observedEventIds.add(eventId);
+    notifyListeners();
   }
 }
