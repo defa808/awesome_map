@@ -29,6 +29,7 @@ Problem _$ProblemFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['updateDate'] as String),
     json['description'] as String,
+    json['ownerId'] as String,
     (json['problemTypes'] as List)
         ?.map((e) =>
             e == null ? null : Category.fromJson(e as Map<String, dynamic>))
@@ -58,6 +59,7 @@ Map<String, dynamic> _$ProblemToJson(Problem instance) => <String, dynamic>{
       'comments': instance.comments,
       'commentsLength': instance.commentsLength,
       'description': instance.description,
+      'ownerId': instance.ownerId,
       'files': instance.files,
       'subscribersCount': instance.subscribersCount,
     };

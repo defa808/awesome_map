@@ -47,9 +47,9 @@ namespace awesome_map_server.Controllers {
 
         // GET: api/Problems/5
         [HttpGet("{id}")]
-        [Authorize(Roles ="Administrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<ProblemViewModel>> GetProblem(Guid id) {
-            Problem problem = await _problemService.GetProblem(id);
+            Problem problem = _problemService.GetProblem(id);
 
             if (problem == null) {
                 return NotFound();
@@ -62,13 +62,20 @@ namespace awesome_map_server.Controllers {
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProblem(Guid id, [FromBody] Problem problem) {
+        public async Task<IActionResult> PutProblem(Guid id, [FromBody] ProblemViewModel problem) {
             if (id != problem.Id) {
                 return BadRequest();
             }
-
             try {
-                _problemService.Change(problem);
+                Problem newProblem = _mapper.Map<Problem>(problem);
+                foreach (var item in problem.ProblemTypes)
+                    newProblem.ProblemTypeProblems.Add(new ProblemTypeProblem() { Problem = newProblem, ProblemTypeId = item.Id });
+                await _problemService.Change(newProblem);
+                newProblem = _problemService.GetProblem(newProblem.Id);
+                ProblemViewModel loadedProblem = _mapper.Map<ProblemViewModel>(newProblem);
+                loadedProblem.ProblemTypes = problem.ProblemTypes;
+                loadedProblem.SubscribersCount = newProblem.Subscribers.Count;
+                return CreatedAtAction("GetProblem", new { id = newProblem.Id }, loadedProblem);
             } catch (DbUpdateConcurrencyException) {
                 if (!_problemService.Exist(id)) {
                     return NotFound();
@@ -76,8 +83,6 @@ namespace awesome_map_server.Controllers {
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Problems
@@ -103,7 +108,7 @@ namespace awesome_map_server.Controllers {
         // DELETE: api/Problems/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Problem>> DeleteProblem(Guid id) {
-            var problem = await _problemService.GetProblem(id);
+            var problem = _problemService.GetProblem(id);
             if (problem == null) {
                 return NotFound();
             }
@@ -115,12 +120,12 @@ namespace awesome_map_server.Controllers {
         public async Task<IActionResult> Subscribe([FromBody] Guid problemId) {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            Problem problem = await _problemService.GetProblem(problemId);
+            Problem problem = _problemService.GetProblem(problemId);
             if (problem == null)
                 return NotFound();
             try {
                 _problemService.Subscribe(problem, userId);
-             
+
             } catch (Exception e) {
                 return BadRequest();
             }

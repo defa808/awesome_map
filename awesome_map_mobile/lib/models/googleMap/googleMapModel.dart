@@ -154,6 +154,14 @@ class GoogleMapModel extends ChangeNotifier {
     createMarkers.forEach((item) {
       add(item, lazyLoading: true);
     });
+    if (this.selectedMarker != null) {
+      this.selectedMarker = createMarkers
+          .firstWhere(
+              (element) => element.marker.markerId == this.selectedMarker,
+              orElse: null)
+          ?.marker
+          ?.markerId;
+    }
     notifyListeners();
   }
 }

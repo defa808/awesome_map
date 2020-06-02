@@ -119,15 +119,18 @@ class _ProblemHomeState extends State<ProblemHome> {
     ProblemMarkers problemMarkersProvider = context.read<ProblemMarkers>();
     GoogleMapModel googleMapProvider = context.read<GoogleMapModel>();
     ProblemFilterModel filterProvider = context.read<ProblemFilterModel>();
-    AuthorizationProvider authorizationProvider = context.read<AuthorizationProvider>();
-    await problemMarkersProvider
-        .getProblems();
+    AuthorizationProvider authorizationProvider =
+        context.read<AuthorizationProvider>();
+
+    problemMarkersProvider.addListener(() {
+      googleMapProvider.updateMarkers(problemMarkersProvider.createMarkers(),
+          markerType: MarkerType.Problem);
+    });
     filterProvider.addListener(() {
       problemMarkersProvider.updateFilter(filterProvider);
       googleMapProvider.updateMarkers(problemMarkersProvider.createMarkers(),
           markerType: MarkerType.Problem);
     });
-    googleMapProvider.updateMarkers(problemMarkersProvider.createMarkers(),
-        markerType: MarkerType.Problem);
+    await problemMarkersProvider.getProblems();
   }
 }

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/comment/comment.dart';
+import 'package:awesome_map_mobile/models/files/fileBody.dart';
 import 'package:awesome_map_mobile/models/files/serverFile.dart';
 import 'package:awesome_map_mobile/models/problem/problemStatus.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -26,6 +29,7 @@ class Problem {
   int commentsLength;
 
   String description;
+  String ownerId;
   List<ServerFile> files;
   int subscribersCount;
   Problem(
@@ -37,6 +41,7 @@ class Problem {
       this.createDate,
       this.updateDate,
       this.description,
+      this.ownerId,
       this.problemTypes,
       this.files,
       this.comments,
@@ -53,6 +58,7 @@ class Problem {
         DateTime.now(),
         null,
         "",
+        "00000000-0000-0000-0000-000000000000",
         new List<Category>(),
         new List<ServerFile>(),
         new List<Comment>(),
@@ -64,4 +70,15 @@ class Problem {
       _$ProblemFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProblemToJson(this);
+
+  addCategory(Category item) {
+    this.problemTypes.add(item);
+  }
+
+  removeCategory(String guid) {
+    this.problemTypes =
+        this.problemTypes.where((item) => item.id != guid).toList();
+  }
+
+  
 }

@@ -119,4 +119,18 @@ class FileService {
         return "jpg";
     }
   }
+
+  Future<bool> remove(String id) async {
+    try {
+      AppConfig config = await AppConfig.forEnvironment();
+      Response response =
+          await http.delete(config.apiUrl + "api/ServerFiles/$id");
+      if (response.statusCode == 200 || response.statusCode == 201)
+        return true;
+      throw Exception(response.body.toString());
+    } catch (e) {
+      print(e.toString());
+    }
+    return false;
+  }
 }

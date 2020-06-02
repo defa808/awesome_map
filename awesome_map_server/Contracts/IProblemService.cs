@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Contracts {
     public interface IProblemService {
         Task<List<Problem>> GetProblems();
-        Task<Problem> GetProblem(Guid id);
+        Problem GetProblem(Guid id);
         Task Change(Problem problem);
         Task Save(Problem newProblem);
         Task Delete(Problem problem);

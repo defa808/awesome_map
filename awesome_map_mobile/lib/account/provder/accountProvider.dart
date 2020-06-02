@@ -28,16 +28,23 @@ class AccountProvider extends ChangeNotifier {
   }
 
   subsribeOnProblem(Problem problem) async {
+    this.userInfo.observedProblemIds.add(problem.id);
+    problem.subscribersCount += 1;
+    notifyListeners();
+
     try {
       bool result =
           await GetIt.I.get<AccountService>().subscribeOnProblem(problem.id);
-      if (result) {
-        this.userInfo.observedProblemIds.add(problem.id);
-        problem.subscribersCount += 1;
+      if (result == false) {
+        this.userInfo.observedProblemIds.remove(problem.id);
+        problem.subscribersCount -= 1;
         notifyListeners();
       }
     } catch (e) {
       print(e.toString());
+      this.userInfo.observedProblemIds.remove(problem.id);
+      problem.subscribersCount -= 1;
+      notifyListeners();
     }
   }
 
@@ -95,7 +102,8 @@ class AccountProvider extends ChangeNotifier {
     this.userInfo.observedProblemIds.add(problemId);
     notifyListeners();
   }
-   addEvent(String eventId) {
+
+  addEvent(String eventId) {
     this.userInfo.myEventIds.add(eventId);
     this.userInfo.observedEventIds.add(eventId);
     notifyListeners();

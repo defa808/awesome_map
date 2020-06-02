@@ -10,6 +10,7 @@ class CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RawChip(
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       avatar: icon != null ? CircleAvatar(
         backgroundColor: Colors.transparent,
         foregroundColor: CustomTheme.of(context).chipTheme.labelStyle.color,

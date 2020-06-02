@@ -99,22 +99,31 @@ class ProblemDetailsContent extends StatelessWidget {
                 child: Container(),
               ),
               account.userInfo.observedProblemIds.any((x) => x == problem.id)
-                  ? RaisedButton(
-                      color: CustomTheme.of(context).accentColor,
-                      textColor: CustomTheme.of(context).bottomAppBarColor,
-                      child: Text("Відписатись"),
-                      onPressed: context
-                              .watch<AccountProvider>()
-                              .userInfo
-                              .myProblemIds
-                              .any((element) => element == problem.id)
-                          ? null
-                          : () => account.unsubsribeOnProblem(problem))
+                  ? (context
+                          .watch<AccountProvider>()
+                          .userInfo
+                          .myProblemIds
+                          .any((element) => element == problem.id)
+                      ? RaisedButton(
+                          color: CustomTheme.of(context).accentColor,
+                          textColor: CustomTheme.of(context).bottomAppBarColor,
+                          child: Text("Редагувати"),
+                          onPressed: () => Navigator.pushNamed(
+                              context, '/editProblemDetail',
+                              arguments: problem))
+                      : RaisedButton(
+                          color: CustomTheme.of(context).accentColor,
+                          textColor: CustomTheme.of(context).bottomAppBarColor,
+                          child: Text("Відписатись"),
+                          onPressed: () =>
+                              account.unsubsribeOnProblem(problem)))
                   : RaisedButton(
                       color: CustomTheme.of(context).accentColor,
                       textColor: CustomTheme.of(context).bottomAppBarColor,
                       child: Text("Слідкувати"),
-                      onPressed: () => account.subsribeOnProblem(problem))
+                      onPressed: () {
+                        account.subsribeOnProblem(problem);
+                      })
             ]);
           }),
           SizedBox(

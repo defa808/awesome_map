@@ -3,6 +3,7 @@ import 'package:awesome_map_mobile/authorization/authorizationProvider.dart';
 import 'package:awesome_map_mobile/authorization/signUp.dart';
 import 'package:awesome_map_mobile/comments/provider/commentProvider.dart';
 import 'package:awesome_map_mobile/introduce/introduce.dart';
+import 'package:awesome_map_mobile/problems/editProblemItem.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
           "/userEvents": (context) => EventUserList(),
           "/event": (context) => EventDetails(),
           "/problemDetail": (context) => ProblemDetails(),
+          "/editProblemDetail": (context) => EditProblemItem(),
         },
         debugShowCheckedModeBanner: false,
         title: 'Awesome Map KPI',

@@ -66,4 +66,23 @@ class ProblemService {
     }
     return null;
   }
+
+  Future<Problem> update(Problem problem) async {
+    try {
+      AppConfig config = await AppConfig.forEnvironment();
+      Map<String, dynamic> problemMap = problem.toJson();
+       Map<String, String> headers = await GetIt.I
+          .get<AuthorizationService>()
+          .getHeaders({"Content-type": "application/json"});
+      Response res = await http.put(config.apiUrl + "api/Problems/${problem.id}",
+          headers: headers,
+          body: jsonEncode(problemMap));
+      if (res.statusCode == 200 || res.statusCode == 201)
+        return Problem.fromJson(jsonDecode(res.body));
+      throw new Exception(res.body.toString());
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
 }

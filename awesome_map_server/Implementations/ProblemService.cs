@@ -16,6 +16,7 @@ namespace Implementations {
         }
 
         public async Task Change(Problem problem) {
+            problem.UpdateDate = DateTime.Now;
             _context.Entry(problem).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
@@ -29,8 +30,12 @@ namespace Implementations {
             return _context.Problems.Any(e => e.Id == id);
         }
 
-        public async Task<Problem> GetProblem(Guid id) {
-            return await _context.Problems.FindAsync(id);
+        public Problem GetProblem(Guid id) {
+            return _context.Problems.Include(x => x.Files)
+             .Include(x => x.Subscribers)
+             .Include(x => x.Comments)
+             .Include(x => x.ProblemTypeProblems).ThenInclude(x => x.ProblemType)
+             .ThenInclude(x => x.Icon).FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<List<Problem>> GetProblems() {
@@ -45,7 +50,7 @@ namespace Implementations {
 
         public async Task Save(Problem newProblem) {
             newProblem.CreateDate = DateTime.Now;
-           
+
             _context.Problems.Add(newProblem);
             await _context.SaveChangesAsync();
         }
@@ -56,7 +61,7 @@ namespace Implementations {
         }
 
         public async Task<bool> Unsubscribe(Guid problemId, string userId) {
-            Problem problem = await GetProblem(problemId);
+            Problem problem =  GetProblem(problemId);
             if (problem.OwnerId == userId)
                 return false;
             _context.ProblemUsers.RemoveRange(_context.ProblemUsers.Where(x => x.ProblemId == problemId && x.UserId == userId).ToList());

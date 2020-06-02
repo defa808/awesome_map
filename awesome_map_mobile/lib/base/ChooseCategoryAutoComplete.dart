@@ -44,7 +44,9 @@ class _ChooseCategoryAutoCompleteState
               return Text("Connection lost");
             case ConnectionState.active:
             case ConnectionState.waiting:
-              return LinearProgressIndicator(backgroundColor: widget.color ?? Colors.lightBlue, );
+              return LinearProgressIndicator(
+                backgroundColor: widget.color ?? Colors.lightBlue,
+              );
             case ConnectionState.done:
               {
                 if (snapshot.hasError)
@@ -63,14 +65,14 @@ class _ChooseCategoryAutoCompleteState
                 else
                   return AutoCompleteTextField<Category>(
                     clearOnSubmit: true,
-                    style: TextStyle(color: widget.color?? Colors.grey),
+                    style: TextStyle(color: widget.color ?? Colors.grey),
                     controller: TextEditingController(text: ""),
-
                     decoration: InputDecoration(
                         labelText: "Категорії",
                         fillColor: widget.color,
                         enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: widget.color?? Colors.grey)),
+                            borderSide:
+                                BorderSide(color: widget.color ?? Colors.grey)),
                         hintStyle: TextStyle(color: widget.color),
                         labelStyle: TextStyle(color: widget.color)),
 
@@ -91,9 +93,11 @@ class _ChooseCategoryAutoCompleteState
                         ? a.name.compareTo(b.name)
                         : true,
                     itemFilter: (Category suggestion, String query) =>
-                        suggestion.name
-                            .toLowerCase()
-                            .contains(query.toLowerCase()),
+                        query == null
+                            ? true
+                            : suggestion.name
+                                .toLowerCase()
+                                .contains(query.toLowerCase()),
                     itemSubmitted: (Category data) => widget.addCategory(data),
                     key: null, //without key! it's important not rerendering
                   );

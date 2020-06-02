@@ -16,7 +16,7 @@ class ProblemMarkers with ChangeNotifier {
   Future<List<Problem>> getProblems() async {
     problems = await GetIt.I.get<ProblemService>().getProblems();
     filteredProblems = problems;
-    if (filter != null) updateProblems(filter);
+    if (filter != null) updateFilteredProblems(filter);
 
     notifyListeners();
 
@@ -49,11 +49,11 @@ class ProblemMarkers with ChangeNotifier {
 
   void updateFilter(ProblemFilterModel filterProvider) {
     filter = filterProvider;
-    updateProblems(filter);
+    updateFilteredProblems(filter);
     notifyListeners();
   }
 
-  void updateProblems(ProblemFilterModel filter) {
+  void updateFilteredProblems(ProblemFilterModel filter) {
     filteredProblems = problems
         .where((element) =>
             (filter.title != null
@@ -68,5 +68,11 @@ class ProblemMarkers with ChangeNotifier {
                     (type) => element.problemTypes.any((x) => x.id == type.id))
                 : true))
         .toList();
+  }
+
+  void update(Problem problem) {
+    this.problems.removeWhere((element) => element.id == problem.id);
+    this.problems.add(problem);
+    notifyListeners();
   }
 }
