@@ -43,7 +43,6 @@ namespace awesome_map_server {
 
             services.AddDefaultIdentity<ApplicationUser>(options => {
                 options.SignIn.RequireConfirmedAccount = false;
-                options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
@@ -95,6 +94,7 @@ namespace awesome_map_server {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProblemService, ProblemService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<ICommentService, CommentService>();
         }
 
         private async Task CreateRolesAndUser(IApplicationBuilder app, IServiceProvider serviceProvider) {

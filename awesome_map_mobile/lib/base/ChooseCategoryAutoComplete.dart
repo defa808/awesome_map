@@ -9,13 +9,16 @@ class ChooseCategoryAutoComplete extends StatefulWidget {
       this.getStore,
       this.selectedCategories,
       this.addCategory,
-      this.color = Colors.grey})
+      this.color = Colors.grey,
+      this.validate = true,
+      this.first = false})
       : super(key: key);
   final List<Category> selectedCategories;
   final Future<List<Category>> Function() getStore;
   final void Function(Category) addCategory;
   final Color color;
-
+  final bool first;
+  final bool validate;
   @override
   _ChooseCategoryAutoCompleteState createState() =>
       _ChooseCategoryAutoCompleteState();
@@ -70,6 +73,10 @@ class _ChooseCategoryAutoCompleteState
                     decoration: InputDecoration(
                         labelText: "Категорії",
                         fillColor: widget.color,
+                        errorText: widget.first &&
+                                widget.selectedCategories.length == 0
+                            ? "Оберіть одну з категорій."
+                            :  null,
                         enabledBorder: UnderlineInputBorder(
                             borderSide:
                                 BorderSide(color: widget.color ?? Colors.grey)),

@@ -11,9 +11,14 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-class ProblemFilter extends StatelessWidget {
+class ProblemFilter extends StatefulWidget {
   ProblemFilter({Key key}) : super(key: key);
 
+  @override
+  _ProblemFilterState createState() => _ProblemFilterState();
+}
+
+class _ProblemFilterState extends State<ProblemFilter> {
   @override
   Widget build(BuildContext context) {
     Color mainColor = Colors.white; //Theme.of(context).secondaryHeaderColor;
@@ -79,7 +84,8 @@ class ProblemFilter extends StatelessWidget {
                                 ),
                                 DropdownButton<ProblemStatus>(
                                     isExpanded: true,
-                                    underline: Container(height:1.0,color:mainColor),
+                                    underline: Container(
+                                        height: 1.0, color: mainColor),
                                     iconEnabledColor: mainColor,
                                     selectedItemBuilder:
                                         (BuildContext context) {
@@ -117,9 +123,12 @@ class ProblemFilter extends StatelessWidget {
                       ),
                       Row(
                         children: <Widget>[
-                          Flexible(child: ChooseCategoryAutoComplete(
+                          Flexible(
+                              child: ChooseCategoryAutoComplete(
                                   addCategory: model.addCategory,
-                                  getStore: GetIt.I.get<ProblemService>().getCategories,
+                                  getStore: GetIt.I
+                                      .get<ProblemService>()
+                                      .getCategories,
                                   selectedCategories: model.selectedCategories,
                                   color: Colors.white)),
                         ],
@@ -151,7 +160,10 @@ class ProblemFilter extends StatelessWidget {
                           child: FlatButton(
                             child: Text("Cкинути",
                                 style: TextStyle(color: mainColor)),
-                            onPressed: model.reset,
+                            onPressed: () {
+                              model.reset();
+                              setState(() {});
+                            },
                           ))
                     ]),
                   )

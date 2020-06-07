@@ -77,6 +77,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                         child:
                             Consumer<ProblemForm>(builder: (context, model, _) {
                           return CreateProblemItemContent(
+                            first: model.first,
                             formKey:_formKey,
                             problem: model.problem,
                             addFile: model.addFile,

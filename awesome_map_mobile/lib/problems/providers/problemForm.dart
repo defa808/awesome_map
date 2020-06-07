@@ -15,6 +15,7 @@ import 'package:http/http.dart';
 
 class ProblemForm with ChangeNotifier {
   bool readyToFill = false;
+  bool first = false;
   Problem problem = Problem.empty();
   List<File> files = new List<File>();
   void setLatLon(LatLng position) {
@@ -25,9 +26,18 @@ class ProblemForm with ChangeNotifier {
   }
 
   Future<bool> save() async {
+    if (problem.title.isEmpty ||
+        problem.description.isEmpty ||
+        files.length == 0 ||
+        problem.problemTypes.length == 0) {
+      first = true;
+      this.notifyListeners();
+      return false;
+    } else {
+      first = false;
+    }
     try {
-      this.problem =
-          await GetIt.I.get<ProblemService>().save(this.problem);
+      this.problem = await GetIt.I.get<ProblemService>().save(this.problem);
       if (this.problem != null) {
         ServerFile fileInfo = ServerFile.empty();
         fileInfo.problemId = this.problem.id;
@@ -37,6 +47,7 @@ class ProblemForm with ChangeNotifier {
         }
         await GetIt.I.get<AccountProvider>().addProblem(problem.id);
         readyToFill = false;
+        first = false;
         return true;
       }
     } catch (e) {
@@ -60,6 +71,7 @@ class ProblemForm with ChangeNotifier {
     this.readyToFill = false;
     this.problem = Problem.empty();
     this.files.clear();
+    first = false;
     this.notifyListeners();
   }
 
@@ -70,6 +82,7 @@ class ProblemForm with ChangeNotifier {
 
   void removeFile(File file) {
     files.removeWhere((element) => element == file);
+
     notifyListeners();
   }
 }

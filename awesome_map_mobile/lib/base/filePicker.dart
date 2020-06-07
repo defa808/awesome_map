@@ -7,12 +7,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class FilePicker extends StatefulWidget {
-  const FilePicker({Key key, this.addFile, this.removeFile, this.files})
+  const FilePicker({Key key, this.addFile, this.removeFile, this.files, this.first = false, this.validate = true})
       : super(key: key);
   final List<File> files;
   final void Function(File) addFile;
   final void Function(File) removeFile;
-
+  final bool first;
+  final bool validate;
   @override
   _FilePickerState createState() => _FilePickerState();
 }
@@ -149,7 +150,9 @@ class _FilePickerState extends State<FilePicker> {
           onPressed: () {
             _onImageButtonPressed(ImageSource.gallery, context: context);
           },
-        )
+        ),
+        if(widget.first && !widget.validate)
+        Text("Додавання файлу обов'язкове", style: TextStyle(color:Colors.red),)
       ],
     );
   }

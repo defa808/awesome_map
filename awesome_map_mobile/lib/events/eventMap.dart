@@ -1,4 +1,5 @@
 import 'package:awesome_map_mobile/base/baseMap.dart';
+import 'package:awesome_map_mobile/base/createMarkerEntity.dart';
 import 'package:awesome_map_mobile/events/providers/eventForm.dart';
 import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
@@ -53,17 +54,7 @@ class _EventMapState extends State<EventMap> {
         body: Container(
           child: Stack(children: <Widget>[
             BaseMap(filter: MarkerType.Event),
-            if (isPrepareAdd)
-              Center(
-                child: Container(
-                  height: 90,
-                  width: 45,
-                  child: Align(
-                      alignment: FractionalOffset.topCenter,
-                      child:
-                          Icon(Icons.location_on, color: Colors.red, size: 45)),
-                ),
-              ),
+            if (isPrepareAdd) CreateMarkerEntity(),
             if (problemFormModel.readyToFill) CreateEventItem(),
           ]),
         ),

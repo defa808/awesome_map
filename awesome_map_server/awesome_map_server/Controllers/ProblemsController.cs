@@ -21,11 +21,9 @@ namespace awesome_map_server.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class ProblemsController : ControllerBase {
-        private readonly ApplicationDbContext _context;
         private IMapper _mapper;
         private IProblemService _problemService;
-        public ProblemsController(ApplicationDbContext context, IMapper autoMapper, IProblemService problemService) {
-            _context = context;
+        public ProblemsController(IMapper autoMapper, IProblemService problemService) {
             _mapper = autoMapper;
             _problemService = problemService;
         }
@@ -48,7 +46,7 @@ namespace awesome_map_server.Controllers {
         // GET: api/Problems/5
         [HttpGet("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<ProblemViewModel>> GetProblem(Guid id) {
+        public ActionResult<ProblemViewModel> GetProblem(Guid id) {
             Problem problem = _problemService.GetProblem(id);
 
             if (problem == null) {

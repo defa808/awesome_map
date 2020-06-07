@@ -8,8 +8,28 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-class EventFilter extends StatelessWidget {
+class EventFilter extends StatefulWidget {
   EventFilter({Key key}) : super(key: key);
+
+  @override
+  _EventFilterState createState() => _EventFilterState();
+}
+TextEditingController nameController;
+
+
+
+class _EventFilterState extends State<EventFilter> {
+
+@override
+void initState() { 
+  super.initState();
+}
+
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -35,8 +35,6 @@ import 'problems/providers/problemMarkers.dart';
 
 final storage = FlutterSecureStorage();
 
-
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupInjector();
@@ -58,10 +56,6 @@ void main() {
       ChangeNotifierProvider<AuthorizationProvider>(create: (context) => AuthorizationProvider()),
       ChangeNotifierProvider<CommentProvider>(create: (context) => CommentProvider()),
       ChangeNotifierProvider<AccountProvider>(create: (context) => GetIt.I.get<AccountProvider>()),
-      // ProxyProvider<GoogleMapModel, ProblemMarkers>(
-      //   update: (context, googleMapModel, problemMarkersModel) =>
-      //       ProblemMarkers(googleMapModel: googleMapModel),
-      // )
     ],
   ));
 }
@@ -149,19 +143,6 @@ class _AppPageState extends State<AppPage> {
                 }
             }
           }),
-      // Center(
-      //   child: Column(
-      //     children: <Widget>[
-      //       // Text(
-      //       //   'You have pushed the button this many times:',
-      //       // ),
-      //       // Text(
-      //       //   '$_counter',
-      //       //   style: Theme.of(context).textTheme.display1,
-      //       // ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

@@ -37,6 +37,7 @@ abstract class FilterModel extends ChangeNotifier {
   reset() {
     resetAllFields();
     selectedCategories = new List<Category>();
+    updateCounter();
     notifyListeners();
   }
 }

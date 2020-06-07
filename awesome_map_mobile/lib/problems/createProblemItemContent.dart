@@ -19,7 +19,9 @@ class CreateProblemItemContent extends StatefulWidget {
       this.files,
       this.addFile,
       this.removeFile,
-      this.formKey})
+      this.formKey,
+      this.first,
+      this.validate})
       : super(key: key);
   final Problem problem;
   final List<File> files;
@@ -29,6 +31,8 @@ class CreateProblemItemContent extends StatefulWidget {
   final Widget btnCancel;
   final GlobalKey<FormState> formKey;
   final bool isEditMode;
+  final bool first;
+  final bool validate;
   @override
   _CreateProblemItemContentState createState() =>
       _CreateProblemItemContentState();
@@ -37,6 +41,7 @@ class CreateProblemItemContent extends StatefulWidget {
 class _CreateProblemItemContentState extends State<CreateProblemItemContent> {
   TextEditingController nameController;
   TextEditingController descriptionController;
+
   @override
   void initState() {
     super.initState();
@@ -132,28 +137,44 @@ class _CreateProblemItemContentState extends State<CreateProblemItemContent> {
           ChooseCategoryAutoComplete(
               getStore: GetIt.I.get<ProblemService>().getCategories,
               selectedCategories: widget.problem.problemTypes,
+              validate: widget.problem.problemTypes.length != 0,
+              first: widget.first,
               addCategory: (Category category) {
                 widget.problem.addCategory(category);
                 setState(() {});
               }),
           TextFormField(
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
               controller: nameController,
               decoration: InputDecoration(
-                  border: UnderlineInputBorder(), labelText: "Назва"),
+                  border: UnderlineInputBorder(),
+                  labelText: "Назва",
+                  errorText: widget.first && nameController.value.text.isEmpty
+                      ? "Введіть назву."
+                      : null),
               onSaved: (String value) {
                 widget.problem.title = value;
               }),
           SizedBox(height: 10),
           TextFormField(
               controller: descriptionController,
+              maxLines: null,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
-                  border: UnderlineInputBorder(), labelText: "Опис"),
+                  border: UnderlineInputBorder(),
+                  labelText: "Опис",
+                  errorText:
+                      widget.first && descriptionController.value.text.isEmpty
+                          ? "Введіть опис."
+                          : null),
               onSaved: (String value) {
                 widget.problem.description = value;
               }),
           SizedBox(height: 10),
           FilePicker(
+            first: widget.first,
+            validate: widget.problem.files.length != 0,
             addFile: widget.addFile,
             removeFile: widget.removeFile,
             files: widget.files,

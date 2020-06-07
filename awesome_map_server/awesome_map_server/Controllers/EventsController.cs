@@ -28,7 +28,7 @@ namespace awesome_map_server.Controllers {
 
         // GET: api/Events
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventViewModel>>> GetEvents() {
+        public async Task<IEnumerable<EventViewModel>> GetEvents() {
 
             List<Event> events = await _eventService.GetEvents();
             List<EventViewModel> listViewModels = new List<EventViewModel>();

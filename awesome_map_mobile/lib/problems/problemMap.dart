@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:awesome_map_mobile/base/baseMap.dart';
+import 'package:awesome_map_mobile/base/createMarkerEntity.dart';
 import 'package:awesome_map_mobile/base/slidingUpPanelContainer.dart';
 import 'package:awesome_map_mobile/models/googleMap/awesomeMarker.dart';
 import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
@@ -49,33 +50,6 @@ class _ProblemMapState extends State<ProblemMap> {
     });
   }
 
-  Future<Widget> getImage() async {
-    // final Completer<Widget> completer = Completer();
-    // return Container(
-    //     child: Image.memory(im.decode(await FileService.getFileBytes(
-    //         "5F6422D1-BCD0-405D-1CF7-08D7FB72B7AC"))));
-
-    // final url = 'http://192.168.0.110:5000/api/FileBodies/5F6422D1-BCD0-405D-1CF7-08D7FB72B7AC';
-    // final image = NetworkImage(url);
-    // final config2 = await image.obtainKey(const ImageConfiguration());
-    // ImageStream stream = image.resolve(ImageConfiguration()).addListener();
-    // final load = image.load(config2, null);
-
-    // final listener = new ImageStreamListener((ImageInfo info, isSync) async {
-    //   print(info.image.width);
-    //   print(info.image.height);
-
-    //   if (info.image.width == 80 && info.image.height == 160) {
-    //     completer.complete(Container(child: Text('AZAZA')));
-    //   } else {
-    //     completer.complete(Container(child: Image(image: image)));
-    //   }
-    // });
-
-    // load.addListener(listener);
-    // return completer.future;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ProblemForm>(builder: (context, problemFormModel, _) {
@@ -85,24 +59,8 @@ class _ProblemMapState extends State<ProblemMap> {
         body: Container(
           child: Stack(children: <Widget>[
             BaseMap(filter: MarkerType.Problem),
-            if (problemFormModel.readyToFill)
-              CreateProblemItem(),
-            // SlidingUpPanelContainer(
-            //   isShow: problemFormModel.readyToFill,
-
-            //   renderChild: (sc) => CreateProblemItem(scrollController: sc),
-            // ),
-            if (isPrepareAdd)
-              Center(
-                child: Container(
-                  height: 90,
-                  width: 45,
-                  child: Align(
-                      alignment: FractionalOffset.topCenter,
-                      child:
-                          Icon(Icons.location_on, color: Colors.red, size: 45)),
-                ),
-              ),
+            if (problemFormModel.readyToFill) CreateProblemItem(),
+            if (isPrepareAdd) CreateMarkerEntity()
           ]),
         ),
       );
