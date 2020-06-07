@@ -20,8 +20,7 @@ class CreateProblemItemContent extends StatefulWidget {
       this.addFile,
       this.removeFile,
       this.formKey,
-      this.first,
-      this.validate})
+      this.first})
       : super(key: key);
   final Problem problem;
   final List<File> files;
@@ -32,7 +31,6 @@ class CreateProblemItemContent extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final bool isEditMode;
   final bool first;
-  final bool validate;
   @override
   _CreateProblemItemContentState createState() =>
       _CreateProblemItemContentState();
