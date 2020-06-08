@@ -6,6 +6,7 @@ import 'package:awesome_map_mobile/introduce/introduce.dart';
 import 'package:awesome_map_mobile/problems/editProblemItem.dart';
 import 'package:awesome_map_mobile/problems/problemDetails.dart';
 import 'package:awesome_map_mobile/problems/problemListMessage.dart';
+import 'package:awesome_map_mobile/settings/settingsHome.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:awesome_map_mobile/welcome/welcome.dart';
@@ -78,6 +79,8 @@ class MyApp extends StatelessWidget {
           "/event": (context) => EventDetails(),
           "/problemDetail": (context) => ProblemDetails(),
           "/editProblemDetail": (context) => EditProblemItem(),
+          "/settings": (context) => SettingsHome(),
+
         },
         debugShowCheckedModeBanner: false,
         title: 'Awesome Map KPI',
