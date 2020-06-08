@@ -15,12 +15,12 @@ namespace Implementations {
             _context = context;
         }
 
-        public async void Change(Event entity) {
+        public async Task Change(Event entity) {
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
-        public async void Delete(Event entity) {
+        public async Task Delete(Event entity) {
             _context.Events.Remove(entity);
             await _context.SaveChangesAsync();
         }
@@ -42,7 +42,7 @@ namespace Implementations {
             return await _context.Events.FindAsync(id);
         }
 
-        public async void Save(Event entity) {
+        public async Task Save(Event entity) {
             entity.CreateDate = DateTime.Now;
 
             _context.Events.Add(entity);

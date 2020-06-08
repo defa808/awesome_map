@@ -55,7 +55,8 @@ namespace awesome_map_server {
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>().AddJwtBearerClientAuthentication();
+                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+                .AddJwtBearerClientAuthentication();
 
             services.AddAuthentication(o => {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -70,6 +71,7 @@ namespace awesome_map_server {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTTokenSecret"]))
                 };
             }).AddIdentityServerJwt().AddGoogle(options => {
+                
                 options.SignInScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.SaveTokens = true;
                 options.CallbackPath = new PathString("/signin-google");

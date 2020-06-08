@@ -11,8 +11,10 @@ using awesome_map_server.ViewModels;
 using AutoMapper;
 using System.Security.Claims;
 using Contracts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace awesome_map_server.Controllers {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EventsController : ControllerBase {
@@ -57,12 +59,24 @@ namespace awesome_map_server.Controllers {
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvent(Guid id, Event @event) {
+        public async Task<IActionResult> PutEvent(Guid id, EventViewModel @event) {
             if (id != @event.Id) {
                 return BadRequest();
             }
             try {
-                _eventService.Change(@event);
+
+                Event newEntity = _mapper.Map<Event>(@event);
+                foreach (var item in @event.EventTypes)
+                    newEntity.EventTypeEvents.Add(new EventTypeEvent() { Event = newEntity, TypeId = item.Id });
+
+               await  _eventService.Change(newEntity);
+
+                EventViewModel loadedEntity = _mapper.Map<EventViewModel>(newEntity);
+                loadedEntity.EventTypes = @event.EventTypes;
+                loadedEntity.SubscribersCount = newEntity.Subscribers.Count;
+
+                return CreatedAtAction("GetEvent", new { id = @event.Id }, loadedEntity);
+
             } catch (DbUpdateConcurrencyException) {
                 if (!_eventService.Exist(id)) {
                     return NotFound();
@@ -70,8 +84,6 @@ namespace awesome_map_server.Controllers {
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Events
@@ -79,13 +91,16 @@ namespace awesome_map_server.Controllers {
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<EventViewModel>> PostEvent(EventViewModel @event) {
-            Event newEntity = _mapper.Map<Event>(@event);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            Event newEntity = _mapper.Map<Event>(@event);
+            newEntity.OwnerId = userId;
             foreach (var item in @event.EventTypes)
                 newEntity.EventTypeEvents.Add(new EventTypeEvent() { Event = newEntity, TypeId = item.Id });
 
-            _eventService.Save(newEntity);
-            
+            await _eventService.Save(newEntity);
+            _eventService.Subscribe(newEntity, userId);
+
             EventViewModel loadedEntity = _mapper.Map<EventViewModel>(newEntity);
             loadedEntity.EventTypes = @event.EventTypes;
             loadedEntity.SubscribersCount = newEntity.Subscribers.Count;
