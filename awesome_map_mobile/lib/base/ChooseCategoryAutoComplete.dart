@@ -66,47 +66,52 @@ class _ChooseCategoryAutoCompleteState
                     ],
                   );
                 else
-                  return AutoCompleteTextField<Category>(
-                    clearOnSubmit: true,
-                    style: TextStyle(color: widget.color ?? Colors.grey),
-                    controller: TextEditingController(text: ""),
-                    decoration: InputDecoration(
-                        labelText: "Категорії",
-                        fillColor: widget.color,
-                        errorText: widget.first &&
-                                widget.selectedCategories.length == 0
-                            ? "Оберіть одну з категорій."
-                            :  null,
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: widget.color ?? Colors.grey)),
-                        hintStyle: TextStyle(color: widget.color),
-                        labelStyle: TextStyle(color: widget.color)),
+                  return Column(
+                    children: <Widget>[
+                      AutoCompleteTextField<Category>(
+                        clearOnSubmit: true,
+                        style: TextStyle(color: widget.color ?? Colors.grey),
+                        controller: TextEditingController(text: ""),
+                        decoration: InputDecoration(
+                            labelText: "Категорії",
+                            fillColor: widget.color,
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: widget.color ?? Colors.grey)),
+                            hintStyle: TextStyle(color: widget.color),
+                            labelStyle: TextStyle(color: widget.color)),
 
-                    suggestions: snapshot.data
-                        .where((item) => widget.selectedCategories
-                            .every((item2) => item2.id != item.id))
-                        .toList(),
-                    itemBuilder: (BuildContext context, Category suggestion) =>
-                        ListTile(
-                      leading: suggestion.icon != null
-                          ? Icon(IconData(suggestion.icon.iconCode,
-                              fontFamily: suggestion.icon.fontFamily,
-                              fontPackage: suggestion.icon.fontPackage))
-                          : null,
-                      title: Text(suggestion.name),
-                    ),
-                    itemSorter: (a, b) => (a != null && b != null)
-                        ? a.name.compareTo(b.name)
-                        : true,
-                    itemFilter: (Category suggestion, String query) =>
-                        query == null
-                            ? true
-                            : suggestion.name
-                                .toLowerCase()
-                                .contains(query.toLowerCase()),
-                    itemSubmitted: (Category data) => widget.addCategory(data),
-                    key: null, //without key! it's important not rerendering
+                        suggestions: snapshot.data
+                            .where((item) => widget.selectedCategories
+                                .every((item2) => item2.id != item.id))
+                            .toList(),
+                        itemBuilder:
+                            (BuildContext context, Category suggestion) =>
+                                ListTile(
+                          leading: suggestion.icon != null
+                              ? Icon(IconData(suggestion.icon.iconCode,
+                                  fontFamily: suggestion.icon.fontFamily,
+                                  fontPackage: suggestion.icon.fontPackage))
+                              : null,
+                          title: Text(suggestion.name),
+                        ),
+                        itemSorter: (a, b) => (a != null && b != null)
+                            ? a.name.compareTo(b.name)
+                            : true,
+                        itemFilter: (Category suggestion, String query) =>
+                            query == null
+                                ? true
+                                : suggestion.name
+                                    .toLowerCase()
+                                    .contains(query.toLowerCase()),
+                        itemSubmitted: (Category data) =>
+                            widget.addCategory(data),
+                        key: null, //without key! it's important not rerendering
+                      ),
+                      if (widget.first && widget.selectedCategories.length == 0)
+                        Text("Оберіть одну з категорій.",
+                            style: TextStyle(color: Colors.red))
+                    ],
                   );
                 break;
               }

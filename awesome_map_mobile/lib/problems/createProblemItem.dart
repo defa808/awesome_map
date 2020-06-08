@@ -20,10 +20,10 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
   final _formKey = GlobalKey<FormState>();
 
   void completeTicket() async {
-    context.read<GoogleMapModel>().removeLast();
     _formKey.currentState.save();
     ProblemForm provider = context.read<ProblemForm>();
     if (await provider.save()) {
+      context.read<GoogleMapModel>().removeLast();
       context.read<GoogleMapModel>().add(AwesomeMarker(
           marker: Marker(
               markerId: MarkerId(provider.problem.id),
@@ -78,7 +78,7 @@ class _CreateProblemItemState extends State<CreateProblemItem> {
                             Consumer<ProblemForm>(builder: (context, model, _) {
                           return CreateProblemItemContent(
                             first: model.first,
-                            formKey:_formKey,
+                            formKey: _formKey,
                             problem: model.problem,
                             addFile: model.addFile,
                             removeFile: model.removeFile,

@@ -87,6 +87,7 @@ class GoogleMapModel extends ChangeNotifier {
           ),
         );
         markers[markerId].marker = newMarker;
+        // zoomTo(markers[selectedMarker].marker.position);
       } else {
         if (markers.containsKey(selectedMarker)) {
           final Marker resetOld = markers[selectedMarker]
@@ -105,7 +106,6 @@ class GoogleMapModel extends ChangeNotifier {
       }
       selectedMarker = null;
     }
-
     notifyListeners();
   }
 
@@ -163,5 +163,17 @@ class GoogleMapModel extends ChangeNotifier {
           ?.markerId;
     }
     notifyListeners();
+  }
+
+  void zoomTo(LatLng location) async {
+    try {
+      this.controller.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(
+              bearing: 0,
+              target: location,
+              zoom: 17.0,
+            ),
+          ));
+    } on Exception {}
   }
 }

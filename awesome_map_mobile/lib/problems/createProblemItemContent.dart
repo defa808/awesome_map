@@ -20,7 +20,7 @@ class CreateProblemItemContent extends StatefulWidget {
       this.addFile,
       this.removeFile,
       this.formKey,
-      this.first})
+      this.first = false})
       : super(key: key);
   final Problem problem;
   final List<File> files;
@@ -172,7 +172,7 @@ class _CreateProblemItemContentState extends State<CreateProblemItemContent> {
           SizedBox(height: 10),
           FilePicker(
             first: widget.first,
-            validate: widget.problem.files.length != 0,
+            validate: widget.files.length != 0,
             addFile: widget.addFile,
             removeFile: widget.removeFile,
             files: widget.files,

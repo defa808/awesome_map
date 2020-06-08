@@ -24,9 +24,8 @@ class _EditProblemItemState extends State<EditProblemItem> {
 
   List<ServerFile> newFiles = [];
   Problem problem;
-
+  bool first = false;
   List<String> removedFiles = [];
-  List<ServerFile> existedFile = [];
 
   @override
   void initState() {
@@ -60,18 +59,34 @@ class _EditProblemItemState extends State<EditProblemItem> {
   }
 
   void updateEntity() async {
+    setState(() {
+      first = false;
+    });
     _formKey.currentState.save();
+    if (this.problem.title.isEmpty ||
+        this.problem.description.isEmpty ||
+        this.problem.files.length + this.newFiles.length == 0 ||
+        this.problem.problemTypes.length == 0) {
+      setState(() {
+        first = true;
+      });
+
+      return;
+    }
     Problem problem = await GetIt.I.get<ProblemService>().update(this.problem);
     for (var item in removedFiles) {
       await GetIt.I.get<FileService>().remove(item);
+      this.problem.files.removeWhere((element) => element.path == item);
+
     }
     for (ServerFile item in newFiles) {
       ServerFile file =
           await GetIt.I.get<FileService>().save(item, File(item.path));
       this.problem.files.removeWhere((element) => element.path == item.path);
       this.problem.files.add(file);
-      problem.files = this.problem.files;
     }
+      problem.files = this.problem.files;
+
     if (problem != null) {
       context.read<ProblemMarkers>().update(problem);
       Navigator.pop(context);
@@ -97,6 +112,7 @@ class _EditProblemItemState extends State<EditProblemItem> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: CreateProblemItemContent(
+              first: first,
               isEditMode: true,
               formKey: _formKey,
               problem: this.problem,
