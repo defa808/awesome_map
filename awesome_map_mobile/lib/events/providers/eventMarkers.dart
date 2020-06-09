@@ -17,6 +17,7 @@ class EventMarkers with ChangeNotifier {
     events = await GetIt.I.get<EventService>().getEvents();
     filteredEvents = events;
     if (filter != null) updateProblems(filter);
+    notifyListeners();
 
     return filteredEvents;
   }
@@ -68,5 +69,11 @@ class EventMarkers with ChangeNotifier {
                     (type) => element.eventTypes.any((x) => x.id == type.id))
                 : true))
         .toList();
+  }
+
+   void update(Event event) {
+    this.events.removeWhere((element) => element.id == event.id);
+    this.events.add(event);
+    notifyListeners();
   }
 }

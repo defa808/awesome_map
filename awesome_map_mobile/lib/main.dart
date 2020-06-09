@@ -19,6 +19,7 @@ import 'package:provider/single_child_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'account/account.dart';
 import 'authorization/signIn.dart';
+import 'events/editEventItem.dart';
 import 'events/eventDetails.dart';
 import 'events/eventUserList.dart';
 import 'events/providers/eventFilterModel.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
           "/problemDetail": (context) => ProblemDetails(),
           "/editProblemDetail": (context) => EditProblemItem(),
           "/settings": (context) => SettingsHome(),
+          "/editEventDetail":(context) => EditEventItem()
 
         },
         debugShowCheckedModeBanner: false,

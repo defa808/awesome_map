@@ -1,4 +1,5 @@
 import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
+import 'package:awesome_map_mobile/base/locationPlace.dart';
 import 'package:awesome_map_mobile/base/photo/photoVIewer.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
 import 'package:awesome_map_mobile/models/event/event.dart';
@@ -44,9 +45,10 @@ class EventDetailsContent extends StatelessWidget {
                             Icons.location_on,
                             color: Colors.lightBlue,
                           ),
-                          Flexible(
-                            child: Text("Палац України",
-                                style: TextStyle(color: Colors.lightBlue)),
+                          LocationPlace(
+                            latitude: event.latitude,
+                            longitude: event.longitude,
+                            color:Colors.lightBlue
                           ),
                         ],
                       ),
@@ -176,11 +178,26 @@ class EventDetailsContent extends StatelessWidget {
                     child: Container(),
                   ),
                   account.userInfo.observedEventIds.any((x) => x == event.id)
-                      ? RaisedButton(
-                          color: CustomTheme.of(context).accentColor,
-                          textColor: CustomTheme.of(context).bottomAppBarColor,
-                          child: Text("Відписатись"),
-                          onPressed: () => account.unsubsribeOnEvent(event))
+                      ? (context
+                              .watch<AccountProvider>()
+                              .userInfo
+                              .myEventIds
+                              .any((element) => element == event.id)
+                          ? RaisedButton(
+                              color: CustomTheme.of(context).accentColor,
+                              textColor:
+                                  CustomTheme.of(context).bottomAppBarColor,
+                              child: Text("Редагувати"),
+                              onPressed: () => Navigator.pushNamed(
+                                  context, '/editEventDetail',
+                                  arguments: event))
+                          : RaisedButton(
+                              color: CustomTheme.of(context).accentColor,
+                              textColor:
+                                  CustomTheme.of(context).bottomAppBarColor,
+                              child: Text("Відписатись"),
+                              onPressed: () =>
+                                  account.unsubsribeOnEvent(event)))
                       : RaisedButton(
                           color: CustomTheme.of(context).accentColor,
                           textColor: CustomTheme.of(context).bottomAppBarColor,

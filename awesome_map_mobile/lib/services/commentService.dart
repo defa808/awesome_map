@@ -21,8 +21,11 @@ class CommentService {
   }
 
   Future<List<Comment>> getComments(String request) async {
+    Map<String, String> headers = await GetIt.I
+        .get<AuthorizationService>()
+        .getHeaders({"Content-type": "application/json"});
     Response res =
-        await http.get(request, headers: {"Content-type": "application/json"});
+        await http.get(request, headers: headers);
     List<dynamic> jsonModel = json.decode(res.body);
     if (res.statusCode == 200 || res.statusCode == 201)
       return jsonModel.map<Comment>((x) => Comment.fromJson(x)).toList();

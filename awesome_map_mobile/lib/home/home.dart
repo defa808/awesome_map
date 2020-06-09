@@ -4,8 +4,14 @@ import 'package:awesome_map_mobile/authorization/authorizationProvider.dart';
 import 'package:awesome_map_mobile/base/baseMap.dart';
 import 'package:awesome_map_mobile/events/eventHome.dart';
 import 'package:awesome_map_mobile/events/filter/eventFilterButton.dart';
+import 'package:awesome_map_mobile/events/providers/eventFilterModel.dart';
+import 'package:awesome_map_mobile/events/providers/eventMarkers.dart';
+import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
+import 'package:awesome_map_mobile/models/googleMap/markerType.dart';
 import 'package:awesome_map_mobile/problems/filter/problemFilterButton.dart';
 import 'package:awesome_map_mobile/problems/problemHome.dart';
+import 'package:awesome_map_mobile/problems/providers/problemFilterModel.dart';
+import 'package:awesome_map_mobile/problems/providers/problemMarkers.dart';
 import 'package:awesome_map_mobile/theming/custom_theme.dart';
 import 'package:awesome_map_mobile/theming/themes.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +92,48 @@ class _HomeState extends State<Home> {
         });
     });
     _selectedDrawerIndex = -1;
+    loadData();
+
     // checkAuthorization();
+  }
+
+  void loadData() async {
+    await loadEvents();
+
+    await loadProblems();
+  }
+
+  Future loadEvents() async {
+    GoogleMapModel googleMapProvider = context.read<GoogleMapModel>();
+    EventMarkers eventMarkersProvider = context.read<EventMarkers>();
+    EventFilterModel filterProvider = context.read<EventFilterModel>();
+    eventMarkersProvider.addListener(() {
+      googleMapProvider.updateMarkers(eventMarkersProvider.createMarkers(),
+          markerType: MarkerType.Event);
+    });
+    filterProvider.addListener(() {
+      eventMarkersProvider.updateFilter(filterProvider);
+      googleMapProvider.updateMarkers(eventMarkersProvider.createMarkers(),
+          markerType: MarkerType.Event);
+    });
+   
+    eventMarkersProvider.getEvents();
+  }
+
+  Future loadProblems() async {
+    GoogleMapModel googleMapProvider = context.read<GoogleMapModel>();
+    ProblemMarkers problemMarkersProvider = context.read<ProblemMarkers>();
+    ProblemFilterModel filterProvider = context.read<ProblemFilterModel>();
+    problemMarkersProvider.addListener(() {
+      googleMapProvider.updateMarkers(problemMarkersProvider.createMarkers(),
+          markerType: MarkerType.Problem);
+    });
+    filterProvider.addListener(() {
+      problemMarkersProvider.updateFilter(filterProvider);
+      googleMapProvider.updateMarkers(problemMarkersProvider.createMarkers(),
+          markerType: MarkerType.Problem);
+    });
+    problemMarkersProvider.getProblems();
   }
 
   // checkAuthorization() async {

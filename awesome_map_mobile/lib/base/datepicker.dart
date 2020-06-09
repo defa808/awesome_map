@@ -8,6 +8,9 @@ class DatePicker extends StatelessWidget {
   final DateTime firstDate;
   final DateTime endDate;
   final String labelText;
+  final bool first;
+  final bool validate;
+
   DatePicker(
       {Key key,
       @required this.labelText,
@@ -15,6 +18,8 @@ class DatePicker extends StatelessWidget {
       @required this.firstDate,
       @required this.endDate,
       @required this.onChange,
+      this.first = false,
+      this.validate = true,
       this.color = Colors.white})
       : super(key: key);
   Color color;
@@ -23,6 +28,7 @@ class DatePicker extends StatelessWidget {
     return DateTimeField(
         cursorColor: color,
         decoration: InputDecoration(
+          errorText: first && !validate ? "Поле обов'язкове": null,
             focusedBorder:
                 UnderlineInputBorder(borderSide: BorderSide(color: color)),
             hintStyle: TextStyle(color: color),

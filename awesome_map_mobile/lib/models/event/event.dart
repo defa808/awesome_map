@@ -20,7 +20,7 @@ class Event {
   String placeDescription;
   DateTime startDate;
   DateTime createdDate;
-  Duration duration = new Duration(minutes: 10);
+  Duration duration;
   int peopleCount;
   bool isClosed;
   int subscribersCount;
@@ -55,15 +55,23 @@ class Event {
         "",
         DateTime.now(),
         DateTime.now(),
-        Duration(),
+        null,
         0,
         false,
         0,
-        new List<ServerFile>(),new List<Comment>());
+        new List<ServerFile>(),
+        new List<Comment>());
   }
 
-  factory Event.fromJson(Map<String, dynamic> json) =>
-      _$EventFromJson(json);
+  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 
   Map<String, dynamic> toJson() => _$EventToJson(this);
+
+  addCategory(Category item) {
+    this.eventTypes.add(item);
+  }
+
+  removeCategory(String guid) {
+    this.eventTypes = this.eventTypes.where((item) => item.id != guid).toList();
+  }
 }

@@ -7,12 +7,15 @@ class TimePicker extends StatefulWidget {
   final String labelText;
   TimePicker({
     Key key,
+    this.first = false,
+    this.validate = true,
     @required this.labelText,
     @required this.onChange,
     this.color = Colors.white,
   }) : super(key: key);
   Color color;
-
+  bool first;
+  bool validate;
   @override
   _TimePickerState createState() => _TimePickerState();
 }
@@ -33,6 +36,8 @@ class _TimePickerState extends State<TimePicker> {
         cursorColor: widget.color,
         controller: timeController,
         decoration: InputDecoration(
+            errorText:
+                widget.first && !widget.validate ? "Поле обов'язкове" : null,
             focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: widget.color)),
             hintStyle: TextStyle(color: widget.color),
@@ -40,7 +45,7 @@ class _TimePickerState extends State<TimePicker> {
             enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: widget.color)),
             labelText: widget.labelText),
-            focusNode: FocusNode(canRequestFocus: false),
+        focusNode: FocusNode(canRequestFocus: false),
         style: TextStyle(
           color: widget.color,
         ),

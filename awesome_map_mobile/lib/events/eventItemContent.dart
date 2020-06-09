@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:awesome_map_mobile/base/locationPlace.dart';
 import 'package:awesome_map_mobile/models/event/event.dart';
+import 'package:awesome_map_mobile/models/googleMap/googleMapModel.dart';
 import 'package:awesome_map_mobile/services/fileService.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class EventItemContent extends StatefulWidget {
   EventItemContent({Key key, this.event}) : super(key: key);
@@ -91,11 +95,13 @@ class _EventItemContentState extends State<EventItemContent> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
+                    Expanded(
+                                          child: Row(children: <Widget>[
                         Icon(Icons.location_on),
-                        Text("Бібліотека НТУУ 'КПІ'")
-                      ],
+                        LocationPlace(
+                            latitude: widget.event.latitude,
+                            longitude: widget.event.longitude),
+                      ]),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,

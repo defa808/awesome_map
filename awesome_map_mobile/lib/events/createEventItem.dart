@@ -5,6 +5,7 @@ import 'package:awesome_map_mobile/base/datepicker.dart';
 import 'package:awesome_map_mobile/base/filePicker.dart';
 import 'package:awesome_map_mobile/base/filter/categoryItem.dart';
 import 'package:awesome_map_mobile/base/timePicker.dart';
+import 'package:awesome_map_mobile/events/createEventItemContent.dart';
 import 'package:awesome_map_mobile/events/providers/eventForm.dart';
 import 'package:awesome_map_mobile/events/providers/eventMarkers.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
@@ -87,152 +88,27 @@ class _CreateEventItemState extends State<CreateEventItem> {
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: 5),
                 child: Consumer<EventForm>(builder: (context, model, _) {
-                  return Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Center(
-                          child: Container(
-                              height: 5,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(18))),
-                        ),
-                        SizedBox(height: 5),
-                        Row(
-                          children: <Widget>[
-                            Flexible(
-                              child: TextFormField(
-                                  decoration: InputDecoration(
-                                      border: UnderlineInputBorder(),
-                                      labelText: "Широта",
-                                      hintText: "Широта"),
-                                  keyboardType: TextInputType.number,
-                                  initialValue: model.event.latitude.toString(),
-                                  onSaved: (String value) {
-                                    model.event.latitude = double.parse(value);
-                                  }),
-                            ),
-                            SizedBox(width: 50),
-                            Flexible(
-                              child: TextFormField(
-                                  decoration: InputDecoration(
-                                      border: UnderlineInputBorder(),
-                                      labelText: "Довгота",
-                                      hintText: "Довгота"),
-                                  keyboardType: TextInputType.number,
-                                  initialValue:
-                                      model.event.longitude.toString(),
-                                  onSaved: (String value) {
-                                    model.event.longitude = double.parse(value);
-                                  }),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Wrap(
-                            direction: Axis.horizontal,
-                            runAlignment: WrapAlignment.start,
-                            alignment: WrapAlignment.start,
-                            crossAxisAlignment: WrapCrossAlignment.start,
-                            children: <Widget>[
-                              for (Category item in model.event.eventTypes)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 5.0),
-                                  child: CategoryItem(
-                                      label: Text(item.name),
-                                      icon: item.icon != null
-                                          ? Icon(IconData(item.icon.iconCode,
-                                              fontFamily: item.icon.fontFamily,
-                                              fontPackage:
-                                                  item.icon.fontPackage))
-                                          : null,
-                                      onDelete: () {
-                                        model.removeCategory(item.id);
-                                      }),
-                                )
-                            ]),
-                        ChooseCategoryAutoComplete(
-                            getStore: GetIt.I.get<EventService>().getCategories,
-                            selectedCategories: model.event.eventTypes,
-                            addCategory: model.addCategory),
-                        SizedBox(height: 10),
-                        TextFormField(
-                            decoration: InputDecoration(
-                                border: UnderlineInputBorder(),
-                                labelText: "Назва"),
-                            onSaved: (String value) {
-                              model.event.title = value;
-                            }),
-                        SizedBox(height: 10),
-                        TextFormField(
-                            maxLines: null,
-                            keyboardType: TextInputType.multiline,
-                            decoration: InputDecoration(
-                                border: UnderlineInputBorder(),
-                                labelText: "Опис"),
-                            onSaved: (String value) {
-                              model.event.description = value;
-                            }),
-                        SizedBox(height: 10),
-                        DatePicker(
-                          color: Colors.black,
-                          labelText: "Дата проведення",
-                          initDate: DateTime.now(),
-                          endDate: DateTime.now().add(Duration(days: 365 * 2)),
-                          onChange: (value) {
-                            model.event.startDate = value;
-                          },
-                          firstDate: DateTime(2020),
-                        ),
-                        SizedBox(height: 10),
-                        TimePicker(
-                          labelText: "Тривалість",
-                          color: Colors.black,
-                          onChange: (val) {
-                            model.event.duration = val;
-                          },
-                        ),
-                        // Expanded(
-                        //   child: DurationPicker(
-                        //     duration: model.event.duration,
-                        //     onChange: (val) {
-                        //       model.event.duration = val;
-                        //     },
-                        //     snapToMins: 5.0,
-                        //   ),
-                        // ),
-                        SizedBox(height: 10),
-                        FilePicker(
-                          addFile: model.addFile,
-                          removeFile: model.removeFile,
-                          files: model.files,
-                        ),
-                        SizedBox(height: 10),
-                        Divider(height: 1),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            FlatButton.icon(
-                              textColor: Colors.blue,
-                              icon: Icon(Icons.send, color: Colors.blue),
-                              label: Text("Відправити"),
-                              onPressed: () {
-                                completeTicket();
-                              },
-                            ),
-                            FlatButton.icon(
-                              icon: Icon(Icons.clear),
-                              label: Text("Скасувати"),
-                              onPressed: () {
-                                removeTicket();
-                              },
-                            ),
-                          ],
-                        )
-                      ],
+                  return CreateEventItemContent(
+                    first: model.first,
+                    formKey: _formKey,
+                    event: model.event,
+                    addFile: model.addFile,
+                    removeFile: model.removeFile,
+                    files: model.files,
+                    btnOk: FlatButton.icon(
+                      textColor: Colors.blue,
+                      icon: Icon(Icons.send, color: Colors.blue),
+                      label: Text("Відправити"),
+                      onPressed: () {
+                        completeTicket();
+                      },
+                    ),
+                    btnCancel: FlatButton.icon(
+                      icon: Icon(Icons.clear),
+                      label: Text("Скасувати"),
+                      onPressed: () {
+                        removeTicket();
+                      },
                     ),
                   );
                 }),

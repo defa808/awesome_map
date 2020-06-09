@@ -176,4 +176,11 @@ class GoogleMapModel extends ChangeNotifier {
           ));
     } on Exception {}
   }
+
+  Future<Placemark> getAddressLocation(
+      double latitude, double longitude) async {
+    List<Placemark> placeMarks =
+        await Geolocator().placemarkFromCoordinates(latitude, longitude);
+    return placeMarks.length > 0 ? placeMarks[0] : null;
+  }
 }

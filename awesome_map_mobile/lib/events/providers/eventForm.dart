@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EventForm with ChangeNotifier {
   bool readyToFill = false;
+  bool first = false;
   Event event = Event.empty();
   List<File> files = new List<File>();
 
@@ -23,6 +24,18 @@ class EventForm with ChangeNotifier {
   }
 
   Future<bool> save() async {
+      if (event.title.isEmpty ||
+        event.description.isEmpty ||
+        files.length == 0 ||
+        event.startDate == null ||
+        event.duration == null ||
+        event.eventTypes.length == 0) {
+      first = true;
+      this.notifyListeners();
+      return false;
+    } else {
+      first = false;
+    }
     try {
       this.event = await GetIt.I.get<EventService>().save(this.event);
       ServerFile fileInfo = ServerFile.empty();
@@ -66,6 +79,7 @@ class EventForm with ChangeNotifier {
     this.readyToFill = false;
     this.event = Event.empty();
     this.files.clear();
+    this.first = false;
     this.notifyListeners();
   }
 }

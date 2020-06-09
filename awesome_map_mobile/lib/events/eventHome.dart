@@ -30,7 +30,7 @@ class _ProblemHomeState extends State<EventHome> {
   @override
   void initState() {
     super.initState();
-    loadData();
+    
   }
 
   void loadData() async {

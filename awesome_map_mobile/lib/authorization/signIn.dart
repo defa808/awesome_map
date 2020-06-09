@@ -182,13 +182,16 @@ class _SignInState extends State<SignIn> {
                               height: 45,
                               child: Text('Gmail'),
                               textColor: Colors.white,
-                              onPressed: () async {
+                              onPressed: 
+                              // null
+                              () async {
                                 bool res =
                                     await authorizationProvider.handleGoogleSignIn();
                                 if (res)
                                   await Navigator.pushNamedAndRemoveUntil(
                                       context, '/home', (_) => false);
-                              }),
+                              }
+                              ),
                         ],
                       )
                     ],

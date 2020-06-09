@@ -193,14 +193,15 @@ class _SignUpState extends State<SignUp> {
                           height: 45,
                           child: Text('Gmail'),
                           textColor: Colors.white,
-                          onPressed: () async {
-                            bool res = await context
-                                .read<AuthorizationProvider>()
-                                .handleGoogleSignIn();
-                            if (res)
-                              await Navigator.pushNamedAndRemoveUntil(
-                                  context, '/home', (_) => false);
-                          },
+                          onPressed: null
+                          //  () async {
+                          //   bool res = await context
+                          //       .read<AuthorizationProvider>()
+                          //       .handleGoogleSignIn();
+                          //   if (res)
+                          //     await Navigator.pushNamedAndRemoveUntil(
+                          //         context, '/home', (_) => false);
+                          // },
                         )
                       ],
                     )
