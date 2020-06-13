@@ -43,4 +43,10 @@ class CommentProvider extends ChangeNotifier {
     }
     return false;
   }
+
+  void add(String entityId, Comment comment) {
+    if (!commentsEntity.containsKey(entityId))
+      commentsEntity[entityId] = <Comment>[];
+    commentsEntity[entityId].add(comment);
+  }
 }

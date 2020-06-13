@@ -68,5 +68,14 @@ namespace Implementations {
             _context.SaveChanges();
             return true;
         }
+
+        public bool UpdateStatus(Guid id, int status) {
+            Problem problem = _context.Problems.FirstOrDefault(x => x.Id == id);
+            if (problem == null)
+                throw new ArgumentException();
+            problem.Status =  (ProblemStatus)status;
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

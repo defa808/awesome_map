@@ -11,6 +11,7 @@ using awesome_map_server.ViewModels.Comment;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Contracts;
 
 namespace awesome_map_server.Controllers {
     [Route("api/[controller]")]
@@ -18,10 +19,11 @@ namespace awesome_map_server.Controllers {
     public class CommentsController : ControllerBase {
         private IMapper _mapper;
         private readonly ApplicationDbContext _context;
-
-        public CommentsController(ApplicationDbContext context, IMapper mapper) {
+        private ICommentService _commentService;
+        public CommentsController(ApplicationDbContext context, IMapper mapper, ICommentService commentService) {
             _context = context;
             _mapper = mapper;
+            _commentService = commentService;
         }
 
         // GET: api/Comments
@@ -83,11 +85,10 @@ namespace awesome_map_server.Controllers {
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<Comment>> PostComment(CommentViewModel comment) {
+            
             Comment entity = _mapper.Map<Comment>(comment);
             entity.UserSenderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _context.Comments.Add(entity);
-            await _context.SaveChangesAsync();
-            entity = _context.Comments.Where(x => x.Id == entity.Id).Include(x => x.UserSender).First();
+            entity = await _commentService.Save(entity);
             CommentViewModel commentViewModel = _mapper.Map<CommentViewModel>(entity);
             return CreatedAtAction("GetComment", new { id = comment.Id }, commentViewModel);
         }

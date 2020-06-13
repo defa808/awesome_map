@@ -36,14 +36,12 @@ class AuthorizationProvider extends ChangeNotifier {
   Future<bool> handleGoogleSignIn() async {
     try {
       AppConfig config = await AppConfig.forEnvironment();
-
       _googleSignIn = GoogleSignIn(
           signInOption: SignInOption.standard,
           scopes: <String>['email', 'profile', 'openid'],
           clientId: config.clientId);
       GoogleSignInAccount googleAccount = await _googleSignIn.signIn();
       await GetIt.I.get<AccountProvider>().updateGoogleAccount(googleAccount);
-
       var identityHeader = (await googleAccount.authentication).accessToken;
       await storage.write(key: "oauth", value: identityHeader);
       return googleAccount != null;

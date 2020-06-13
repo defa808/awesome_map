@@ -14,5 +14,6 @@ namespace Contracts {
         bool Exist(Guid id);
         void Subscribe(Problem problem, string userId);
         Task<bool> Unsubscribe(Guid problemId, string userId);
+        bool UpdateStatus(Guid id, int status);
     }
 }

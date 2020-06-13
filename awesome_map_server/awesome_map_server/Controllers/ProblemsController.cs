@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using awesome_map_server.ViewModels;
+using awesome_map_server.ViewModels.Comment;
 using Contracts;
 using DataBaseContext;
 using DataBaseModels.Models;
@@ -23,9 +24,11 @@ namespace awesome_map_server.Controllers {
     public class ProblemsController : ControllerBase {
         private IMapper _mapper;
         private IProblemService _problemService;
-        public ProblemsController(IMapper autoMapper, IProblemService problemService) {
+        private ICommentService _commentService;
+        public ProblemsController(IMapper autoMapper, IProblemService problemService, ICommentService commentService) {
             _mapper = autoMapper;
             _problemService = problemService;
+            _commentService = commentService;
         }
 
         // GET: api/Problems
@@ -81,6 +84,32 @@ namespace awesome_map_server.Controllers {
                     throw;
                 }
             }
+        }
+
+        [HttpPut("{id}/{status}")]
+        public async Task<IActionResult> UpdateStatus(Guid id, int status, [FromBody] string comment = null) {
+            try {
+                if (_problemService.UpdateStatus(id, status)) {
+                    if (comment != null && comment.Length > 0) {
+                        Comment newComment = await _commentService.Save(new Comment() {
+                            ProblemId = id,
+                            TimeSend = DateTime.Now,
+                            UserSenderId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                            Text = comment
+                        });
+                        CommentViewModel viewModel = _mapper.Map<CommentViewModel>(newComment);
+                        return Ok(viewModel);
+                    }
+                    return Ok(true);
+                }
+            } catch (DbUpdateConcurrencyException) {
+                if (!_problemService.Exist(id)) {
+                    return NotFound();
+                } else {
+                    throw;
+                }
+            }
+            return Ok(false);
         }
 
         // POST: api/Problems

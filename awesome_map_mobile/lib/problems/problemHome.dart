@@ -98,8 +98,33 @@ class _ProblemHomeState extends State<ProblemHome> {
                             ? SlidingUpPanelContainer(
                                 renderChild: (sc) => MapDetails(
                                       title: Header(
-                                        text: problem?.title,
-                                      ),
+                                          text: problem?.title,
+                                          tool: PopupMenuButton<String>(
+                                            onSelected: (value) {
+                                              if (value == "changeStatus")
+                                                Navigator.pushNamed(context,
+                                                    '/changeProblemStatus',
+                                                    arguments: problem);
+                                              if (value == "edit")
+                                                Navigator.pushNamed(context,
+                                                    '/editProblemDetail',
+                                                    arguments: problem);
+                                            },
+                                            itemBuilder:
+                                                (BuildContext context) {
+                                              return [
+                                                PopupMenuItem<String>(
+                                                    value: "edit",
+                                                    child: Text("Редагувати"),
+                                                    enabled: true),
+                                                PopupMenuItem<String>(
+                                                    value: "changeStatus",
+                                                    child:
+                                                        Text("Змінити статус"),
+                                                    enabled: true)
+                                              ];
+                                            },
+                                          )),
                                       child: ProblemDetailsContent(problem),
                                       scrollController: sc,
                                     ),

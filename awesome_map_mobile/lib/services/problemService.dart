@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:awesome_map_mobile/env/config.dart';
 import 'package:awesome_map_mobile/main.dart';
 import 'package:awesome_map_mobile/models/base/category.dart';
+import 'package:awesome_map_mobile/models/comment/comment.dart';
 import 'package:awesome_map_mobile/models/problem/problem.dart';
 import 'package:awesome_map_mobile/services/authorizationService.dart';
 import 'package:get_it/get_it.dart';
@@ -52,12 +53,11 @@ class ProblemService {
     try {
       AppConfig config = await AppConfig.forEnvironment();
       Map<String, dynamic> problemMap = problem.toJson();
-       Map<String, String> headers = await GetIt.I
+      Map<String, String> headers = await GetIt.I
           .get<AuthorizationService>()
           .getHeaders({"Content-type": "application/json"});
       Response res = await http.post(config.apiUrl + "api/Problems",
-          headers: headers,
-          body: jsonEncode(problemMap));
+          headers: headers, body: jsonEncode(problemMap));
       if (res.statusCode == 200 || res.statusCode == 201)
         return Problem.fromJson(jsonDecode(res.body));
       throw new Exception(res.body.toString());
@@ -71,14 +71,55 @@ class ProblemService {
     try {
       AppConfig config = await AppConfig.forEnvironment();
       Map<String, dynamic> problemMap = problem.toJson();
-       Map<String, String> headers = await GetIt.I
+      Map<String, String> headers = await GetIt.I
           .get<AuthorizationService>()
           .getHeaders({"Content-type": "application/json"});
-      Response res = await http.put(config.apiUrl + "api/Problems/${problem.id}",
+      Response res = await http.put(
+          config.apiUrl + "api/Problems/${problem.id}",
           headers: headers,
           body: jsonEncode(problemMap));
       if (res.statusCode == 200 || res.statusCode == 201)
         return Problem.fromJson(jsonDecode(res.body));
+      throw new Exception(res.body.toString());
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<bool> updateStatus(String id, int status) async {
+    try {
+      String comment = "";
+      AppConfig config = await AppConfig.forEnvironment();
+      Map<String, String> headers = await GetIt.I
+          .get<AuthorizationService>()
+          .getHeaders({"Content-type": "application/json"});
+          
+      Response res = await http.put(
+          config.apiUrl + "api/Problems/${id}/${status}",
+          headers: headers,
+          body: jsonEncode(comment));
+      if (res.statusCode == 200 || res.statusCode == 201) return true;
+      throw new Exception(res.body.toString());
+    } catch (e) {
+      print(e.toString());
+    }
+    return false;
+  }
+
+  Future<Comment> updateStatusWithComment(
+      String id, int status, String comment) async {
+    try {
+      AppConfig config = await AppConfig.forEnvironment();
+      Map<String, String> headers = await GetIt.I
+          .get<AuthorizationService>()
+          .getHeaders({"Content-type": "application/json"});
+      Response res = await http.put(
+          config.apiUrl + "api/Problems/${id}/${status}",
+          headers: headers,
+          body: jsonEncode(comment));
+      if (res.statusCode == 200 || res.statusCode == 201)
+        return Comment.fromJson(jsonDecode(res.body));
       throw new Exception(res.body.toString());
     } catch (e) {
       print(e.toString());
