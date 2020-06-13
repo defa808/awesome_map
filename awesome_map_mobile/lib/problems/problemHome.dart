@@ -1,3 +1,4 @@
+import 'package:awesome_map_mobile/account/provder/accountProvider.dart';
 import 'package:awesome_map_mobile/authorization/authorizationProvider.dart';
 import 'package:awesome_map_mobile/base/filterContainer.dart';
 import 'package:awesome_map_mobile/base/slidingUpPanelContainer.dart';
@@ -99,32 +100,44 @@ class _ProblemHomeState extends State<ProblemHome> {
                                 renderChild: (sc) => MapDetails(
                                       title: Header(
                                           text: problem?.title,
-                                          tool: PopupMenuButton<String>(
-                                            onSelected: (value) {
-                                              if (value == "changeStatus")
-                                                Navigator.pushNamed(context,
-                                                    '/changeProblemStatus',
-                                                    arguments: problem);
-                                              if (value == "edit")
-                                                Navigator.pushNamed(context,
-                                                    '/editProblemDetail',
-                                                    arguments: problem);
-                                            },
-                                            itemBuilder:
-                                                (BuildContext context) {
-                                              return [
-                                                PopupMenuItem<String>(
-                                                    value: "edit",
-                                                    child: Text("Редагувати"),
-                                                    enabled: true),
-                                                PopupMenuItem<String>(
-                                                    value: "changeStatus",
-                                                    child:
-                                                        Text("Змінити статус"),
-                                                    enabled: true)
-                                              ];
-                                            },
-                                          )),
+                                          tool: Consumer<AccountProvider>(
+                                              builder: (BuildContext context,
+                                                  AccountProvider value,
+                                                  Widget child) {
+                                            return value.roles.contains("Admin")
+                                                ? PopupMenuButton<String>(
+                                                    onSelected: (value) {
+                                                      if (value ==
+                                                          "changeStatus")
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            '/changeProblemStatus',
+                                                            arguments: problem);
+                                                      if (value == "edit")
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            '/editProblemDetail',
+                                                            arguments: problem);
+                                                    },
+                                                    itemBuilder:
+                                                        (BuildContext context) {
+                                                      return [
+                                                        PopupMenuItem<String>(
+                                                            value: "edit",
+                                                            child: Text(
+                                                                "Редагувати"),
+                                                            enabled: true),
+                                                        PopupMenuItem<String>(
+                                                            value:
+                                                                "changeStatus",
+                                                            child: Text(
+                                                                "Змінити статус"),
+                                                            enabled: true)
+                                                      ];
+                                                    },
+                                                  )
+                                                : Container();
+                                          })),
                                       child: ProblemDetailsContent(problem),
                                       scrollController: sc,
                                     ),

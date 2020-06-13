@@ -148,7 +148,7 @@ class _SignUpState extends State<SignUp> {
                               side: BorderSide(color: Colors.blue)),
                           minWidth: double.infinity,
                           height: 45,
-                          child: Text('Вхід'),
+                          child: Text('Реєстрація'),
                           textColor: Colors.blue,
                           onPressed: () async {
                             if (!EmailValidator.validate(
