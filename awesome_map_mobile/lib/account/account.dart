@@ -91,21 +91,7 @@ class _AccountState extends State<Account> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 8),
-                    height: 220,
-                    width: 220,
-                    alignment: Alignment(1.2, 1),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        image: DecorationImage(
-                            image: AssetImage("images/noavatar.png"))),
-                    child: FlatButton(
-                        onPressed: () {},
-                        textColor: Colors.white,
-                        child: Icon(Icons.add_a_photo,
-                            size: 50,
-                            color: Color.fromRGBO(255, 255, 255, 0.80)))),
+               
                 TextFormField(
                     controller: emailController,
                     enabled: isEditMode,

@@ -54,7 +54,7 @@ class _ProblemListMessageState extends State<ProblemListMessage> {
                               beforeShowMap: () {
                                 Navigator.pop(context, true);
                                 Navigator.pushReplacementNamed(context, '/home',
-                                    arguments: 2);
+                                    arguments: 0);
                               },
                             ))
                         .toList(),
